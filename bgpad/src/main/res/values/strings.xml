@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">BgPad</string>
+
+    <string name="enter_username">请输入用户名</string>
+    <string name="enter_password">请输入密码</string>
+    <string name="login">登录 </string>
+    <string name="register">注册</string>
+    <string name="Remember_password">记住密码</string>
+    <string name="find_password">找回密码</string>
+    <string name="automatic_logon">自动登录</string>
+    <string name="settings">standard_settings</string>
+    <string name="ble_not_supported">您的设备不支持BLE</string>
+    <string name="unknown_device">Unknown device</string>
+    <string name="scan_text">请对准扫描框进行扫描</string>
+    <string name="search_name">按姓名进行搜索</string>
+    <string name="search_number">按编号进行搜索</string>
+</resources>
