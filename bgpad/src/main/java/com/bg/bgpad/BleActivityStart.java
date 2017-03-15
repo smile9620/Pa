@@ -41,8 +41,8 @@ public abstract class BleActivityStart extends BaseActivity {
 
     private LeDeviceListAdapter mLeDeviceListAdapter;
     private final long SCAN_PERIOD = 3000;
-    private ProgressDialog pogressDialog;
-    private AlertDialog mydialog = null;
+    protected ProgressDialog pogressDialog = null;
+    private AlertDialog myDialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -227,8 +227,8 @@ public abstract class BleActivityStart extends BaseActivity {
                         Constant.mDeviceAddress = mLeDeviceListAdapter.mLeDevices.get(0).getAddress();
                         select_ble();
                     } else {
-                        mydialog = myDialog();
-                        mydialog.show();
+                        myDialog = myDialog();
+                        myDialog.show();
                     }
                     break;
             }
@@ -287,7 +287,7 @@ public abstract class BleActivityStart extends BaseActivity {
                         mBluetoothAdapter.stopLeScan(mLeScanCallback);
                         Constant.mScanning = false;
                     }
-                    mydialog.cancel();
+                    myDialog.cancel();
 
                 }
             }

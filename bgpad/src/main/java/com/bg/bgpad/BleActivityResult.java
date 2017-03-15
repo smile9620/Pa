@@ -22,7 +22,6 @@ public abstract class BleActivityResult extends BleActivityStart {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        startBle();
         Receiver();
     }
 
@@ -65,6 +64,8 @@ public abstract class BleActivityResult extends BleActivityStart {
 
     @Override
     protected void select_ble() {
+        pogressDialog.setMessage("蓝牙正在连接中，请稍后...");
+        pogressDialog.show();
         startBle();
     }
 
@@ -101,12 +102,15 @@ public abstract class BleActivityResult extends BleActivityStart {
             mGattUpdateReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    final String action = intent.getAction();
-                    if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) { // 连接成功
-                        // Log.e(TAG, "Only gatt, just wait");
-                    } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED
-                            .equals(action)) { // 断开连接
-                        if (is_change) {
+                    if (is_change) {
+                        if (pogressDialog != null) {
+                            pogressDialog.dismiss();
+                        }
+                        final String action = intent.getAction();
+                        if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) { // 连接成功
+                            // Log.e(TAG, "Only gatt, just wait");
+                        } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED
+                                .equals(action)) { // 断开连接
                             updateState(false);
                             new AlertDialog.Builder(BleActivityResult.this).
                                     setTitle("提示：").setIcon(android.R.drawable.ic_dialog_info).
@@ -121,18 +125,14 @@ public abstract class BleActivityResult extends BleActivityStart {
                                 Constant.mBluetoothLeService.close();
                                 Constant.mBluetoothLeService = null;
                             }
-                        }
-                    } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED
-                            .equals(action)) // 可以开始干活了
-                    {
-                        if (is_change) {
+                        } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED
+                                .equals(action)) // 可以开始干活了
+                        {
                             updateState(true);
                             showToast("连接成功，现在可以正常通信！");
-                        }
 
-                    } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) { // 收到数据
-                        String data = intent.getStringExtra(BluetoothLeService.EXTRA_DATA);
-                        if (is_change) {
+                        } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) { // 收到数据
+                            String data = intent.getStringExtra(BluetoothLeService.EXTRA_DATA);
                             updateData(data);
                         }
                     }
