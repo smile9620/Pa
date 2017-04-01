@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,8 +29,8 @@ public class RegisterActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         View view = this.findViewById(R.id.title);
-        new SetTitle(this).setTitleBar(view, new boolean[]{false,true}, "注册", new int[]{R.drawable.back_bt,
-                R.drawable.turn_bt});
+        new SetTitle(this,view, new boolean[]{true,false},
+                "注册", new int[]{R.drawable.back_bt, R.drawable.turn_bt});
 
         tel = (EditText) this.findViewById(R.id.tel);
         password = (EditText) this.findViewById(R.id.password);
@@ -126,12 +127,12 @@ public class RegisterActivity extends BaseActivity implements
 
 
     @Override
-    public void leftBt(Button left) {
+    public void leftBt(ImageButton left) {
         finish();
     }
 
     @Override
-    public void rightBt(Button right) {
+    public void rightBt(ImageButton right) {
 
     }
 }

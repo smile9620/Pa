@@ -14,4 +14,5 @@
     <string name="scan_text">请对准扫描框进行扫描</string>
     <string name="search_name">按姓名进行搜索</string>
     <string name="search_number">按编号进行搜索</string>
+    <string name="search_date">按日期进行搜索</string>
 </resources>

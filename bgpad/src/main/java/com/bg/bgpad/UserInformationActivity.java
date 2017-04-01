@@ -3,9 +3,11 @@ package com.bg.bgpad;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -15,16 +17,25 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.annotation.IdRes;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.ViewDebug;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bg.constant.Constant;
 import com.bg.constant.InBodyBluetooth;
+import com.bg.model.InBodyData;
 import com.bg.model.User;
 import com.bg.utils.BitmapTool;
 import com.bg.utils.SetTitle;
@@ -32,6 +43,7 @@ import com.bg.utils.SetTitle;
 import org.litepal.crud.DataSupport;
 
 import java.io.File;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -45,22 +57,27 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
     @BindView(R.id.image)
     ImageButton image;
     @BindView(R.id.username)
-    TextInputLayout username;
+    EditText username;
     @BindView(R.id.usernumber)
-    TextInputLayout usernumber;
+    EditText usernumber;
     @BindView(R.id.sex)
-    TextInputLayout sex;
+    RadioGroup sex;
+    @BindView(R.id.boy)
+    RadioButton boy;
+    @BindView(R.id.girl)
+    RadioButton girl;
     @BindView(R.id.birthday)
-    TextInputLayout birthday;
+    EditText birthday;
+    @BindView(R.id.age)
+    TextView age;
     @BindView(R.id.height)
-    TextInputLayout height;
-    @BindView(R.id.mark)
-    TextInputLayout mark;
+    EditText height;
     @BindView(R.id.test)
     Button test;
 
     private List<User> user;
     private boolean column;
+    private boolean showdialog = true;
 
     private Handler handler = new Handler() {
         @Override
@@ -75,18 +92,35 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_information);
         ButterKnife.bind(this);
-        new SetTitle(this).setTitleBar(view, new boolean[]{false, false}, "用户信息", new int[]{R.drawable.back_bt,
-                R.drawable.userdelete_bt});
+        new SetTitle(this, view, new boolean[]{true, false},
+                "测试", new int[]{R.drawable.back_bt, R.drawable.ble_bt});
 
         Intent intent = getIntent();
         column = intent.getBooleanExtra("column", true);
         if (!column) {
             height.setVisibility(View.VISIBLE);
         }
+        sex.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                if (boy.isChecked()) {
+                    showToast("男生");
+                } else {
+                    showToast("女生");
+                }
+            }
+        });
+
         if (intent.getStringExtra("user_number") != null) {
-            user = DataSupport.where(Constant.USER_NUMBER + " = ?", intent.getStringExtra(Constant.USER_NUMBER)).find(User.class);
-            username.getEditText().setText(user.get(0).getUser_name());
-            usernumber.getEditText().setText(user.get(0).getUser_number());
+            showdialog = false;
+            usernumber.setFocusable(false);
+            username.setFocusable(false);
+            boy.setClickable(false);
+            girl.setClickable(false);
+            birthday.setClickable(false);
+//            user = DataSupport.where(Constant.USER_NUMBER + " = ?", intent.getStringExtra(Constant.USER_NUMBER)).find(User.class);
+//            username.setText(user.get(0).getUser_name());
+//            usernumber.setText(user.get(0).getUser_number());
         }
 
     }
@@ -100,6 +134,7 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
         @Override
         public void onTick(long millisUntilFinished) {
         }
+
         @Override
         public void onFinish() {
             Message message = Message.obtain();
@@ -121,40 +156,66 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
     }
 
     @Override
-    public void leftBt(Button left) {
+    public void leftBt(ImageButton left) {
         finish();
     }
 
     @Override
-    public void rightBt(Button right) {
+    public void rightBt(ImageButton right) {
         DataSupport.deleteAll(User.class, "user_number = ?", user.get(0).getUser_number());
         Toast.makeText(this, "用户" + user.get(0).getUser_name().toString() + "删除成功！",
                 Toast.LENGTH_SHORT).show();
     }
 
-    @OnClick({R.id.image, R.id.test})
+    @OnClick({R.id.image, R.id.test, R.id.birthday})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.image:
                 Permission();
                 break;
-            case R.id.test:
-//                String name = username.getEditText().getText().toString();
-//                String number = usernumber.getEditText().getText().toString();
-//                if (name == null || name.isEmpty() || number == null || number.isEmpty()) {
-//                    Toast.makeText(this, "姓名或编号不能为空", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                User user = new User();
-//                user.setUser_name(username.getEditText().getText().toString());
-//                user.setUser_number(usernumber.getEditText().getText().toString());
-//                if (user.save()) {
-//                    showToast( "保存成功！");
-//                } else {
-//                    showToast( "保存失败！");
-//                }
-                writeBle(InBodyBluetooth.send3);
+            case R.id.birthday:
+                showDialog(showdialog);
                 break;
+            case R.id.test:
+//                String name = username.getText().toString();
+//                String number = usernumber.getText().toString();
+//                String heig = height.getText().toString();
+////                if (name == null || name.isEmpty() || number == null || number.isEmpty()) {
+////                    Toast.makeText(this, "姓名或编号不能为空", Toast.LENGTH_SHORT).show();
+////                    return;
+////                }
+//
+//                User user = new User();
+//                InBodyData inBodyData = new InBodyData();
+//                user.setUser_name(name);
+//                user.setUser_number(number);
+//                inBodyData.setHeight(Float.parseFloat(heig));
+//                inBodyData.setUser(user);
+//                user.getData_list().add(inBodyData);
+//                if (user.save() && inBodyData.save()) {
+//                    showToast("保存成功！");
+//                } else {
+//                    showToast("保存失败！");
+//                }
+////                writeBle(InBodyBluetooth.send3);
+//                break;
+        }
+    }
+
+    private void showDialog(Boolean bool) {
+        if (bool) {
+            final Calendar cal = Calendar.getInstance();
+            new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                    String mon = null;
+                    if ((month + 1) < 10) {
+                        mon = "0" + (month + 1);
+                    }
+                    birthday.setText(year + "-" + mon + "-" + dayOfMonth);
+                    age.setText((cal.get(Calendar.YEAR) - year) + "");
+                }
+            }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show();
         }
     }
 
@@ -182,7 +243,7 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
         File file = new File(path1, System.currentTimeMillis() + ".jpg");
         Constant.imageUri = Uri.fromFile(file);
 
-        Intent intent = new Intent(UserInformationActivity.this,CameraActivity.class);
+        Intent intent = new Intent(UserInformationActivity.this, CameraActivity.class);
         startActivityForResult(intent, Constant.CAMERA_STA_USERINFO);
     }
 
@@ -210,7 +271,15 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
             try {
                 // 读取uri所在的图片
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Constant.imageUri);
-                image.setBackground(new BitmapDrawable(this.getResources(), bitmap));
+
+                Matrix matrix=new Matrix(); //抗锯齿
+                matrix.postScale(0.2f, 0.2f);
+                Bitmap temp = Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,true);
+
+                image.setBackground(new BitmapDrawable(this.getResources(), temp));
+                if (!bitmap.isRecycled()) {
+                    bitmap.recycle();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -247,4 +316,5 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
 
         }
     }
+
 }

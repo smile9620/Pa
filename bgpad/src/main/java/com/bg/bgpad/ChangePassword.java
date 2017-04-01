@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,8 +34,8 @@ public class ChangePassword extends BaseActivity implements SetTitle.OnTitleBtCl
         setContentView(R.layout.activity_change_password);
 
         View view = this.findViewById(R.id.title);
-        new SetTitle(this).setTitleBar(view,new boolean[]{false,true}, "密码修改", new int[]{R.drawable.back_bt,
-                R.drawable.turn_bt});
+        new SetTitle(this,view,new boolean[]{true,false},
+                "密码修改", new int[]{R.drawable.back_bt, R.drawable.turn_bt});
         findView();
 
         newpassword.setOnFocusChangeListener(this);
@@ -106,12 +107,12 @@ public class ChangePassword extends BaseActivity implements SetTitle.OnTitleBtCl
 
 
     @Override
-    public void leftBt(Button left) {
+    public void leftBt(ImageButton left) {
         finish();
     }
 
     @Override
-    public void rightBt(Button right) {
+    public void rightBt(ImageButton right) {
     }
 
     @Override

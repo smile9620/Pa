@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--倍率为 1.33-->
+    <dimen name="general_text">18sp</dimen>
+    <dimen name="general_small_text">14sp</dimen>
+
+    <dimen name="title_height">72dp</dimen>
+    <dimen name="title_text">30sp</dimen>
+    <dimen name="title_bt">40dp</dimen>
+    <dimen name="title_bt_marg">22dp</dimen>
+
+    <dimen name="inbody_image_height">300dp</dimen>
+    <dimen name="inbody_bt_text_size">20sp</dimen>
+    <dimen name="inbody_bt_img_marg">20dp</dimen>
+    <dimen name="inbody_bt_margtop">10dp</dimen>
+    <dimen name="inbody_bt_drawablepadding">8dp</dimen>
+    <dimen name="inbody_bt_padding">18dp</dimen>
+
+    <dimen name="selectuser_edit_height">42dp</dimen>
+    <dimen name="selectuser_edit_width">230dp</dimen>
+    <dimen name="selectuser_edit_padding">10dp</dimen>
+    <dimen name="selectuser_addbt_width">144dp</dimen>
+    <dimen name="selectuser_addbt_marginleft">15dp</dimen>
+
+    <dimen name="selectuser_userlist_marginleft">20dp</dimen>
+
+    <dimen name="information_margin_top">30dp</dimen>
+    <dimen name="information_table_width">478dp</dimen>
+    <dimen name="information_table_padd">7dp</dimen>
+    <dimen name="information_table_row_padd">6dp</dimen>
+    <dimen name="information_table_row_marg">10dp</dimen>
+    <dimen name="information_radiobt_marg">10dp</dimen>
+    <dimen name="information_testbt_width">168dp</dimen>
+    <dimen name="information_testbt_hight">48dp</dimen>
+    <dimen name="information_testbt_size">20sp</dimen>
+    <dimen name="information_photo_width">120dp</dimen>
+    <dimen name="information_photo_height">150dp</dimen>
+    <dimen name="information_table_row">236dp</dimen>
+    <dimen name="information_image_height">324dp</dimen>
+    <dimen name="information_image_marg">30dp</dimen>
+</resources>

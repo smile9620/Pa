@@ -10,7 +10,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.IBinder;
+
 import com.bg.constant.Constant;
 
 public abstract class BleActivityResult extends BleActivityStart {
@@ -64,10 +66,37 @@ public abstract class BleActivityResult extends BleActivityStart {
 
     @Override
     protected void select_ble() {
-        pogressDialog.setMessage("蓝牙正在连接中，请稍后...");
         pogressDialog.show();
+        pogressDialog.setMessage("蓝牙正在连接中，请稍后...");
         startBle();
     }
+
+    //1分钟之后，如何还是显示连接中，则认为连接不成功，则断开
+    CountDownTimer countDownTimer = new CountDownTimer(10000, 1) {
+        @Override
+        public void onTick(long millisUntilFinished) {
+        }
+
+        @Override
+        public void onFinish() {
+            if (pogressDialog != null && pogressDialog.isShowing()) {
+                pogressDialog.dismiss();
+                if (Constant.mBluetoothLeService != null) {
+                    Constant.mBluetoothLeService.close();
+                    Constant.mBluetoothLeService = null;
+                }
+                new AlertDialog.Builder(BleActivityResult.this).
+                        setTitle("提示：").setIcon(android.R.drawable.ic_dialog_info).
+                        setMessage("蓝牙连接失败，请重试！")
+                        .setNegativeButton("知道了", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        }).setCancelable(false).show();
+            }
+        }
+    };
 
     @Override
     protected void onResume() {
@@ -152,7 +181,12 @@ public abstract class BleActivityResult extends BleActivityStart {
                             .getService();
                     if (Constant.mBluetoothLeService.initialize()) {
                         Constant.mBluetoothLeService.connect(Constant.mDeviceAddress);
+                        countDownTimer.start();
                     } else {
+                        if (pogressDialog != null && pogressDialog.isShowing()) {
+                            pogressDialog.dismiss();
+                            showToast("蓝牙连接失败！");
+                        }
                         showToast("设备获取失败!");
                     }
                 }

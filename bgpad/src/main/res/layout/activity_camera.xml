@@ -20,10 +20,10 @@
 
     <Button
         android:id="@+id/btn_takepic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="拍照"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/camera_bt"/>
 
 </FrameLayout>

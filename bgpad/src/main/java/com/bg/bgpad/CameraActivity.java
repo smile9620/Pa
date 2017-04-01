@@ -30,6 +30,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Size;
+import android.view.KeyEvent;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
@@ -254,4 +255,5 @@ public class CameraActivity extends AppCompatActivity {
                     (long) rhs.getWidth() * rhs.getHeight());
         }
     }
+
 }

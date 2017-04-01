@@ -1,12 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--<style name="diagram_radiobutton">-->
-        <!--<item name="android:layout_width">0dp</item>-->
-        <!--<item name="android:layout_height">match_parent</item>-->
-        <!--<item name="android:button">@null</item>-->
-        <!--<item name="android:gravity">center</item>-->
-        <!--<item name="android:textSize">17sp</item>-->
-        <!--<item name="android:textColor">@drawable/boy_height_selector</item>-->
-        <!--<item name="android:layout_weight">1</item>-->
-    <!--</style>-->
+
+    <style name="inbody_infor_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/table_row</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:padding">@dimen/information_table_padd</item>
+        <item name="android:textSize">@dimen/general_text</item>
+        <item name="android:textColor">@color/text_color</item>
+    </style>
+
+    <style name="inbody_infor_edit">
+        <item name="android:layout_width">@dimen/information_table_row</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@drawable/user_bg</item>
+        <item name="android:padding">@dimen/information_table_padd</item>
+        <item name="android:textSize">@dimen/general_text</item>
+        <item name="android:layout_marginLeft">@dimen/information_table_row_marg</item>
+        <item name="android:gravity">center</item>
+        <item name="android:ems">11</item>
+        <item name="android:textColor">@color/text_color</item>
+    </style>
+
+    <style name="inbody_main_bt">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_margin">@dimen/information_table_row_marg</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textSize">@dimen/inbody_bt_text_size</item>
+        <item name="android:textColor">@color/share_view</item>
+        <item name="android:gravity">center_vertical|left</item>
+        <item name="android:drawablePadding">@dimen/inbody_bt_drawablepadding</item>
+        <item name="android:paddingLeft">@dimen/inbody_bt_padding</item>
+        <item name="android:paddingRight">@dimen/inbody_bt_padding</item>
+        <item name="android:drawableRight">@drawable/next</item>
+    </style>
+
+    <style name="seluser_pop_text">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/general_text</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:padding">@dimen/selectuser_edit_padding</item>
+    </style>
+
+    <style name="seluser_userlist_text">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/general_small_text</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:padding">@dimen/selectuser_edit_padding</item>
+    </style>
 </resources>

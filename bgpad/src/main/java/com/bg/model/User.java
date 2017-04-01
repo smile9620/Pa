@@ -1,16 +1,14 @@
 package com.bg.model;
 
-import android.app.Application;
-import android.content.Context;
 import android.view.Gravity;
 import android.widget.Toast;
 
 import com.bg.bgpad.AppContext;
-import com.bg.bgpad.BaseActivity;
 
 import org.litepal.annotation.Column;
 import org.litepal.crud.DataSupport;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,17 +28,17 @@ public class User extends DataSupport {
     private int birthday;      //出生年月
     private String image_path;  //头像路径
     private String mark;       //备注
-    private Date createDate;   //创建日期
-    private List<Data> data_list = new ArrayList<Data>();         //测试数据
+    private Date createDate;   //创建日期，用于排序
+    private String strDate;    //用于搜索 如：2017-03-20
+    private List<InBodyData> data_list = new ArrayList<InBodyData>(); //测试数据
 
-    public List<Data> getData_list() {
-        return DataSupport.where("data_id = ?", String.valueOf(user_number)).find(Data.class);
+    public List<InBodyData> getData_list() {
+        return data_list;
     }
 
-    public void setData_list(List<Data> data_list) {
+    public void setData_list(List<InBodyData> data_list) {
         this.data_list = data_list;
     }
-
 
     public int getBirthday() {
         return birthday;
@@ -49,6 +47,7 @@ public class User extends DataSupport {
     public void setBirthday(int birthday) {
         this.birthday = birthday;
     }
+
     public long getId() {
         return id;
     }
@@ -97,14 +96,6 @@ public class User extends DataSupport {
         this.image_path = image_path;
     }
 
-    public String getMark() {
-        return mark;
-    }
-
-    public void setMark(String mark) {
-        this.mark = mark;
-    }
-
     public Date getCreateDate() {
         return createDate;
     }
@@ -113,16 +104,35 @@ public class User extends DataSupport {
         this.createDate = createDate;
     }
 
+    public String getStrDate() {
+        return strDate;
+    }
+
+    public void setStrDate(String strDate) {
+        this.strDate = strDate;
+    }
+
+    public String getMark() {
+        return mark;
+    }
+
+    public void setMark(String mark) {
+        this.mark = mark;
+    }
+
     @Override
     public synchronized boolean save() {
-
         if (DataSupport.where("user_number = ?", getUser_number()).find(User.class).size() > 0) {
-           Toast toast = Toast.makeText(AppContext.getContext(), "编号为" + getUser_number() +
-                   "的用户已存在！", Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER,0,0);
+            Toast toast = Toast.makeText(AppContext.getContext(), "编号为" + getUser_number() +
+                    "的用户已存在！", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
         }
-        setCreateDate(new Date());
+        Date currentTime = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String dateString = formatter.format(currentTime);
+        setCreateDate(currentTime);
+        setStrDate(dateString);
         return super.save();
     }
 }

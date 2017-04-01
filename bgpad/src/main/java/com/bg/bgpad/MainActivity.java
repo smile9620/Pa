@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
@@ -16,6 +17,8 @@ import android.widget.ViewFlipper;
 import com.bg.constant.Constant;
 import com.bg.utils.ActivityCollector;
 import com.bg.utils.SetTitle;
+
+import org.litepal.tablemanager.Connector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,8 +44,8 @@ public class MainActivity extends BleActivityResult implements SetTitle.OnTitleB
         setContentView(R.layout.activity_main);
 
         View view = this.findViewById(R.id.title);
-        new SetTitle(this).setTitleBar(view, new boolean[]{false,true},"贝高医疗", new int[]{R.drawable.qr_bt,
-                R.drawable.ble_bt});
+        new SetTitle(this,view, new boolean[]{true,false},
+                "贝高医疗", new int[]{R.drawable.qr_bt, R.drawable.ble_bt});
 
         mViewFlipper = (ViewFlipper) this.findViewById(R.id.viewFlipper);
         mGridView = (GridView) this.findViewById(R.id.gridView);
@@ -94,21 +97,22 @@ public class MainActivity extends BleActivityResult implements SetTitle.OnTitleB
     }
 
     private List<BaseActivity> getPages() {
-        InBodyActivity inBodyActivity = new InBodyActivity();
-        pages.add(inBodyActivity);
-        pages.add(inBodyActivity);
-        pages.add(inBodyActivity);
-        pages.add(inBodyActivity);
+        UserSelectActivity userSelectActivity = new UserSelectActivity();
+        UserManagementActivity userManag = new UserManagementActivity();
+        pages.add(userSelectActivity);
+        pages.add(userManag);
+        pages.add(userSelectActivity);
+        pages.add(userSelectActivity);
         return pages;
     }
 
     @Override
-    public void leftBt(Button left) {
+    public void leftBt(ImageButton left) {
         requestPermission("Camrea");
     }
 
     @Override
-    public void rightBt(Button right) {
+    public void rightBt(ImageButton right) {
 
 //        if (!Constant.mScanning) {
 //            isavailable();

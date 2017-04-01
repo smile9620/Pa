@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +27,7 @@ public class DataAnalysis extends BleActivityResult implements SetTitle.OnTitleB
         ButterKnife.bind(this);
 
         View view = this.findViewById(R.id.title);
-        new SetTitle(this).setTitleBar(view, new boolean[]{false, false},
+        new SetTitle(this,view, new boolean[]{true, false},
                 "数据分析", new int[]{R.drawable.back_bt, R.drawable.ble_bt});
 
         getBle(DeviceName.InBody);
@@ -55,12 +56,12 @@ public class DataAnalysis extends BleActivityResult implements SetTitle.OnTitleB
     }
 
     @Override
-    public void leftBt(Button left) {
+    public void leftBt(ImageButton left) {
         finish();
     }
 
     @Override
-    public void rightBt(Button right) {
+    public void rightBt(ImageButton right) {
         searchBtClick();
     }
 

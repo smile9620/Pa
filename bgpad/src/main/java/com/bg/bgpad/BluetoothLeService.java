@@ -55,7 +55,7 @@ public class BluetoothLeService extends Service {
 	public final static String ACTION_DATA_AVAILABLE = "com.example.bluetooth.le.ACTION_DATA_AVAILABLE";
 	public final static String EXTRA_DATA = "com.example.bluetooth.le.EXTRA_DATA";
 
-	public final static UUID UUID_NOTIFY = 
+	public final static UUID UUID_NOTIFY =
 	UUID.fromString("0000ffe1-0000-1000-8000-00805f9b34fb");
 	public final static UUID UUID_SERVICE = UUID
 			.fromString("0000ffe0-0000-1000-8000-00805f9b34fb");
@@ -232,7 +232,7 @@ public class BluetoothLeService extends Service {
 
 	/**
 	 * Initializes a reference to the local Bluetooth adapter.
-	 * 
+	 *
 	 * @return Return true if the initialization is successful.
 	 */
 	public boolean initialize() {
@@ -258,10 +258,10 @@ public class BluetoothLeService extends Service {
 
 	/**
 	 * Connects to the GATT server hosted on the Bluetooth LE device.
-	 * 
+	 *
 	 * @param address
 	 *            The device address of the destination device.
-	 * 
+	 *
 	 * @return Return true if the connection is initiated successfully. The
 	 *         connection result is reported asynchronously through the
 	 *         {@code BluetoothGattCallback#onConnectionStateChange(android.bluetooth.BluetoothGatt, int, int)}
@@ -333,7 +333,7 @@ public class BluetoothLeService extends Service {
 	 * result is reported asynchronously through the
 	 * {@code BluetoothGattCallback#onCharacteristicRead(android.bluetooth.BluetoothGatt, android.bluetooth.BluetoothGattCharacteristic, int)}
 	 * callback.
-	 * 
+	 *
 	 * @param characteristic
 	 *            The characteristic to read from.
 	 */
@@ -347,7 +347,7 @@ public class BluetoothLeService extends Service {
 
 	/**
 	 * Enables or disables notification on a give characteristic.
-	 * 
+	 *
 	 * @param characteristic
 	 *            Characteristic to act on.
 	 * @param enabled
@@ -375,7 +375,7 @@ public class BluetoothLeService extends Service {
 	 * Retrieves a list of supported GATT services on the connected device. This
 	 * should be invoked only after {@code BluetoothGatt#discoverServices()}
 	 * completes successfully.
-	 * 
+	 *
 	 * @return A {@code List} of supported services.
 	 */
 	public List<BluetoothGattService> getSupportedGattServices() {

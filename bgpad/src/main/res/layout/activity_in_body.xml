@@ -8,55 +8,44 @@
         android:id="@+id/title"
         layout="@layout/title_bar" />
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/inbody_image_height"
+        android:background="@drawable/banner" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3">
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/input"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="@string/search_name" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <ImageButton
-                android:id="@+id/more"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|right"
-                android:background="@drawable/more"
-                android:paddingRight="5dp"/>
-        </FrameLayout>
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/inbody_bt_margtop"
+        android:layout_marginTop="@dimen/inbody_bt_margtop"
+        android:orientation="vertical">
 
         <Button
-            android:id="@+id/search"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="搜索" />
+            android:id="@+id/test"
+            style="@style/inbody_main_bt"
+            android:background="#5C9AD3"
+            android:drawableLeft="@drawable/test"
+            android:text="测试" />
 
         <Button
-            android:id="@+id/add"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="添加" />
+            android:id="@+id/userset"
+            style="@style/inbody_main_bt"
+            android:background="#99B365"
+            android:drawableLeft="@drawable/userset"
+            android:text="用户管理" />
+
+        <Button
+            android:id="@+id/set"
+            style="@style/inbody_main_bt"
+            android:background="#D06194"
+            android:drawableLeft="@drawable/set"
+            android:text="设置" />
+
+        <Button
+            android:id="@+id/help"
+            style="@style/inbody_main_bt"
+            android:background="#D7BF23"
+            android:drawableLeft="@drawable/help"
+            android:text="帮助" />
     </LinearLayout>
-
-    <ListView
-        android:id="@+id/listview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 </LinearLayout>
