@@ -9,6 +9,15 @@
     <color name="table_row">#efefef</color>
     <color name="more_bt">#e3e3e3</color>
     <color name="line_black">#787878</color>
+    <color name="transparent">#00000000</color>
+    <color name="list_item">#8cdbff</color>
+
+    <color name="score_text">#f81e33</color>
+    <color name="report_blue_dark">#69afd2</color>
+    <color name="report_blue_light">#9dccdf</color>
+    <color name="report_green_dark">#99b365</color>
+    <color name="report_green_light">#c9df9d</color>
+
 
     <!--<color name="blue">#055EDD</color>-->
     <!--<color name="white">#EDEDED</color>-->
@@ -29,7 +38,6 @@
     <!--<color name="sbc_snippet_text">#ff4b4b4b</color>-->
     <!--<color name="share_text">#ff000000</color>-->
     <!--<color name="status_text">#ffffffff</color>-->
-    <!--<color name="transparent">#00000000</color>-->
     <!--<color name="viewfinder_frame">#ff000000</color>-->
     <!--<color name="viewfinder_laser">#ffff0000</color>-->
     <!--<color name="header">#58567D</color>-->

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/title"
+        layout="@layout/title_bar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/inbody_set_margin"
+        android:orientation="vertical">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/title_bar">
+
+                <TextView
+                    style="@style/seluser_userlist_text"
+                    android:layout_weight="9"
+                    android:text="编号" />
+
+                <TextView
+                    style="@style/seluser_userlist_text"
+                    android:layout_weight="6"
+                    android:text="姓名" />
+
+                <TextView
+                    style="@style/seluser_userlist_text"
+                    android:layout_weight="3"
+                    android:text="性别" />
+
+                <TextView
+                    style="@style/seluser_userlist_text"
+                    android:layout_weight="5"
+                    android:text="测试日期" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/table_row">
+
+                <TextView
+                    android:id="@+id/usernumber"
+                    style="@style/seluser_userlist_text"
+                    android:layout_weight="9"
+                    android:text="编号" />
+
+                <TextView
+                    android:id="@+id/username"
+                    style="@style/seluser_userlist_text"
+                    android:layout_weight="6"
+                    android:text="姓名" />
+
+                <TextView
+                    android:id="@+id/sex"
+                    style="@style/seluser_userlist_text"
+                    android:layout_weight="3"
+                    android:text="性别" />
+
+                <TextView
+                    android:id="@+id/testdate"
+                    style="@style/seluser_userlist_text"
+                    android:layout_weight="5"
+                    android:text="测试日期" />
+            </TableRow>
+        </TableLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/inbody_report_score_width"
+                android:layout_height="@dimen/inbody_report_score_height"
+                android:background="@color/report_green_dark"
+                android:gravity="center"
+                android:padding="@dimen/inbody_report_score_padding"
+                android:text="身体总评分："
+                android:textColor="@color/share_view"
+                android:textSize="@dimen/general_text" />
+
+            <TextView
+                android:id="@+id/score"
+                android:layout_width="@dimen/inbody_report_score_width"
+                android:layout_height="@dimen/inbody_report_score_height"
+                android:background="@drawable/score_bg"
+                android:gravity="center"
+                android:padding="@dimen/inbody_report_score_padding"
+                android:text="99"
+                android:textColor="@color/score_text"
+                android:textSize="@dimen/general_text" />
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/inbody_test_report_title"
+                        android:text="身体成分分析" />
+
+                    <TextView
+                        style="@style/inbody_test_report_unit"
+                        android:text="单位（kg）" />
+                </LinearLayout>
+                <!--<TextView-->
+                <!--style="@style/inbody_test_report_table_text"-->
+                <!--android:background="@color/report_green_dark"-->
+                <!--android:text="成分分类"-->
+                <!--android:textColor="@color/share_view" />-->
+
+
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+</LinearLayout>

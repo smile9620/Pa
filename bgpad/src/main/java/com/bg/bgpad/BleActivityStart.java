@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 import com.bg.constant.Constant;
 import com.bg.utils.LeDeviceListAdapter;
 import com.bg.utils.LogUtil;
+import com.bg.utils.MyDialog;
 import com.zxing.activity.CaptureActivity;
 
 /**
@@ -41,8 +43,9 @@ public abstract class BleActivityStart extends BaseActivity {
 
     private LeDeviceListAdapter mLeDeviceListAdapter;
     private final long SCAN_PERIOD = 3000;
-    protected ProgressDialog pogressDialog = null;
-    private AlertDialog myDialog = null;
+    protected Dialog pogressDialog = null;
+    protected MyDialog myDialog = null;
+    private AlertDialog devicesDialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,8 +87,7 @@ public abstract class BleActivityStart extends BaseActivity {
             // 获取Adapter
             if_supported = mBluetoothAdapter != null ? true : false;
             if (if_supported) {
-                pogressDialog = ProgressDialog.show(this, "提示：", "蓝牙正在搜索中...");
-                pogressDialog.dismiss();
+                myDialog = new MyDialog(this);
                 mLeDeviceListAdapter = new LeDeviceListAdapter(this, deviceName);
                 if (!firstIn) {
                     // 如果蓝牙已开启第一次进入，自动搜索
@@ -136,6 +138,7 @@ public abstract class BleActivityStart extends BaseActivity {
         if (!scan) {
             pogressDialog.dismiss();
         } else {
+            pogressDialog = myDialog.setDialog(getResources().getString(R.string.ble_search), false,false,null);
             pogressDialog.show();
         }
     }
@@ -197,10 +200,10 @@ public abstract class BleActivityStart extends BaseActivity {
         // 开启权限permission granted
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             switch (requestCode) {
-                case Constant.REQUEST_ACCESS_LOCATION ://蓝牙
+                case Constant.REQUEST_ACCESS_LOCATION://蓝牙
                     scanLeDevice(true);// 自动搜索
                     break;
-                case Constant.REQUEST_GRANTED_ACCESS ://相机
+                case Constant.REQUEST_GRANTED_ACCESS://相机
                     startQR();
                     break;
                 default:
@@ -227,8 +230,8 @@ public abstract class BleActivityStart extends BaseActivity {
                         Constant.mDeviceAddress = mLeDeviceListAdapter.mLeDevices.get(0).getAddress();
                         select_ble();
                     } else {
-                        myDialog = myDialog();
-                        myDialog.show();
+                        devicesDialog = devicesDialog();
+                        devicesDialog.show();
                     }
                     break;
             }
@@ -250,7 +253,7 @@ public abstract class BleActivityStart extends BaseActivity {
         }
     };
 
-    private AlertDialog myDialog() {
+    private AlertDialog devicesDialog() {
         AlertDialog.Builder dia = new AlertDialog.Builder(BleActivityStart.this);
         AlertDialog dialog = null;
         dia.setTitle("发现可用设备是否连接？");
@@ -287,7 +290,7 @@ public abstract class BleActivityStart extends BaseActivity {
                         mBluetoothAdapter.stopLeScan(mLeScanCallback);
                         Constant.mScanning = false;
                     }
-                    myDialog.cancel();
+                    devicesDialog.cancel();
 
                 }
             }
@@ -312,7 +315,7 @@ public abstract class BleActivityStart extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            switch (requestCode){
+            switch (requestCode) {
                 case Constant.BT_REQ:
                     requestPermission("Ble");
                     break;

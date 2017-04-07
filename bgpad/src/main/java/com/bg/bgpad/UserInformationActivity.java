@@ -3,7 +3,9 @@ package com.bg.bgpad;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -22,8 +24,11 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewDebug;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -38,6 +43,7 @@ import com.bg.constant.InBodyBluetooth;
 import com.bg.model.InBodyData;
 import com.bg.model.User;
 import com.bg.utils.BitmapTool;
+import com.bg.utils.MyDialog;
 import com.bg.utils.SetTitle;
 
 import org.litepal.crud.DataSupport;
@@ -94,7 +100,12 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
         ButterKnife.bind(this);
         new SetTitle(this, view, new boolean[]{true, false},
                 "测试", new int[]{R.drawable.back_bt, R.drawable.ble_bt});
-
+//        new MyDialog(this).showDialog("对不起，编号重复，请重新输入！", false,true, new MyDialog.DialogConfirm() {
+//            @Override
+//            public void dialogConfirm() {
+//                showToast("我知道了！");
+//            }
+//        });
         Intent intent = getIntent();
         column = intent.getBooleanExtra("column", true);
         if (!column) {
@@ -219,6 +230,25 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void alertDialog(){
+
+        Dialog mDeleteDialog = new Dialog(this, R.style.myDialog);
+        View vi = this.getLayoutInflater().inflate(R.layout.error_tip,null);
+        mDeleteDialog.setContentView(vi);
+        mDeleteDialog.show();
+        mDeleteDialog.getWindow().setGravity(Gravity.CENTER);
+
+//        AlertDialog.Builder buldier = new AlertDialog.Builder(this);
+//        View vi = this.getLayoutInflater().inflate(R.layout.error_tip,null);
+//        buldier.setView(vi);
+//        AlertDialog dialog = buldier.create();
+//        Window window = dialog.getWindow();
+//        WindowManager.LayoutParams lp = window.getAttributes();
+//        lp.alpha = 0.9f;
+//        window.setAttributes(lp);
+//        dialog.show();
+    }
     private void Permission() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)

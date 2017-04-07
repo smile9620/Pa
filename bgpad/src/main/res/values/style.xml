@@ -54,4 +54,48 @@
         <item name="android:gravity">center_horizontal</item>
         <item name="android:padding">@dimen/selectuser_edit_padding</item>
     </style>
+
+    <style name="myDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowBackground">@drawable/dialog_bg</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="inbody_set_edit">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@drawable/user_bg</item>
+        <item name="android:padding">@dimen/information_table_padd</item>
+        <item name="android:textSize">@dimen/general_text</item>
+        <item name="android:layout_marginLeft">@dimen/information_table_row_marg</item>
+        <item name="android:gravity">center</item>
+        <item name="android:ems">11</item>
+        <item name="android:textColor">@color/text_color</item>
+    </style>
+
+    <style name="inbody_test_report_title">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@color/title_bar</item>
+        <item name="android:textSize">@dimen/general_text</item>
+    </style>
+
+    <style name="inbody_test_report_unit">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">right</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textSize">@dimen/general_small_text</item>
+    </style>
+
+    <style name="inbody_test_report_table_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">4dp</item>
+    </style>
 </resources>

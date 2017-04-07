@@ -38,4 +38,10 @@
     <dimen name="information_table_row">140dp</dimen>
     <dimen name="information_image_height">200dp</dimen>
     <dimen name="information_image_marg">15dp</dimen>
+
+    <dimen name="dialog_small_text_magtop">10dp</dimen>
+    <dimen name="dialog_text_padding">6dp</dimen>
+
+    <dimen name="inbody_set_margin">15dp</dimen>
+    <dimen name="inbody_set_width">280dp</dimen>
 </resources>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/title"
+        layout="@layout/title_bar" />
+
+    <RelativeLayout
+        android:layout_width="@dimen/inbody_set_width"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/inbody_set_margin">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="打印机"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/inbody_bt_text_size"
+            android:textStyle="bold"
+            android:layout_marginLeft="@dimen/information_table_padd"
+            android:layout_centerVertical="true"/>
+
+        <Switch
+            android:id="@+id/printset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="@null"
+            android:thumb="@drawable/switch_dot"
+            android:track="@drawable/switch_bt"
+            android:layout_marginRight="@dimen/information_table_padd"/>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="@dimen/information_table_width"
+        android:layout_height="1dp"
+        android:background="@color/line_black" />
+
+    <View
+        android:layout_width="@dimen/information_table_width"
+        android:layout_height="1dp"
+        android:background="@color/table_row" />
+
+    <TableLayout
+        android:layout_width="@dimen/inbody_set_width"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/inbody_set_margin">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/information_table_row_padd">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="单位信息"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/inbody_bt_text_size"
+                android:textStyle="bold" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/information_table_row_padd">
+
+            <TextView
+                style="@style/inbody_infor_text"
+                android:text="公司名称 " />
+
+            <EditText
+                android:id="@+id/company"
+                style="@style/inbody_set_edit"
+                android:singleLine="true" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/information_table_row_padd">
+
+            <TextView
+                style="@style/inbody_infor_text"
+                android:text="公司地址 " />
+
+            <EditText
+                android:id="@+id/address"
+                style="@style/inbody_set_edit"
+                android:maxLength="18"
+                android:singleLine="true" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/information_table_row_padd">
+
+            <TextView
+                style="@style/inbody_infor_text"
+                android:text="电话" />
+
+            <EditText
+                android:id="@+id/telephone"
+                style="@style/inbody_set_edit"
+                android:maxLength="18"
+                android:singleLine="true" />
+        </TableRow>
+    </TableLayout>
+</LinearLayout>

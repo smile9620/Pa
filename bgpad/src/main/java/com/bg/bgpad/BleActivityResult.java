@@ -14,6 +14,7 @@ import android.os.CountDownTimer;
 import android.os.IBinder;
 
 import com.bg.constant.Constant;
+import com.bg.utils.MyDialog;
 
 public abstract class BleActivityResult extends BleActivityStart {
 
@@ -67,7 +68,7 @@ public abstract class BleActivityResult extends BleActivityStart {
     @Override
     protected void select_ble() {
         pogressDialog.show();
-        pogressDialog.setMessage("蓝牙正在连接中，请稍后...");
+        myDialog.setMsg(getResources().getString(R.string.ble_connect));
         startBle();
     }
 
@@ -85,15 +86,8 @@ public abstract class BleActivityResult extends BleActivityStart {
                     Constant.mBluetoothLeService.close();
                     Constant.mBluetoothLeService = null;
                 }
-                new AlertDialog.Builder(BleActivityResult.this).
-                        setTitle("提示：").setIcon(android.R.drawable.ic_dialog_info).
-                        setMessage("蓝牙连接失败，请重试！")
-                        .setNegativeButton("知道了", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        }).setCancelable(false).show();
+                myDialog.setDialog("蓝牙连接失败，请重试！"
+                        , true, false, null).show();
             }
         }
     };
@@ -141,15 +135,8 @@ public abstract class BleActivityResult extends BleActivityStart {
                         } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED
                                 .equals(action)) { // 断开连接
                             updateState(false);
-                            new AlertDialog.Builder(BleActivityResult.this).
-                                    setTitle("提示：").setIcon(android.R.drawable.ic_dialog_info).
-                                    setMessage("蓝牙已断开，请重新连接！")
-                                    .setNegativeButton("知道了", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.cancel();
-                                        }
-                                    }).setCancelable(false).show();
+                            myDialog.setDialog("蓝牙已断开，请重新连接！"
+                                    , true, false, null).show();
                             if (Constant.mBluetoothLeService != null) {
                                 Constant.mBluetoothLeService.close();
                                 Constant.mBluetoothLeService = null;

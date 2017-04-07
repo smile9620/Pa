@@ -39,16 +39,16 @@ public class InBodyActivity extends BaseActivity implements SetTitle.OnTitleBtCl
         Intent intent = new Intent();
         switch (view.getId()) {
             case R.id.test:
-                intent.setClass(this,UserInformationActivity.class);
+                intent.setClass(this,UserSelectActivity.class);
                 break;
             case R.id.userset:
-                intent.setClass(this,UserInformationActivity.class);
+                intent.setClass(this,UserManagementActivity.class);
                 break;
             case R.id.set:
-                intent.setClass(this,UserInformationActivity.class);
+                intent.setClass(this,InBodySetActivity.class);
                 break;
             case R.id.help:
-                intent.setClass(this,UserInformationActivity.class);
+                intent.setClass(this,InBodyTestReportActivity.class);
                 break;
         }
         startActivity(intent);

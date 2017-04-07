@@ -1,10 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
+
+    <include
+        android:id="@+id/title"
+        layout="@layout/title_bar" />
+
     <include
         android:id="@+id/selection"
         layout="@layout/selection_user" />
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/selectuser_userlist_marginleft"
+        android:layout_weight="1">
+
+
+        <TextView
+            android:id="@+id/datatip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="没有数据！"
+            android:textColor="@color/more_bt"
+            android:textSize="@dimen/title_text" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include layout="@layout/usersetlist_item" />
+
+            <ListView
+                android:id="@+id/listview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="#00000000"
+                android:dividerHeight="0dp" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/selectuser_edit_height"
+        android:layout_marginBottom="@dimen/dialog_text_padding"
+        android:layout_marginRight="@dimen/selectuser_userlist_marginleft">
+
+        <Button
+            android:id="@+id/export"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/selectuser_edit_height"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/test_bg"
+            android:text="导出"
+            android:textColor="@color/share_view"
+            android:textSize="@dimen/general_text" />
+
+        <Button
+            android:id="@+id/delete"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/selectuser_edit_height"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="@dimen/selectuser_userlist_marginleft"
+            android:layout_toLeftOf="@id/export"
+            android:background="@drawable/test_bg"
+            android:text="删除"
+            android:textColor="@color/share_view"
+            android:textSize="@dimen/general_text" />
+    </RelativeLayout>
+
 </LinearLayout>
+

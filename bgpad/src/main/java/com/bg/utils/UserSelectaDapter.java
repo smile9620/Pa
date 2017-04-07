@@ -22,6 +22,7 @@ public class UserSelectaDapter extends BaseAdapter {
 
     private List<Map<String, String>> list_maps;
     private Context context;
+//    private Color color = ContextCompat.getColor(context,R.color.table_row);
 
     public UserSelectaDapter(Context context, List<Map<String, String>> list_maps) {
         this.context = context;
@@ -59,8 +60,9 @@ public class UserSelectaDapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         if (position % 2 == 0) {
-          convertView.setBackgroundColor(Color.parseColor("#efefef"));
+            convertView.setBackgroundColor(Color.parseColor("#efefef"));
         }
+        parent.getChildAt(position);
         viewHolder.usernumber.setText(list_maps.get(position).get("user_number").toString());
         viewHolder.username.setText(list_maps.get(position).get("user_name").toString());
         viewHolder.sex.setText(list_maps.get(position).get("sex").toString());

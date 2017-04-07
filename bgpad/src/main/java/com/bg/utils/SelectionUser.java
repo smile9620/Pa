@@ -38,6 +38,8 @@ public class SelectionUser implements View.OnClickListener {
     private String select;
     private PopupWindow pop;
     private Context context;
+    private String from;
+    private String to;
 
     public SelectionUser(Context context, SetOnSelectoinUser onSelectoinUser, View view, boolean addShow) {
         this.context = context;
@@ -70,12 +72,12 @@ public class SelectionUser implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.input:
                 if (input.getHint().equals(context.getResources().getString(R.string.search_date))) {
-                    showDialog();
+                    showDialog("from");
                 }
                 break;
             case R.id.search:
                 String str = input.getText().toString();
-                onSelectoinUser.onSearch(select,str);
+                onSelectoinUser.onSearch(select, str);
                 break;
             case R.id.add:
                 onSelectoinUser.onAdd();
@@ -145,16 +147,19 @@ public class SelectionUser implements View.OnClickListener {
         return popWindow;
     }
 
-    private void showDialog() {
+    private void showDialog(final String str) {
         Calendar cal = Calendar.getInstance();
         new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                String mon = null;
-                if ((month + 1) < 10) {
-                    mon = "0" + (month + 1);
+
+                if (str.equals("from")) {
+                    from = year + "-" + (month + 1) + "-" + dayOfMonth;
+                    showDialog("to");
+                } else {
+                    to = year + "-" + (month + 1) + "-" + dayOfMonth;
+                    input.setText(from + "/" + to);
                 }
-                input.setText(year + "-" + mon + "-" + dayOfMonth);
             }
         }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show();
     }
@@ -173,7 +178,7 @@ public class SelectionUser implements View.OnClickListener {
             case "date":
                 select = select_date;  //根据体检日期进行查询
                 input.setHint(context.getResources().getString(R.string.search_date));
-                showDialog();
+                showDialog("from");
                 break;
         }
         if (str.equals("date")) {

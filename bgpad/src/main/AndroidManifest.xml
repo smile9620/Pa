@@ -64,24 +64,31 @@
 
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".ChangePassword" />
         <activity android:name="com.zxing.activity.CaptureActivity" />
         <activity android:name=".Test" />
-        <activity android:name=".UserSelectActivity"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
+        <activity
+            android:name=".UserSelectActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+        <activity
+            android:name=".UserInformationActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+        <activity android:name=".DataAnalysis" />
+        <activity android:name=".CameraActivity" />
+        <activity
+            android:name=".UserManagementActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+        <activity android:name=".InBodyActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".UserInformationActivity"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"></activity>
-        <activity android:name=".DataAnalysis" />
-        <activity android:name=".CameraActivity" />
-        <activity android:name=".UserManagementActivity"></activity>
-        <activity android:name=".InBodyActivity"></activity>
+        <activity android:name=".InBodySetActivity" />
+        <activity android:name=".TestReportActivity" />
+        <activity android:name=".InBodyTestReportActivity"></activity>
     </application>
 
 </manifest>

@@ -15,4 +15,6 @@
     <string name="search_name">按姓名进行搜索</string>
     <string name="search_number">按编号进行搜索</string>
     <string name="search_date">按日期进行搜索</string>
+    <string name="ble_search">蓝牙正在搜索中，请稍后...</string>
+    <string name="ble_connect">蓝牙正在连接中，请稍后...</string>
 </resources>

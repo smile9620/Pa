@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.bg.constant.Constant;
 import com.bg.constant.DeviceName;
@@ -48,13 +50,15 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
     View selection;
     @BindView(R.id.listview)
     ListView listview;
+    @BindView(R.id.datatip)
+    TextView datatip;
 
     private List<User> users = new ArrayList<User>();
     private List<Map<String, String>> list_maps = new ArrayList<>();
-    //    private SimpleAdapter simpleAdapter;
     private boolean bt_enable;
     private boolean column = true;  //是否有立柱，默认为有
-    private UserSelectaDapter selectaDapter;
+    private SimpleAdapter simpleAdapter;
+    private int[] colors = new int[]{0xFFFFFFFF, 0xFFEFEFEF};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,27 +69,30 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
                 new int[]{R.drawable.back_bt, R.drawable.ble_bt});
         new SelectionUser(this, this, selection, true);
 
-//        getBle(DeviceName.InBody); //启动蓝牙
+        getBle(DeviceName.InBody); //启动蓝牙
         getData();
-//        simpleAdapter = new SimpleAdapter(this, list_maps, R.layout.userlist_item,
-//                new String[]{"user_number", "user_name", "sex", "strDate"},
-//                new int[]{R.id.usernumber, R.id.username, R.id.sex, R.id.testdate});
-        selectaDapter = new UserSelectaDapter(this, list_maps);
-        listview.setAdapter(selectaDapter);
+        simpleAdapter = new SimpleAdapter(this, list_maps, R.layout.userlist_item,
+                new String[]{"user_number", "user_name", "sex", "strDate"},
+                new int[]{R.id.usernumber, R.id.username, R.id.sex, R.id.testdate}) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View adapterView = super.getView(position, convertView, parent);
+                int colorPos = position % colors.length;
+                adapterView.setBackgroundColor(colors[colorPos]);
+                return adapterView;
+            }
+        };
+
+        listview.setAdapter(simpleAdapter);
         listview.setOnItemClickListener(this);
 
     }
 
     private void getData() {
-//        users = DataSupport.order("createDate desc").limit(10).find(User.class);
-        Map<String, String> map_title = new HashMap<>();
-        map_title.put("user_number", "编号");
-        map_title.put("user_name", "姓名");
-        map_title.put("sex", "性别");
-        map_title.put("strDate", "测试日期");
-        list_maps.add(map_title); // 添加表头
-//        for (int i = 0; i < users.size(); i++) {
-        for (int i = 0; i < 30; i++) {
+        users = DataSupport.order("createDate desc").limit(10).find(User.class);
+        if (users.size() != 0) {
+        datatip.setVisibility(View.GONE);
+        for (int i = 0; i < users.size(); i++) {
             Map<String, String> map = new HashMap<>();
 //            map.put("user_number", users.get(i).getCreateDate().toString());
 //            map.put("user_name", users.get(i).getUser_name());
@@ -97,12 +104,15 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
             map.put("strDate", "2017-04-01");
             list_maps.add(map);
         }
+        } else {
+            datatip.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        selectaDapter.notifyDataSetChanged();
+        simpleAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -136,11 +146,14 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        String number = list_maps.get(position).get("user_number");
-        Intent intent = new Intent(this, UserInformationActivity.class);
-        intent.putExtra("user_number", number);
-        intent.putExtra("column", column);
-        startActivity(intent);
+        if (position != 0) {
+            view.setBackgroundColor(ContextCompat.getColor(this, R.color.title_bar));
+            String number = list_maps.get(position).get("user_number");
+            Intent intent = new Intent(this, UserInformationActivity.class);
+            intent.putExtra("user_number", number);
+            intent.putExtra("column", column);
+            startActivity(intent);
+        }
     }
 
     @Override
