@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/shape_judge"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/inbody_report_score_padding"
+        android:text="体型判断"
+        android:textColor="@color/title_bar"
+        android:textSize="@dimen/general_text" />
+
+    <RelativeLayout
+        android:layout_width="@dimen/shape_judge_width"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/current"
+            android:drawableLeft="@drawable/current"
+            android:padding="1dp"
+            android:text="本次"
+            android:textSize="@dimen/small_text"
+            android:textColor="@color/text_color"/>
+
+        <TextView
+            android:id="@+id/current"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:drawableLeft="@drawable/before"
+            android:padding="1dp"
+            android:text="前次"
+            android:textSize="@dimen/small_text"
+            android:textColor="@color/text_color"/>
+    </RelativeLayout>
+
+    <FrameLayout
+        android:layout_width="@dimen/shape_judge_width"
+        android:layout_height="@dimen/shape_judge_height"
+        android:background="@drawable/shape_judgment">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/shape_judge_bmi_margin"
+            android:rotation="-90"
+            android:text="BMI:27.3"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/small_text" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:text="体脂百分比：23.1"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/small_text" />
+
+        <GridLayout
+            android:layout_width="@dimen/shape_judge_grid_width"
+            android:layout_height="@dimen/shape_judge_grid_height"
+            android:layout_marginBottom="@dimen/shape_judge_grid_margbutt"
+            android:layout_marginLeft="@dimen/shape_judge_grid_margleft"
+            android:columnCount="4"
+            android:rowCount="4">
+
+            <TextView
+                style="@style/inbody_test_report_table_text"
+                android:layout_column="0"
+                android:layout_columnSpan="2"
+                android:layout_columnWeight="2"
+                android:layout_marginBottom="1dp"
+                android:layout_marginTop="1dp"
+                android:layout_row="0"
+                android:background="#2aa334"
+                android:text="远动员型" />
+
+            <TextView
+                style="@style/inbody_test_report_table_text"
+                android:layout_column="2"
+                android:layout_columnWeight="1"
+                android:layout_margin="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_marginTop="1dp"
+                android:layout_row="0"
+                android:background="#f2af57"
+                android:text="偏胖" />
+
+            <TextView
+                style="@style/inbody_test_report_table_text"
+                android:layout_column="3"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="1dp"
+                android:layout_marginTop="1dp"
+                android:layout_row="0"
+                android:background="#f09c26"
+                android:text="肥胖" />
+
+            <TextView
+                style="@style/inbody_test_report_table_text"
+                android:layout_column="0"
+                android:layout_columnSpan="2"
+                android:layout_columnWeight="2"
+                android:layout_marginBottom="1dp"
+                android:layout_marginTop="1dp"
+                android:layout_row="1"
+                android:background="#3e98ed"
+                android:text="肌肉型" />
+
+            <TextView
+                style="@style/inbody_test_report_table_text"
+                android:layout_column="2"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="1dp"
+                android:layout_marginTop="1dp"
+                android:layout_row="1"
+                android:layout_rowSpan="2"
+                android:layout_rowWeight="2"
+                android:background="#199c26"
+                android:text="健康型" />
+
+            <TextView
+                style="@style/inbody_test_report_table_text"
+                android:layout_column="3"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="1dp"
+                android:layout_marginTop="1dp"
+                android:layout_row="1"
+                android:background="#f2af57"
+                android:text="偏胖" />
+
+            <TextView
+                style="@style/inbody_test_report_table_text"
+                android:layout_column="0"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="1dp"
+                android:layout_marginTop="1dp"
+                android:layout_row="2"
+                android:background="#5ba8f0"
+                android:text="苗条肌肉型" />
+
+            <TextView
+                style="@style/inbody_test_report_table_text"
+                android:layout_column="1"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="1dp"
+                android:layout_marginTop="1dp"
+                android:layout_row="2"
+                android:layout_rowWeight="2"
+                android:background="#78b3eb"
+                android:text="苗条" />
+
+            <TextView
+                style="@style/inbody_test_report_table_text"
+                android:layout_column="3"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="1dp"
+                android:layout_marginTop="1dp"
+                android:layout_row="2"
+                android:layout_rowSpan="2"
+                android:layout_rowWeight="2"
+                android:background="#f5c987"
+                android:text="隐性肥胖" />
+
+            <TextView
+                style="@style/inbody_test_report_table_text"
+                android:layout_column="0"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="1dp"
+                android:layout_marginTop="1dp"
+                android:layout_row="3"
+                android:background="#71c77a"
+                android:text="消瘦型" />
+
+            <TextView
+                style="@style/inbody_test_report_table_text"
+                android:layout_column="1"
+                android:layout_columnSpan="2"
+                android:layout_columnWeight="2"
+                android:layout_marginBottom="1dp"
+                android:layout_marginTop="1dp"
+                android:layout_row="3"
+                android:background="#71c77a"
+                android:text="偏瘦型" />
+        </GridLayout>
+    </FrameLayout>
+
+</LinearLayout>
