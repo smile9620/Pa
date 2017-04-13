@@ -19,7 +19,6 @@ public class Constant {
     public final static int REQUEST_ACCESS_LOCATION = 5; //蓝牙权限
     public final static int REQUEST_GRANTED_ACCESS = 6; //相机权限
     public static boolean mScanning = true; //蓝牙是否在搜索中
-    public final static String USER_NUMBER = "user_number";
     public static String mDeviceAddress; // 蓝牙地址
     public static BluetoothLeService mBluetoothLeService = null;
     public static Uri imageUri = null;

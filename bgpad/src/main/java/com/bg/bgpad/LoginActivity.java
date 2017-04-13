@@ -104,10 +104,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     Toast.makeText(this, "密码为空，不能登录！", Toast.LENGTH_SHORT).show();
                 } else {
                     SharedPreferences share = getSharedPreferences(
-                            LoginActivity.this.getString(R.string.login),
+                            LoginActivity.this.getString(R.string.log),
                             MODE_PRIVATE);
-                    Map<String, ?> map = new HashMap<String, String>();
-                    map = share.getAll();
+                    Map<String, ?> map = share.getAll();
+
                     if (share != null && map.size() != 0) {
                         if ((map.get("telephone").equals(myname) && map.get(
                                 "password").equals(mypassword))) {

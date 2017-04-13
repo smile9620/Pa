@@ -62,7 +62,7 @@ public class RegisterActivity extends BaseActivity implements
                 }
                 if (pass.equals(passu)) {
                     SharedPreferences share = getSharedPreferences(
-                            RegisterActivity.this.getString(R.string.login),
+                            RegisterActivity.this.getString(R.string.log),
                             MODE_PRIVATE);
                     SharedPreferences.Editor edit = share.edit();
                     edit.putString("telephone", telphone);

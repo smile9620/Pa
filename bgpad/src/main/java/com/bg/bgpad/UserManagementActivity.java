@@ -1,6 +1,10 @@
 package com.bg.bgpad;
 
+import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -12,12 +16,19 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.bg.model.InBodyData;
+import com.bg.model.User;
 import com.bg.utils.MyDialog;
 import com.bg.utils.SelectionUser;
 import com.bg.utils.SetTitle;
 
+import org.litepal.crud.DataSupport;
+
+import java.lang.annotation.ElementType;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -43,8 +54,15 @@ public class UserManagementActivity extends BaseActivity implements SelectionUse
     Button delete;
     private SimpleAdapter simpleAdapter;
     private int[] colors = new int[]{0xFFFFFFFF, 0xFFEFEFEF};
-    private List<Map<String, String>> list_maps = new ArrayList<>();
-    private Map<Integer, Boolean> map = new HashMap<>();// 存放已被选中的CheckBox
+    private ArrayList<Map<String, String>> list_maps = new ArrayList<>();
+    private Map<Integer, Boolean> checkmap = new HashMap<>();// 存放已被选中的CheckBox
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            simpleAdapter.notifyDataSetChanged();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +73,7 @@ public class UserManagementActivity extends BaseActivity implements SelectionUse
                 "用户管理", new int[]{R.drawable.back_bt, R.drawable.ble_bt});
         new SelectionUser(this, this, selection, false);
 
-        adddata();
+        getData();
         simpleAdapter = new SimpleAdapter(this, list_maps, R.layout.usersetlist_item,
                 new String[]{"user_number", "user_name", "strDate"},
                 new int[]{R.id.usernumber, R.id.username, R.id.testdate}) {
@@ -70,13 +88,13 @@ public class UserManagementActivity extends BaseActivity implements SelectionUse
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if (isChecked) {
-                            map.put(pos, true);
+                            checkmap.put(pos, true);
                         } else {
-                            map.remove(pos);
+                            checkmap.remove(pos);
                         }
                     }
                 });
-                if (map != null && map.containsKey(position)) {
+                if (checkmap != null && checkmap.containsKey(position)) {
                     box.setChecked(true);
                 } else {
                     box.setChecked(false);
@@ -92,29 +110,42 @@ public class UserManagementActivity extends BaseActivity implements SelectionUse
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     for (int i = 0; i < list_maps.size(); i++) {
-                        map.put(i, true);
+                        checkmap.put(i, true);
                     }
                 } else {
-                    map.clear();
+                    checkmap.clear();
                 }
                 simpleAdapter.notifyDataSetChanged();
             }
         });
     }
 
-    private void adddata() {
-        for (int i = 0; i < 3; i++) {
-            Map<String, String> map = new HashMap<>();
-            map.put("user_number", "编号" + i);
-            map.put("user_name", "姓名" + i);
-            map.put("strDate", "测试日期" + i);
-            list_maps.add(map);
+    private void getData() {
+        List<InBodyData> inbodylist = DataSupport.order("testDate desc").limit(10).find(InBodyData.class);
+        addData(inbodylist);
+    }
+
+    private void addData(List<InBodyData> list) {
+        list_maps.clear();
+        if (list.size() != 0) {
+            datatip.setVisibility(View.GONE);
+            for (int i = 0; i < list.size(); i++) {
+                User user = list.get(i).getUser();
+                Map<String, String> map = new HashMap<>();
+                map.put("user_number", user.getUser_number().toString());
+                map.put("user_name", user.getUser_name());
+                map.put("strDate", list.get(i).getStrDate());
+                list_maps.add(map);
+            }
+        } else {
+            datatip.setVisibility(View.VISIBLE);
         }
+        handler.sendEmptyMessage(0);
     }
 
     @Override
-    public void onSearch(String type, String selectStr) {
-        showToast(selectStr);
+    public void sendList(List<InBodyData> list) {
+        addData(list);
     }
 
     @Override
@@ -128,7 +159,6 @@ public class UserManagementActivity extends BaseActivity implements SelectionUse
 
     @Override
     public void rightBt(ImageButton right) {
-
     }
 
     @Override
@@ -141,15 +171,45 @@ public class UserManagementActivity extends BaseActivity implements SelectionUse
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.export:
-                new MyDialog(this).setDialog("数据正在导出中，请稍后...", false,false,null).show();
+                new MyDialog(this).setDialog("数据正在导出中，请稍后...", false, false, null).show();
                 break;
             case R.id.delete:
-                new MyDialog(this).setDialog( "确定彻底删除所选选项？", true,true, new MyDialog.DialogConfirm() {
-                    @Override
-                    public void dialogConfirm() {
-                        showToast("我知道了！");
+                if (list_maps.size() != 0) {
+                    if (checkmap.size() != 0) {
+                        new MyDialog(this).setDialog("确定彻底删除所选选项？", true, true, new MyDialog.DialogConfirm() {
+                            @Override
+                            public void dialogConfirm() {
+
+                                MyDialog myDialog = new MyDialog(UserManagementActivity.this);
+                                Dialog dialog = myDialog.setDialog("数据正在删除中，请稍后...", false, false, null);
+                                dialog.show();
+                                List<Integer> index = new ArrayList<Integer>();
+                                for (Integer key : checkmap.keySet()) {
+                                    index.add(key);
+                                }
+                                Collections.sort(index);      //升序排列;
+                                for (int i = index.size()-1; 0 <= i; i--) {
+                                    Map<String, String> map = list_maps.get(index.get(i));
+                                    String data = map.get("user_number");
+                                    list_maps.remove(map);
+                                    checkmap.remove(index.get(i));
+                                    DataSupport.deleteAll(InBodyData.class, "user_number = ?", data);
+                                    DataSupport.deleteAll(User.class, "user_number = ?", data);
+                                }
+                                if (checkBox.isChecked()){
+                                    checkBox.setChecked(false);
+                                }
+                                dialog.dismiss();
+                                handler.sendEmptyMessage(0);
+                                myDialog.setDialog("数据已删除！", true, false, null).show();
+                            }
+                        }).show();
+                    } else {
+                        showToast("请选择需要删除的数据！");
                     }
-                }).show();
+                } else {
+                    showToast("无数据！");
+                }
                 break;
         }
     }

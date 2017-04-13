@@ -10,8 +10,10 @@ import org.litepal.crud.DataSupport;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 /**
  * Created by Administrator on 2017-02-14.
@@ -23,28 +25,24 @@ public class User extends DataSupport {
     private String user_name;   //姓名
     @Column(unique = true, nullable = false)
     private String user_number;        //编号
-    private int age;           //年龄
     private int sex;           //性别 0 代表男生，1 代表女生
-    private int birthday;      //出生年月
+    private String birthday;      //出生年月
     private String image_path;  //头像路径
     private String mark;       //备注
     private Date createDate;   //创建日期，用于排序
     private String strDate;    //用于搜索 如：2017-03-20
-    private List<InBodyData> data_list = new ArrayList<InBodyData>(); //测试数据
+    protected int age;           //年龄
+    protected List<InBodyData> data_list = new ArrayList<InBodyData>(); //测试数据
 
     public List<InBodyData> getData_list() {
-        return data_list;
+        return DataSupport.where("user_number = ?", user_number).find(InBodyData.class);
     }
 
-    public void setData_list(List<InBodyData> data_list) {
-        this.data_list = data_list;
-    }
-
-    public int getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(int birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 
@@ -73,11 +71,10 @@ public class User extends DataSupport {
     }
 
     public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
+        char[] bir = birthday.toCharArray();
+        String year = bir[0] + "" + bir[1] + bir[2] + bir[3];
+        Calendar cal = Calendar.getInstance();
+        return cal.get(Calendar.YEAR) - Integer.parseInt(year);
     }
 
     public int getSex() {

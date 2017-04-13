@@ -9,8 +9,10 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,6 +37,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,8 +52,15 @@ import com.bg.utils.SetTitle;
 import org.litepal.crud.DataSupport;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -80,10 +90,14 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
     EditText height;
     @BindView(R.id.test)
     Button test;
+    @BindView(R.id.showheight)
+    TableRow showheight;
 
-    private List<User> user;
+    private List<User> users;
     private boolean column;
     private boolean showdialog = true;
+    private int selectsex = 0;
+    private String photopath = "";
 
     private Handler handler = new Handler() {
         @Override
@@ -100,24 +114,21 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
         ButterKnife.bind(this);
         new SetTitle(this, view, new boolean[]{true, false},
                 "测试", new int[]{R.drawable.back_bt, R.drawable.ble_bt});
-//        new MyDialog(this).showDialog("对不起，编号重复，请重新输入！", false,true, new MyDialog.DialogConfirm() {
-//            @Override
-//            public void dialogConfirm() {
-//                showToast("我知道了！");
-//            }
-//        });
+
         Intent intent = getIntent();
         column = intent.getBooleanExtra("column", true);
         if (!column) {
-            height.setVisibility(View.VISIBLE);
+            showheight.setVisibility(View.VISIBLE);
+        } else {
+            showheight.setVisibility(View.GONE);
         }
         sex.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 if (boy.isChecked()) {
-                    showToast("男生");
+                    selectsex = 0;
                 } else {
-                    showToast("女生");
+                    selectsex = 1;
                 }
             }
         });
@@ -129,11 +140,26 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
             boy.setClickable(false);
             girl.setClickable(false);
             birthday.setClickable(false);
-//            user = DataSupport.where(Constant.USER_NUMBER + " = ?", intent.getStringExtra(Constant.USER_NUMBER)).find(User.class);
-//            username.setText(user.get(0).getUser_name());
-//            usernumber.setText(user.get(0).getUser_number());
-        }
 
+            users = DataSupport.where(" user_number = ? ", intent.getStringExtra("user_number")).find(User.class);
+            username.setText(users.get(0).getUser_name());
+            usernumber.setText(users.get(0).getUser_number());
+            if (users.get(0).getSex() == 0) {
+                boy.setChecked(true);
+            } else {
+                girl.setChecked(true);
+            }
+            birthday.setText(users.get(0).getBirthday());
+            age.setText(users.get(0).getAge() + "");
+            if (users.get(0).getImage_path() != null) {
+                File path1 = new File(Constant.mFilePath);
+                if (path1.exists()) {
+                    File file = new File(path1, users.get(0).getImage_path());
+                    Uri imaUri = Uri.fromFile(file);
+                    showImage(imaUri);
+                }
+            }
+        }
     }
 
     @Override
@@ -173,11 +199,9 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
 
     @Override
     public void rightBt(ImageButton right) {
-        DataSupport.deleteAll(User.class, "user_number = ?", user.get(0).getUser_number());
-        Toast.makeText(this, "用户" + user.get(0).getUser_name().toString() + "删除成功！",
-                Toast.LENGTH_SHORT).show();
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @OnClick({R.id.image, R.id.test, R.id.birthday})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -188,67 +212,111 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
                 showDialog(showdialog);
                 break;
             case R.id.test:
-//                String name = username.getText().toString();
-//                String number = usernumber.getText().toString();
-//                String heig = height.getText().toString();
-////                if (name == null || name.isEmpty() || number == null || number.isEmpty()) {
-////                    Toast.makeText(this, "姓名或编号不能为空", Toast.LENGTH_SHORT).show();
-////                    return;
-////                }
-//
-//                User user = new User();
-//                InBodyData inBodyData = new InBodyData();
-//                user.setUser_name(name);
-//                user.setUser_number(number);
-//                inBodyData.setHeight(Float.parseFloat(heig));
-//                inBodyData.setUser(user);
-//                user.getData_list().add(inBodyData);
-//                if (user.save() && inBodyData.save()) {
-//                    showToast("保存成功！");
-//                } else {
-//                    showToast("保存失败！");
+                String usernu = usernumber.getText().toString().trim();
+                String userna = username.getText().toString().trim();
+                String bir = birthday.getText().toString().trim();
+                String heig = height.getText().toString().trim();
+
+                if (checkUser(usernu, userna, bir, heig)) {
+                    User user = new User();
+                    InBodyData inBodyData = new InBodyData();
+//                for (int i = 0; i < 10; i++) {
+//                    User user = new User();
+//                    InBodyData inBodyData = new InBodyData();
+//                    user.setUser_number("" + i + i);
+//                    user.setUser_name("张" + i);
+//                    user.setBirthday("20120305");
+//                    user.setSex(0);
+//                    inBodyData.setHeight(Float.parseFloat("45.5"));
+//                    inBodyData.setUser_number("" + i + i);
+//                    user.save();
+//                    inBodyData.save();
 //                }
-////                writeBle(InBodyBluetooth.send3);
-//                break;
+                    user.setUser_number(usernu);
+                    user.setUser_name(userna);
+                    user.setBirthday(bir);
+                    user.setSex(selectsex);
+                    if (!column) {
+                        inBodyData.setHeight(Float.parseFloat(heig));
+                    }
+                    if (photopath != "") {
+                        user.setImage_path(photopath);
+                    }
+                    inBodyData.setUser_number(usernu);
+                    if (user.save() && inBodyData.save()) {
+                        showToast("保存成功！");
+                    } else {
+                        showToast("保存失败！");
+                    }
+//                writeBle(InBodyBluetooth.send3);
+                }
+
+                break;
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private boolean checkUser(String number, String name, String birth, String he) {
+
+
+        if (number == null || number.isEmpty()) {
+            usernumber.setHint("编号不能为空！");
+            usernumber.setHintTextColor(Color.RED);
+            return false;
+        }
+        if (name == null || name.isEmpty()) {
+            username.setHint("姓名不能为空！");
+            username.setHintTextColor(Color.RED);
+            return false;
+        }
+        if (birth == null || birth.isEmpty()) {
+            birthday.setHint("出生日期不能为空！");
+            birthday.setHintTextColor(Color.RED);
+            return false;
+        }
+        if (!column) {
+            if (height.isCursorVisible()) {
+                if (he == null || he.isEmpty()) {
+                    height.setHint("身高不能为空！");
+                    height.setHintTextColor(Color.RED);
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     private void showDialog(Boolean bool) {
         if (bool) {
             final Calendar cal = Calendar.getInstance();
+            final Date currentTime = new Date();
             new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                    String mon = null;
+                    String mon = month + 1 + "";
                     if ((month + 1) < 10) {
                         mon = "0" + (month + 1);
                     }
-                    birthday.setText(year + "-" + mon + "-" + dayOfMonth);
-                    age.setText((cal.get(Calendar.YEAR) - year) + "");
+                    String data = year + "-" + mon + "-" + dayOfMonth;
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    Date date = null;
+                    try {
+                        date = formatter.parse(data);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    if (date.getTime() > currentTime.getTime()) {
+                        showToast("出生日期大于当前日期！");
+                    } else {
+
+                        birthday.setText(data);
+                        age.setText((cal.get(Calendar.YEAR) - year) + "");
+                    }
                 }
             }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show();
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void alertDialog(){
-
-        Dialog mDeleteDialog = new Dialog(this, R.style.myDialog);
-        View vi = this.getLayoutInflater().inflate(R.layout.error_tip,null);
-        mDeleteDialog.setContentView(vi);
-        mDeleteDialog.show();
-        mDeleteDialog.getWindow().setGravity(Gravity.CENTER);
-
-//        AlertDialog.Builder buldier = new AlertDialog.Builder(this);
-//        View vi = this.getLayoutInflater().inflate(R.layout.error_tip,null);
-//        buldier.setView(vi);
-//        AlertDialog dialog = buldier.create();
-//        Window window = dialog.getWindow();
-//        WindowManager.LayoutParams lp = window.getAttributes();
-//        lp.alpha = 0.9f;
-//        window.setAttributes(lp);
-//        dialog.show();
-    }
     private void Permission() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
@@ -270,7 +338,8 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
         if (!path1.exists()) {
             path1.mkdirs();
         }
-        File file = new File(path1, System.currentTimeMillis() + ".jpg");
+        photopath = System.currentTimeMillis() + ".jpg";
+        File file = new File(path1, photopath);
         Constant.imageUri = Uri.fromFile(file);
 
         Intent intent = new Intent(UserInformationActivity.this, CameraActivity.class);
@@ -293,26 +362,33 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private void showImage(Uri uri) {
+        Bitmap bitmap;
+        try {
+            // 读取uri所在的图片
+            bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+
+            Matrix matrix = new Matrix(); //抗锯齿
+            matrix.postScale(0.2f, 0.2f);
+            Bitmap temp = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+
+            image.setBackground(new BitmapDrawable(this.getResources(), temp));
+            if (!bitmap.isRecycled()) {
+                bitmap.recycle();
+            }
+        } catch (Exception e) {
+            photopath = "";
+            e.printStackTrace();
+        }
+
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == Constant.CAMERA_STA_USERINFO) {
-            Bitmap bitmap;
-            try {
-                // 读取uri所在的图片
-                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Constant.imageUri);
-
-                Matrix matrix=new Matrix(); //抗锯齿
-                matrix.postScale(0.2f, 0.2f);
-                Bitmap temp = Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,true);
-
-                image.setBackground(new BitmapDrawable(this.getResources(), temp));
-                if (!bitmap.isRecycled()) {
-                    bitmap.recycle();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            showImage(Constant.imageUri);
 
 //            FileInputStream fis = null;
 //            try {

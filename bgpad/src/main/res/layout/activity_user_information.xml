@@ -130,6 +130,7 @@
             </TableRow>
 
             <TableRow
+                android:id="@+id/showheight"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="@dimen/information_table_row_padd">

@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,23 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bg.bgpad.AppContext;
+import com.bg.bgpad.BaseActivity;
 import com.bg.bgpad.R;
+import com.bg.model.InBodyData;
+import com.bg.model.User;
 
+import org.litepal.crud.DataSupport;
+
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static android.R.attr.type;
 
 /**
  * Created by zjy on 2017-03-24.
@@ -32,10 +45,10 @@ public class SelectionUser implements View.OnClickListener {
     private ImageButton search;
     private Button add;
     private SetOnSelectoinUser onSelectoinUser;
-    private String select_name = "user_name"; // 1、根据姓名进行查询
-    private String select_number = "user_number";// 2、根据编码进行查询
-    private String select_date = "createDate";// 2、根据编码进行查询
-    private String select;
+    private static String select_name = "user_name"; // 1、根据姓名进行查询
+    private static String select_number = "user_number";// 2、根据编码进行查询
+    public static String select_date = "testDate";// 2、根据测试时间进行查询
+    private String select = select_name;
     private PopupWindow pop;
     private Context context;
     private String from;
@@ -77,7 +90,28 @@ public class SelectionUser implements View.OnClickListener {
                 break;
             case R.id.search:
                 String str = input.getText().toString();
-                onSelectoinUser.onSearch(select, str);
+                List<InBodyData> datalist = new ArrayList<InBodyData>();
+                if (str == null || str.isEmpty()) {
+                    Toast toast = Toast.makeText(AppContext.getContext(), "请输入查询条件！", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                } else {
+                    if (select.equals(SelectionUser.select_date)) {
+                        String[] dates = dateFormat(str);
+                        datalist = DataSupport.where(" date between ? and ? ",
+                                dates[0], dates[1]).find(InBodyData.class);
+                    } else {
+                        List<User> users = DataSupport.select("user_number").where(select + " like ?", "%" + str + "%").find(User.class);
+                        for (int i = 0; i < users.size(); i++) {
+                            List<InBodyData> list = DataSupport.where("user_number = ? ", users.get(i).getUser_number().toString()).find(InBodyData.class);
+                            for (int j = 0; j < list.size(); j++) {
+                                datalist.add(list.get(i));
+                            }
+                        }
+                    }
+                    onSelectoinUser.sendList(datalist);
+                }
+
                 break;
             case R.id.add:
                 onSelectoinUser.onAdd();
@@ -152,12 +186,19 @@ public class SelectionUser implements View.OnClickListener {
         new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-
+                String mon = month + 1 + "";
+                String day = dayOfMonth + "";
+                if ((month + 1) < 10) {
+                    mon = "0" + (month + 1);
+                }
+                if (dayOfMonth < 10) {
+                    day = "0" + dayOfMonth;
+                }
                 if (str.equals("from")) {
-                    from = year + "-" + (month + 1) + "-" + dayOfMonth;
+                    from = year + "-" + mon + "-" + day;
                     showDialog("to");
                 } else {
-                    to = year + "-" + (month + 1) + "-" + dayOfMonth;
+                    to = year + "-" + mon + "-" + day;
                     input.setText(from + "/" + to);
                 }
             }
@@ -206,8 +247,17 @@ public class SelectionUser implements View.OnClickListener {
         animator.start();
     }
 
+    private String[] dateFormat(String date) {
+        String[] dates = date.split("/");
+        String[] date1 = dates[0].split("-");
+        String[] date2 = dates[1].split("-");
+        dates[0] = date1[0] + date1[1] + date1[2];
+        dates[1] = date2[0] + date2[1] + date2[2];
+        return dates;
+    }
+
     public interface SetOnSelectoinUser {
-        void onSearch(String type, String selectStr);
+        void sendList( List<InBodyData> list);
 
         void onAdd();
     }

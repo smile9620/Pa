@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="inbody_infor_text">
         <item name="android:layout_width">wrap_content</item>
@@ -92,10 +92,42 @@
         <item name="android:textSize">@dimen/general_small_text</item>
     </style>
 
-    <style name="inbody_test_report_table_text">
-        <item name="android:layout_width">wrap_content</item>
+    <style name="inbody_test_report_table_title">
+        <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
-        <item name="android:padding">4dp</item>
+        <item name="android:layout_marginLeft">1dp</item>
+        <item name="android:layout_marginRight">1dp</item>
+        <item name="android:textSize">@dimen/general_small_text</item>
+        <item name="android:layout_gravity">fill</item>
+        <item name="android:textColor">@color/share_view</item>
+        <item name="android:padding">@dimen/inbody_report_table_padding</item>
+        <item name="android:layout_columnWeight" tools:targetApi="lollipop">1</item>
     </style>
+
+    <style name="inbody_test_report_table_text">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginLeft">1dp</item>
+        <item name="android:layout_marginRight">1dp</item>
+        <item name="android:textSize">@dimen/general_small_text</item>
+        <item name="android:layout_gravity">fill</item>
+        <item name="android:padding">@dimen/inbody_report_table_padding</item>
+        <item name="android:textColor">@color/text_color</item>
+    </style>
+
+    <style name="inbody_test_Diagnosis_table_text">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_columnWeight" tools:targetApi="lollipop">1</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textColor">@color/share_view</item>
+        <item name="android:layout_marginLeft">1dp</item>
+        <item name="android:layout_marginRight">1dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/inbody_report_table_padding</item>
+        <item name="android:layout_gravity">fill</item>
+        <item name="android:textSize">@dimen/general_small_text</item>
+    </style>
+
 </resources>

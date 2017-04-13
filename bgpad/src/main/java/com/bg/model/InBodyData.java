@@ -7,6 +7,7 @@ import org.litepal.crud.DataSupport;
 import java.text.SimpleDateFormat;
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -14,12 +15,33 @@ import java.util.List;
  * Created by Administrator on 2017-02-14.
  */
 
-public class InBodyData extends DataSupport{
+public class InBodyData extends DataSupport {
     private long id;
-    private Date testDate; //测试日期，用于排序
-    private String strDate; // 用于搜索
-    private float height; // 身高
-    private User user;
+    private Date testDate;  //测试日期，用于排序
+    private String strDate; // 用于显示
+    private int date;       //用于搜索
+    private float height;   // 身高
+    private String user_number;        //编号 外键
+    protected User user;
+
+    public int getDate() {
+        return date;
+    }
+
+    public void setDate(int date) {
+        this.date = date;
+    }
+    public User getUser() {
+        return DataSupport.where("user_number = ?", user_number).find(User.class).get(0);
+    }
+
+    public String getUser_number() {
+        return user_number;
+    }
+
+    public void setUser_number(String user_number) {
+        this.user_number = user_number;
+    }
 
     public long getId() {
         return id;
@@ -53,28 +75,6 @@ public class InBodyData extends DataSupport{
         this.height = height;
     }
 
-    public User getUser(){
-        return user;
-    }
-//    public List<User> getUser(String info) {
-//        return DataSupport.where("news_id = ?", String.valueOf(id)).find(Comment.class);
-//        List<User> users = new ArrayList<User>();
-//        Cursor cursor = DataSupport.findBySQL("select distinct user_id from inbodydata " +
-//                "where strDate=? order by testDate desc limit 10", info);
-//        int cur_len = cursor.getColumnCount();
-//        if (cursor != null && cursor.moveToFirst()) {
-//            for (int i = 0; i <cur_len ; i++) {
-//                String user_id = cursor.getColumnName(i);
-//               User user = DataSupport.where("id = ?",user_id).find(User.class);
-//            }
-//        }
-//             return users;
-//    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     @Override
     public synchronized boolean save() {
         Date currentTime = new Date();
@@ -82,6 +82,15 @@ public class InBodyData extends DataSupport{
         String dateString = formatter.format(currentTime);
         setTestdate(currentTime);
         setStrDate(dateString);
+
+        Calendar cal = Calendar.getInstance();
+        int month = cal.get(Calendar.MONTH) + 1;
+        String mon = null;
+        if ((month + 1) < 10) {
+            mon = "0" + month;
+        }
+        String fillDate =cal.get(Calendar.YEAR) + mon + cal.get(Calendar.DAY_OF_MONTH);
+        setDate(Integer.parseInt(fillDate));
         return super.save();
     }
 }

@@ -32,7 +32,6 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:text="@null"
-            android:thumb="@drawable/switch_dot"
             android:track="@drawable/switch_bt"
             android:layout_marginRight="@dimen/information_table_padd"/>
 
@@ -80,7 +79,8 @@
             <EditText
                 android:id="@+id/company"
                 style="@style/inbody_set_edit"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:hint="请输入公司名称"/>
         </TableRow>
 
         <TableRow
@@ -96,7 +96,8 @@
                 android:id="@+id/address"
                 style="@style/inbody_set_edit"
                 android:maxLength="18"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:hint="请输入公司地址"/>
         </TableRow>
 
         <TableRow
@@ -112,7 +113,16 @@
                 android:id="@+id/telephone"
                 style="@style/inbody_set_edit"
                 android:maxLength="18"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:hint="请输入公司电话"/>
         </TableRow>
     </TableLayout>
+    <Button
+        android:id="@+id/confirm"
+        android:layout_width="@dimen/selectuser_addbt_width"
+        android:layout_height="@dimen/selectuser_edit_height"
+        android:background="@drawable/test_bg"
+        android:text="@string/confirm"
+        android:textColor="@color/share_view"
+        android:textSize="@dimen/general_text" />
 </LinearLayout>

@@ -11,7 +11,7 @@
         android:layout_height="160dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:background="@drawable/login_bg"
+        android:background="@drawable/register_bg"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="20dp" 
@@ -75,7 +75,7 @@
             android:layout_width="0dp"
             android:layout_height="35dp"
             android:layout_weight="1"
-            android:background="@drawable/login_bt"
+            android:background="@drawable/test_bg"
             android:text="@string/login" />
 
         <Button
@@ -83,7 +83,7 @@
             android:layout_width="0dp"
             android:layout_height="35dp"
             android:layout_weight="1"
-            android:background="@drawable/login_bt"
+            android:background="@drawable/test_bg"
             android:text="@string/register" 
             android:layout_marginLeft="25dp"/>
     </LinearLayout>

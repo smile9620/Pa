@@ -43,10 +43,10 @@
             android:name=".WelcomeActivity"
             android:theme="@style/MyAppTheme">
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
+             <!--<intent-filter>-->
+             <!--<action android:name="android.intent.action.MAIN" />-->
+             <!--<category android:name="android.intent.category.LAUNCHER" />-->
+             <!--</intent-filter>-->
         </activity>
 
         <service
@@ -71,10 +71,7 @@
         <activity
             android:name=".UserSelectActivity"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
-        <activity
-            android:name=".UserInformationActivity"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
-        <activity android:name=".DataAnalysis" />
+        <activity android:name=".UserInformationActivity" />
         <activity android:name=".CameraActivity" />
         <activity
             android:name=".UserManagementActivity"
