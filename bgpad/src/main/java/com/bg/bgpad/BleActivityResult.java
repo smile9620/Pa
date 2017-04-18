@@ -1,11 +1,9 @@
 package com.bg.bgpad;
 
-import android.app.AlertDialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -14,6 +12,7 @@ import android.os.CountDownTimer;
 import android.os.IBinder;
 
 import com.bg.constant.Constant;
+import com.bg.constant.FormatString;
 import com.bg.utils.MyDialog;
 
 public abstract class BleActivityResult extends BleActivityStart {
@@ -28,20 +27,29 @@ public abstract class BleActivityResult extends BleActivityStart {
         Receiver();
     }
 
-    protected boolean writeBle(byte[] byt) {  //分包向蓝牙写数据
+    protected boolean writeBle(String data) {  //分包向蓝牙写数据
+        // 将字符串转换成16进制的字节数组，并插入包头
+        byte[] head = {(byte) 0xAA, (byte) 0xAA, (byte) 0x09, (byte) 0x20, (byte) 0xFF};
+        String s = FormatString.str2HexStr(data); //字符串转16进制字符串
+        byte[] content = FormatString.hexStringToBytes(s); //16进制字符串转字节数组
+        byte[] data3 = new byte[head.length + content.length];
+        System.arraycopy(head, 0, data3, 0, head.length - 1);
+        System.arraycopy(content, 0, data3, 4, content.length);
+        System.arraycopy(head, 4, data3, content.length + 4, 1);
+        // 将字节数组写入蓝牙
         boolean result = false;
-        int len = byt.length;
+        int len = data3.length;
         int flag = 0;
         byte[] tmp;
         do {
             if (len <= 20) {
                 tmp = new byte[len];
-                System.arraycopy(byt, flag, tmp, 0, len);
+                System.arraycopy(data3, flag, tmp, 0, len);
                 result = Constant.mBluetoothLeService.WriteValue(tmp);
                 len -= 20;
             } else {
                 tmp = new byte[20];
-                System.arraycopy(byt, flag, tmp, 0, 20);
+                System.arraycopy(data3, flag, tmp, 0, 20);
                 if (Constant.mBluetoothLeService.WriteValue(tmp)) {
                     flag += 20;
                     len -= 20;
@@ -119,6 +127,7 @@ public abstract class BleActivityResult extends BleActivityStart {
 
     protected abstract void updateData(String str);
 
+    StringBuilder builder = new StringBuilder();
     private void Receiver() {
 
         if (mGattUpdateReceiver == null) {
@@ -135,7 +144,7 @@ public abstract class BleActivityResult extends BleActivityStart {
                         } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED
                                 .equals(action)) { // 断开连接
                             updateState(false);
-                            myDialog.setDialog("蓝牙已断开，请重新连接！"
+                            new MyDialog(BleActivityResult.this).setDialog("蓝牙已断开，请重新连接！"
                                     , true, false, null).show();
                             if (Constant.mBluetoothLeService != null) {
                                 Constant.mBluetoothLeService.close();
@@ -149,7 +158,12 @@ public abstract class BleActivityResult extends BleActivityStart {
 
                         } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) { // 收到数据
                             String data = intent.getStringExtra(BluetoothLeService.EXTRA_DATA);
-                            updateData(data);
+                            String[] da = data.split(" ");
+                            builder.append(data);
+                            if (da[da.length - 1].equals("FF")) {  //判断蓝牙数据是否结束
+                                updateData(builder.toString());
+                                builder.delete(0, builder.length());
+                            }
                         }
                     }
                 }

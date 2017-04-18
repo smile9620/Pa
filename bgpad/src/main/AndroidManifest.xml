@@ -84,7 +84,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".InBodySetActivity" />
-        <activity android:name=".TestReportActivity" />
         <activity android:name=".InBodyTestReportActivity"></activity>
     </application>
 

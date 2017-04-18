@@ -18,7 +18,6 @@ public class MyDialog {
     private Dialog myialog;
     private Context context;
     private TextView msg;
-    private DialogConfirm dialogConfirm;
 
     public MyDialog(Context context) {
         this.context = context;
@@ -31,12 +30,8 @@ public class MyDialog {
         TextView cancel = (TextView) view.findViewById(R.id.cancel);
         TextView confirm = (TextView) view.findViewById(R.id.confirm);
         ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-        if (message.length() > 10) {
-            StringBuilder bu = new StringBuilder(message);
-            bu.insert(9, "\n"); //换行
-            message = bu.toString();
-        }
-        msg.setText(message);
+
+        msg.setText(newLine(message));
         if (!showConfirm) {
             confirm.setVisibility(View.GONE);
         }
@@ -66,16 +61,46 @@ public class MyDialog {
     }
 
     public void setMsg(String str) {
-        StringBuilder bu = new StringBuilder(str);
+
         if (myialog != null) {
-            if (str.length() > 10) {
-                bu.insert(9, "\n"); //换行
-            }
-            msg.setText(bu.toString());
+            msg.setText(newLine(str));
         }
     }
 
+    private String newLine(String aimStr) {
+        //要返回的结果
+        StringBuffer result = new StringBuffer();
+        //中、英文标点符号数组
+        String[] punctuations = {"，", "。", "！", ",", ".", "!"};
+        //换行符
+        String newLine = "\n";
+        //中断特殊字符,可以是 , ; . 之类的
+        //字符串不为空且长度大于10
+        if (aimStr != null && aimStr.length() > 10) {
+            int i = 10;
+            while (i < aimStr.length() + 10) {
+                if (i >= aimStr.length()) {
+                    result.append(aimStr.substring(i - 10, aimStr.length()));
+                } else {
+                    result.append(aimStr.substring(i - 10, i));
+                    for (String punctuation : punctuations) {
+                        if (aimStr.substring(i, i + 1).equals(punctuation)) {
+                            result.append(punctuation);
+                            i += 1;
+                            break;
+                        }
+                    }
+                    result.append(newLine);
+                }
+                i += 10;
+            }
+        } else {
+            result.append(aimStr);
+        }
+        return result.toString();
+    }
+
     public interface DialogConfirm {
-        public void dialogConfirm();
+        void dialogConfirm();
     }
 }

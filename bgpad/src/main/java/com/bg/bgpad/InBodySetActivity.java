@@ -33,8 +33,10 @@ public class InBodySetActivity extends BaseActivity implements SetTitle.OnTitleB
     EditText telephone;
     @BindView(R.id.confirm)
     Button confirm;
-    private SharedPreferences share;
-    private Map<String, ?> map;
+    private SharedPreferences companyShare;
+    private SharedPreferences printShare;
+    private Map<String, ?> companymap;
+    private Map<String, ?> printmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,29 +47,42 @@ public class InBodySetActivity extends BaseActivity implements SetTitle.OnTitleB
         new SetTitle(this, view, new boolean[]{true, false},
                 "设置", new int[]{R.drawable.back_bt, R.drawable.ble_bt});
 
+        printShare = getSharedPreferences(
+                InBodySetActivity.this.getString(R.string.printshare),
+                MODE_PRIVATE);
+        printmap = printShare.getAll();
+        if (printShare != null && printmap.size() != 0) {
+            printset.setChecked(printmap.get("print").equals("wifi") ? true : false);
+        } else {
+            printset.setChecked(false);
+        }
         printset.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor edit = printShare.edit();
+
                 if (isChecked) {
-                    showToast("wifi");
+//                    showToast("wifi");
+                    edit.putString("print", "wifi");
                 } else {
-                    showToast("usb");
+//                    showToast("usb");
+                    edit.putString("print", "usb");
                 }
+                edit.commit();
             }
         });
-
-        share = getSharedPreferences(
-                InBodySetActivity.this.getString(R.string.printset),
+        companyShare = getSharedPreferences(
+                InBodySetActivity.this.getString(R.string.companyshare),
                 MODE_PRIVATE);
-        map = share.getAll();
-        if (share != null && map.size() != 0) {
+        companymap = companyShare.getAll();
+        if (companyShare != null && companymap.size() != 0) {
             confirm.setText(getResources().getString(R.string.modify));
             company.setFocusable(false);
             address.setFocusable(false);
             telephone.setFocusable(false);
-            company.setText(map.get("company").toString());
-            address.setText(map.get("address").toString());
-            telephone.setText(map.get("telephone").toString());
+            company.setText(companymap.get("company").toString());
+            address.setText(companymap.get("address").toString());
+            telephone.setText(companymap.get("telephone").toString());
         } else {
             confirm.setText(getResources().getString(R.string.confirm));
         }
@@ -80,7 +95,7 @@ public class InBodySetActivity extends BaseActivity implements SetTitle.OnTitleB
                     String tele = telephone.getText().toString();
 
                     if (checkEdit(comp, addr, tele)) {
-                        SharedPreferences.Editor edit = share.edit();
+                        SharedPreferences.Editor edit = companyShare.edit();
                         edit.putString("company", comp);
                         edit.putString("address", addr);
                         edit.putString("telephone", tele);

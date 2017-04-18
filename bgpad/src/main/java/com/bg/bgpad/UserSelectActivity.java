@@ -2,7 +2,6 @@ package com.bg.bgpad;
 
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -67,7 +66,7 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
                 new int[]{R.drawable.back_bt, R.drawable.ble_bt});
         new SelectionUser(this, this, selection, true);
 
-//        getBle(DeviceName.InBody); //启动蓝牙
+        getBle(DeviceName.InBody); //启动蓝牙
         getData();
         simpleAdapter = new SimpleAdapter(this, list_maps, R.layout.userlist_item,
                 new String[]{"user_number", "user_name", "sex", "strDate"},
@@ -86,7 +85,7 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
     }
 
     private void getData() {
-        List<InBodyData> inbodylist = DataSupport.order("testDate desc").limit(10).find(InBodyData.class);
+        List<InBodyData> inbodylist = DataSupport.order("testDate desc").limit(15).find(InBodyData.class);
         addData(inbodylist);
     }
 
@@ -113,7 +112,7 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
     protected void updateState(boolean bool) {
         bt_enable = bool;
         if (bool) {
-            writeBle(InBodyBluetooth.send1);
+            writeBle("66666666");
         }
     }
 
@@ -121,10 +120,10 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
     protected void updateData(String str) {
 
         showToast("UserSelectActivity" + str);
-//        FA 4A 0A 30 38 38 38 38 38 38 38 38 38 01 FF
-        String[] data = str.split(" ");
-        column = data[data.length - 3].equals("0") ? false : true;
-        showToast(column == true ? "有立柱" : "没有立柱");
+
+//        column = data[data.length - 3].equals("0") ? false : true;
+//        showToast(column == true ? "有立柱" : "没有立柱");
+
 
     }
 
@@ -140,18 +139,18 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            view.setBackgroundColor(ContextCompat.getColor(this, R.color.title_bar));
-            String number = list_maps.get(position).get("user_number");
-            Intent intent = new Intent(this, UserInformationActivity.class);
-            intent.putExtra("user_number", number);
-            intent.putExtra("column", column);
-            startActivity(intent);
+        view.setBackgroundColor(ContextCompat.getColor(this, R.color.title_bar));
+        String number = list_maps.get(position).get("user_number");
+        Intent intent = new Intent(this, UserInformationActivity.class);
+        intent.putExtra("user_number", number);
+        intent.putExtra("column", column);
+        startActivity(intent);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        simpleAdapter.notifyDataSetChanged();
+        getData();
     }
 
     @Override

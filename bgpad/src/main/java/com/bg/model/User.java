@@ -8,6 +8,7 @@ import com.bg.bgpad.AppContext;
 import org.litepal.annotation.Column;
 import org.litepal.crud.DataSupport;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,7 +20,7 @@ import java.util.concurrent.Callable;
  * Created by Administrator on 2017-02-14.
  */
 
-public class User extends DataSupport {
+public class User extends DataSupport implements Serializable{
 
     private long id;            //id
     private String user_name;   //姓名

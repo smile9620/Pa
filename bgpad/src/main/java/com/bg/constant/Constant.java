@@ -22,5 +22,4 @@ public class Constant {
     public static String mDeviceAddress; // 蓝牙地址
     public static BluetoothLeService mBluetoothLeService = null;
     public static Uri imageUri = null;
-    public static String mFilePath = Environment.getExternalStorageDirectory().getPath() + "/aaaa"; // 照片路径
 }

@@ -101,9 +101,10 @@ public class SelectionUser implements View.OnClickListener {
                         datalist = DataSupport.where(" date between ? and ? ",
                                 dates[0], dates[1]).find(InBodyData.class);
                     } else {
-                        List<User> users = DataSupport.select("user_number").where(select + " like ?", "%" + str + "%").find(User.class);
+                        List<User> users = DataSupport.select("user_number").where(select + " = ?", str).find(User.class);
                         for (int i = 0; i < users.size(); i++) {
-                            List<InBodyData> list = DataSupport.where("user_number = ? ", users.get(i).getUser_number().toString()).find(InBodyData.class);
+                            List<InBodyData> list = DataSupport.where("user_number = ? ", users.get(i).getUser_number().
+                                    toString()).find(InBodyData.class);
                             for (int j = 0; j < list.size(); j++) {
                                 datalist.add(list.get(i));
                             }
@@ -151,6 +152,7 @@ public class SelectionUser implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 inputSelect(popWindow, "name");
+                input.setText("");
             }
         });
         number.setOnClickListener(new View.OnClickListener() {
@@ -158,6 +160,7 @@ public class SelectionUser implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 inputSelect(popWindow, "number");
+                input.setText("");
             }
         });
         date.setOnClickListener(new View.OnClickListener() {
@@ -165,6 +168,7 @@ public class SelectionUser implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 inputSelect(popWindow, "date");
+                input.setText("");
             }
         });
         // 需要设置一下此参数，点击外边可消失
@@ -257,7 +261,7 @@ public class SelectionUser implements View.OnClickListener {
     }
 
     public interface SetOnSelectoinUser {
-        void sendList( List<InBodyData> list);
+        void sendList(List<InBodyData> list);
 
         void onAdd();
     }

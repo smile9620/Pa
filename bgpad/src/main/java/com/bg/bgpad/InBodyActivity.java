@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import com.bg.utils.MyDialog;
 import com.bg.utils.SetTitle;
 
 import butterknife.BindView;
@@ -39,16 +40,16 @@ public class InBodyActivity extends BaseActivity implements SetTitle.OnTitleBtCl
         Intent intent = new Intent();
         switch (view.getId()) {
             case R.id.test:
-                intent.setClass(this,UserSelectActivity.class);
+                intent.setClass(this, UserSelectActivity.class);
                 break;
             case R.id.userset:
-                intent.setClass(this,UserManagementActivity.class);
+                intent.setClass(this, UserManagementActivity.class);
                 break;
             case R.id.set:
-                intent.setClass(this,InBodySetActivity.class);
+                intent.setClass(this, InBodySetActivity.class);
                 break;
             case R.id.help:
-                intent.setClass(this,InBodyTestReportActivity.class);
+                intent.setClass(this, InBodyTestReportActivity.class);
                 break;
         }
         startActivity(intent);

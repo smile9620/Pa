@@ -2,35 +2,24 @@ package com.bg.bgpad;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.IdRes;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewDebug;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -39,28 +28,21 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bg.constant.Constant;
-import com.bg.constant.InBodyBluetooth;
 import com.bg.model.InBodyData;
 import com.bg.model.User;
-import com.bg.utils.BitmapTool;
 import com.bg.utils.MyDialog;
 import com.bg.utils.SetTitle;
 
 import org.litepal.crud.DataSupport;
 
 import java.io.File;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -98,7 +80,9 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
     private boolean showdialog = true;
     private int selectsex = 0;
     private String photopath = "";
-
+    public static UserInformationActivity instance;
+    private Intent intent;
+    private boolean user_exist;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -107,15 +91,21 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
         }
     };
 
+    public UserInformationActivity() {
+        instance = UserInformationActivity.this;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_information);
         ButterKnife.bind(this);
-        new SetTitle(this, view, new boolean[]{true, false},
-                "测试", new int[]{R.drawable.back_bt, R.drawable.ble_bt});
+        intent = getIntent();
+        user_exist = intent.getStringExtra("user_number") == null ? false : true;
+        new SetTitle(this, view, new boolean[]{true, user_exist},
+                "测试", new int[]{R.drawable.back_bt, R.drawable.delete_bt});
 
-        Intent intent = getIntent();
+
         column = intent.getBooleanExtra("column", true);
         if (!column) {
             showheight.setVisibility(View.VISIBLE);
@@ -133,13 +123,14 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
             }
         });
 
-        if (intent.getStringExtra("user_number") != null) {
+        if (user_exist) {
             showdialog = false;
             usernumber.setFocusable(false);
             username.setFocusable(false);
             boy.setClickable(false);
             girl.setClickable(false);
             birthday.setClickable(false);
+            image.setClickable(false);
 
             users = DataSupport.where(" user_number = ? ", intent.getStringExtra("user_number")).find(User.class);
             username.setText(users.get(0).getUser_name());
@@ -152,7 +143,7 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
             birthday.setText(users.get(0).getBirthday());
             age.setText(users.get(0).getAge() + "");
             if (users.get(0).getImage_path() != null) {
-                File path1 = new File(Constant.mFilePath);
+                File path1 = new File(getSDPath() + "/Image");
                 if (path1.exists()) {
                     File file = new File(path1, users.get(0).getImage_path());
                     Uri imaUri = Uri.fromFile(file);
@@ -180,16 +171,11 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
             builder.delete(0, builder.length());
         }
     };
-    private StringBuilder builder = new StringBuilder();
     private long time = 0;
 
     @Override
     protected void updateData(String str) {
-        builder.append(str);
-        if ((System.currentTimeMillis() - time) > 1000) {
-            time = System.currentTimeMillis();
-            countDownTimer.start();
-        }
+        showToast(str);
     }
 
     @Override
@@ -199,6 +185,18 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
 
     @Override
     public void rightBt(ImageButton right) {
+        final String number = intent.getStringExtra("user_number");
+        final List<InBodyData> list = DataSupport.where("user_number = ?", number).find(InBodyData.class);
+        new MyDialog(this).setDialog("是否删除该用户以及该用户下的" + list.size() + "条测试数据！", true, true, new MyDialog.DialogConfirm() {
+            @Override
+            public void dialogConfirm() {
+                DataSupport.deleteAll(User.class, "user_number = ?", number);
+                DataSupport.deleteAll(InBodyData.class, "user_number = ?", number);
+                showToast("删除成功！");
+                finish();
+
+            }
+        }).show();
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -217,42 +215,29 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
                 String bir = birthday.getText().toString().trim();
                 String heig = height.getText().toString().trim();
 
-                if (checkUser(usernu, userna, bir, heig)) {
-                    User user = new User();
-                    InBodyData inBodyData = new InBodyData();
-//                for (int i = 0; i < 10; i++) {
+//                if (checkUser(usernu, userna, bir, heig)) {
 //                    User user = new User();
-//                    InBodyData inBodyData = new InBodyData();
-//                    user.setUser_number("" + i + i);
-//                    user.setUser_name("张" + i);
-//                    user.setBirthday("20120305");
-//                    user.setSex(0);
-//                    inBodyData.setHeight(Float.parseFloat("45.5"));
-//                    inBodyData.setUser_number("" + i + i);
-//                    user.save();
-//                    inBodyData.save();
-//                }
-                    user.setUser_number(usernu);
-                    user.setUser_name(userna);
-                    user.setBirthday(bir);
-                    user.setSex(selectsex);
-                    if (!column) {
-                        inBodyData.setHeight(Float.parseFloat(heig));
-                    }
-                    if (photopath != "") {
-                        user.setImage_path(photopath);
-                    }
-                    inBodyData.setUser_number(usernu);
-                    if (user.save() && inBodyData.save()) {
-                        showToast("保存成功！");
-                    } else {
-                        showToast("保存失败！");
-                    }
-//                writeBle(InBodyBluetooth.send3);
-                }
+//                    user.setUser_number(usernu);
+//                    user.setUser_name(userna);
+//                    user.setBirthday(bir);
+//                    user.setSex(selectsex);
+//                    if (photopath != "") {
+//                        user.setImage_path(photopath);
+//                    }
+//
+                String str = "66666666";
+                writeBle(str);
 
+//                    Intent intent = new Intent(this, InBodyTestReportActivity.class);
+//                    intent.putExtra("user", user);
+//                    startActivity(intent);
+//                }
+
+//                Intent intent = new Intent(this, InBodyTestReportActivity.class);
+//                startActivity(intent);
                 break;
         }
+
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -263,6 +248,14 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
             usernumber.setHint("编号不能为空！");
             usernumber.setHintTextColor(Color.RED);
             return false;
+        } else {
+            if (!user_exist) {
+                List<User> list = DataSupport.where("user_number = ?", number).find(User.class);
+                if (list.size() != 0) {
+                    showToast("编号为" + number + "的用户已存在");
+                    return false;
+                }
+            }
         }
         if (name == null || name.isEmpty()) {
             username.setHint("姓名不能为空！");
@@ -334,10 +327,12 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
             }
         }
 
-        File path1 = new File(Constant.mFilePath);
-        if (!path1.exists()) {
-            path1.mkdirs();
-        }
+//        File path1 = new File(Constant.mFilePath+"/image");
+//        if (!path1.exists()) {
+//            path1.mkdirs();
+//        }
+        File path1 = new File(getSDPath() + "/Image");
+        makeDir(path1);
         photopath = System.currentTimeMillis() + ".jpg";
         File file = new File(path1, photopath);
         Constant.imageUri = Uri.fromFile(file);

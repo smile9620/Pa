@@ -27,7 +27,6 @@ import android.widget.Toast;
 
 import com.bg.constant.Constant;
 import com.bg.utils.LeDeviceListAdapter;
-import com.bg.utils.LogUtil;
 import com.bg.utils.MyDialog;
 import com.zxing.activity.CaptureActivity;
 
@@ -275,17 +274,6 @@ public abstract class BleActivityStart extends BaseActivity {
                 } else {
                     Constant.mDeviceAddress = device.getAddress();
                     select_ble();
-//                    switch (name) {
-//                        case "HMSoft1":
-//                            intent_act.putExtra(Constant.DEVICE_ADDRESS,device.getAddress());
-//                            intent_act.setClass(BleActivityStart.this, DataAnalysis.class);
-//                            startActivity(intent_act);
-//
-//                            break;
-//                        default:
-//                            showToast("该设备不可用！");
-//                            break;
-//                    }
                     if (Constant.mScanning) {
                         mBluetoothAdapter.stopLeScan(mLeScanCallback);
                         Constant.mScanning = false;
