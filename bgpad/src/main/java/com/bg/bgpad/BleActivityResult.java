@@ -12,7 +12,7 @@ import android.os.CountDownTimer;
 import android.os.IBinder;
 
 import com.bg.constant.Constant;
-import com.bg.constant.FormatString;
+import com.bg.utils.FormatString;
 import com.bg.utils.MyDialog;
 
 public abstract class BleActivityResult extends BleActivityStart {

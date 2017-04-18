@@ -1,4 +1,4 @@
-package com.bg.constant;
+package com.bg.utils;
 
 /**
  * Created by zjy on 2017-04-18.
