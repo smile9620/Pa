@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -13,6 +14,7 @@ import com.bg.model.User;
 import com.bg.utils.MyDialog;
 import com.bg.utils.SetTitle;
 
+import java.io.File;
 import java.util.Map;
 
 public class InBodyTestReportActivity extends BleActivityResult implements SetTitle.OnTitleBtClickListener {
@@ -35,22 +37,22 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                saveUser();
+                saveUser();
 
-                for (int i = 0; i < 10; i++) {
-                    User user = new User();
-                    user.setUser_number("" + i + i);
-                    user.setUser_name("张" + i);
-                    user.setBirthday("20120305");
-                    user.setSex(0);
-                    for (int j = 0; j < 5; j++) {
-                        InBodyData inBodyData = new InBodyData();
-                        inBodyData.setHeight(Float.parseFloat("45.5"));
-                        inBodyData.setUser_number("" + i + i);
-                        inBodyData.save();
-                    }
-                    user.save();
-                }
+//                for (int i = 0; i < 10; i++) {
+//                    User user = new User();
+//                    user.setUser_number("" + i + i);
+//                    user.setUser_name("张" + i);
+//                    user.setBirthday("20120305");
+//                    user.setSex(0);
+//                    for (int j = 0; j < 5; j++) {
+//                        InBodyData inBodyData = new InBodyData();
+//                        inBodyData.setHeight(Float.parseFloat("45.5"));
+//                        inBodyData.setUser_number("" + i + i);
+//                        inBodyData.save();
+//                    }
+//                    user.save();
+//                }
             }
         });
         print.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +74,8 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
                     } else {
                         showToast("usb 打印");
                     }
+                }else{
+                    showToast("usb 打印");  //默认情况下为USB打印
                 }
             }
         });
@@ -89,16 +93,7 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
 
     @Override
     public void leftBt(ImageButton left) {
-        if (!is_save) {
-            new MyDialog(this).setDialog("该测试报告尚未保存，您确定要关闭当前页面吗？", true, true, new MyDialog.DialogConfirm() {
-                @Override
-                public void dialogConfirm() {
-                    finishActivity();
-                }
-            }).show();
-        } else {
-            finishActivity();
-        }
+        back();
     }
 
     @Override
@@ -125,5 +120,33 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
         } else {
             showToast("user 为空");
         }
+    }
+
+    private void back() {
+        if (!is_save) {
+            new MyDialog(this).setDialog("该测试报告尚未保存，您确定要关闭当前页面吗？", true, true, new MyDialog.DialogConfirm() {
+                @Override
+                public void dialogConfirm() {
+                    if (user.getImage_path() != null) {  //删除头像
+                        File path1 = new File(getSDPath() + "/Image");
+                        File file = new File(path1, user.getImage_path());
+                        if (file.exists()) {
+                            file.delete();
+                        }
+                    }
+                    finishActivity();
+                }
+            }).show();
+        } else {
+            finishActivity();
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            back();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

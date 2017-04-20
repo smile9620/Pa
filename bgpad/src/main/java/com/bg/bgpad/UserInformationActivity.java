@@ -192,6 +192,13 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
             public void dialogConfirm() {
                 DataSupport.deleteAll(User.class, "user_number = ?", number);
                 DataSupport.deleteAll(InBodyData.class, "user_number = ?", number);
+                if (users.get(0).getImage_path() != null) {  //删除头像
+                    File path1 = new File(getSDPath() + "/Image");
+                    File file = new File(path1, users.get(0).getImage_path());
+                    if (file.exists()) {
+                        file.delete();
+                    }
+                }
                 showToast("删除成功！");
                 finish();
 
@@ -215,23 +222,23 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
                 String bir = birthday.getText().toString().trim();
                 String heig = height.getText().toString().trim();
 
-//                if (checkUser(usernu, userna, bir, heig)) {
-//                    User user = new User();
-//                    user.setUser_number(usernu);
-//                    user.setUser_name(userna);
-//                    user.setBirthday(bir);
-//                    user.setSex(selectsex);
-//                    if (photopath != "") {
-//                        user.setImage_path(photopath);
-//                    }
-//
-                String str = "66666666";
-                writeBle(str);
+                if (checkUser(usernu, userna, bir, heig)) {
+                    User user = new User();
+                    user.setUser_number(usernu);
+                    user.setUser_name(userna);
+                    user.setBirthday(bir);
+                    user.setSex(selectsex);
+                    if (photopath != "") {
+                        user.setImage_path(photopath);
+                    }
 
-//                    Intent intent = new Intent(this, InBodyTestReportActivity.class);
-//                    intent.putExtra("user", user);
-//                    startActivity(intent);
-//                }
+//                String str = "66666666";
+//                writeBle(str);
+
+                    Intent intent = new Intent(this, InBodyTestReportActivity.class);
+                    intent.putExtra("user", user);
+                    startActivity(intent);
+                }
 
 //                Intent intent = new Intent(this, InBodyTestReportActivity.class);
 //                startActivity(intent);

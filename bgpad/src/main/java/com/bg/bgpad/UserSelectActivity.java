@@ -13,10 +13,8 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-
 import com.bg.constant.Constant;
 import com.bg.constant.DeviceName;
-import com.bg.constant.InBodyBluetooth;
 import com.bg.model.InBodyData;
 import com.bg.model.User;
 import com.bg.utils.SelectionUser;
@@ -112,7 +110,8 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
     protected void updateState(boolean bool) {
         bt_enable = bool;
         if (bool) {
-            writeBle("66666666");
+//            writeBle("66666666");
+            writeData("66666666");
         }
     }
 

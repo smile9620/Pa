@@ -9,17 +9,32 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 
 import com.bg.constant.Constant;
 import com.bg.utils.FormatString;
 import com.bg.utils.MyDialog;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public abstract class BleActivityResult extends BleActivityStart {
 
     private ServiceConnection mServiceConnection = null;
     private BroadcastReceiver mGattUpdateReceiver = null;
     private boolean is_change;
+    private Timer timer = new Timer();
+    private String data;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            new MyDialog(BleActivityResult.this).setDialog("下位机在忙或蓝牙故障无法接收数据！",
+                    true, false, null).show();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +42,29 @@ public abstract class BleActivityResult extends BleActivityStart {
         Receiver();
     }
 
-    protected boolean writeBle(String data) {  //分包向蓝牙写数据
+    private int time = 0;
+    TimerTask task = new TimerTask() {
+        @Override
+        public void run() {
+            if (time < 3) {
+                time = time + 1;
+                writeBle(data);
+            } else {
+                time = 0;
+                timer.cancel();
+                handler.sendEmptyMessage(0);
+            }
+        }
+    };
+
+    protected void writeData(String data) {
+        this.data = data;
+        timer.schedule(task, 0, 300);//300毫秒发一次，3次之后未收到数据则下位机忙或蓝牙故障
+    }
+
+    private boolean writeBle(String data) {  //分包向蓝牙写数据
         // 将字符串转换成16进制的字节数组，并插入包头
+        this.data = data;
         byte[] head = {(byte) 0xAA, (byte) 0xAA, (byte) 0x09, (byte) 0x20, (byte) 0xFF};
         String s = FormatString.str2HexStr(data); //字符串转16进制字符串
         byte[] content = FormatString.hexStringToBytes(s); //16进制字符串转字节数组
@@ -128,6 +164,7 @@ public abstract class BleActivityResult extends BleActivityStart {
     protected abstract void updateData(String str);
 
     StringBuilder builder = new StringBuilder();
+
     private void Receiver() {
 
         if (mGattUpdateReceiver == null) {
@@ -157,6 +194,8 @@ public abstract class BleActivityResult extends BleActivityStart {
                             showToast("连接成功，现在可以正常通信！");
 
                         } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) { // 收到数据
+                            time = 0;
+                            timer.cancel();
                             String data = intent.getStringExtra(BluetoothLeService.EXTRA_DATA);
                             String[] da = data.split(" ");
                             builder.append(data);
