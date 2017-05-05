@@ -152,7 +152,7 @@ public class TestReportActivity extends BaseActivity implements SetTitle.OnTitle
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void changeData() {
-        //身体x总评分 score
+        //身体总评分 score
         score.setText(inBodyData.getScore() + "");
         //身体成分分析
         User user = inBodyData.getUser();
