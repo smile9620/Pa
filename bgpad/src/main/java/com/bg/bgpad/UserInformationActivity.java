@@ -3,6 +3,8 @@ package com.bg.bgpad;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -30,14 +32,17 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.bg.constant.Constant;
+import com.bg.constant.InBodyBluetooth;
 import com.bg.model.InBodyData;
 import com.bg.model.User;
+import com.bg.utils.FormatString;
 import com.bg.utils.MyDialog;
 import com.bg.utils.SetTitle;
 
 import org.litepal.crud.DataSupport;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -76,6 +81,7 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
     TableRow showheight;
 
     private List<User> users;
+    private User user;
     private boolean column;
     private boolean showdialog = true;
     private int selectsex = 0;
@@ -83,13 +89,8 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
     public static UserInformationActivity instance;
     private Intent intent;
     private boolean user_exist;
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            showToast(msg.obj.toString());
-        }
-    };
+    private boolean ble_enable = true;
+    private String strBirth;
 
     public UserInformationActivity() {
         instance = UserInformationActivity.this;
@@ -104,8 +105,6 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
         user_exist = intent.getStringExtra("user_number") == null ? false : true;
         new SetTitle(this, view, new boolean[]{true, user_exist},
                 "测试", new int[]{R.drawable.back_bt, R.drawable.delete_bt});
-
-
         column = intent.getBooleanExtra("column", true);
         if (!column) {
             showheight.setVisibility(View.VISIBLE);
@@ -155,27 +154,25 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
 
     @Override
     protected void updateState(boolean bool) {
-
+        ble_enable = bool;
+        if (!bool) {
+            new MyDialog(this).setDialog("蓝牙已断开，请重新连接！", false, true, new MyDialog.DialogConfirm() {
+                @Override
+                public void dialogConfirm() {
+                    finish();
+                }
+            }).show();
+        }
     }
-
-    CountDownTimer countDownTimer = new CountDownTimer(300, 1) {
-        @Override
-        public void onTick(long millisUntilFinished) {
-        }
-
-        @Override
-        public void onFinish() {
-            Message message = Message.obtain();
-            message.obj = builder.toString();
-            handler.sendMessage(message);
-            builder.delete(0, builder.length());
-        }
-    };
-    private long time = 0;
 
     @Override
     protected void updateData(String str) {
-        showToast(str);
+        String[] datas = str.split(" ");
+        if (datas[3].equals("13")) {
+            Intent intent = new Intent(this, InBodyTestReportActivity.class);
+            intent.putExtra("user", user);
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -201,7 +198,6 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
                 }
                 showToast("删除成功！");
                 finish();
-
             }
         }).show();
     }
@@ -221,9 +217,9 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
                 String userna = username.getText().toString().trim();
                 String bir = birthday.getText().toString().trim();
                 String heig = height.getText().toString().trim();
-
-                if (checkUser(usernu, userna, bir, heig)) {
-                    User user = new User();
+                String sendData = checkUser(usernu, userna, bir, heig);
+                if (sendData != null) {
+                    user = new User();
                     user.setUser_number(usernu);
                     user.setUser_name(userna);
                     user.setBirthday(bir);
@@ -231,59 +227,92 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
                     if (photopath != "") {
                         user.setImage_path(photopath);
                     }
-
-//                String str = "66666666";
-//                writeBle(str);
-
-                    Intent intent = new Intent(this, InBodyTestReportActivity.class);
-                    intent.putExtra("user", user);
-                    startActivity(intent);
+                    if (ble_enable) { //蓝牙可用时，才能写数据
+//                        writeData("34122219870611503X诸葛亮  1200006110180", new byte[]{(byte) 0xEA, (byte) 0x52, (byte) 0x29, (byte) 0x22, (byte) 0xFF});
+                        writeData(sendData, new byte[]{(byte) 0xEA, (byte) 0x52, (byte) 0x29, (byte) 0x22, (byte) 0xFF});
+//                        writeData(null, InBodyBluetooth.send2);
+                    } else {
+                        showToast("蓝牙已断开，无法测试！");
+                    }
                 }
-
-//                Intent intent = new Intent(this, InBodyTestReportActivity.class);
-//                startActivity(intent);
                 break;
         }
-
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private boolean checkUser(String number, String name, String birth, String he) {
-
-
+    private String checkUser(String number, String name, String birth, String he) {
+        String result;
         if (number == null || number.isEmpty()) {
             usernumber.setHint("编号不能为空！");
             usernumber.setHintTextColor(Color.RED);
-            return false;
+            return null;
         } else {
             if (!user_exist) {
                 List<User> list = DataSupport.where("user_number = ?", number).find(User.class);
                 if (list.size() != 0) {
                     showToast("编号为" + number + "的用户已存在");
-                    return false;
+                    return null;
                 }
             }
         }
         if (name == null || name.isEmpty()) {
             username.setHint("姓名不能为空！");
             username.setHintTextColor(Color.RED);
-            return false;
+            return null;
         }
         if (birth == null || birth.isEmpty()) {
             birthday.setHint("出生日期不能为空！");
             birthday.setHintTextColor(Color.RED);
-            return false;
+            return null;
         }
         if (!column) {
             if (height.isCursorVisible()) {
                 if (he == null || he.isEmpty()) {
                     height.setHint("身高不能为空！");
                     height.setHintTextColor(Color.RED);
-                    return false;
+                    return null;
                 }
             }
         }
-        return true;
+
+        int number_length = 0; //编号18个字节
+        int name_length = 0;//姓名8个字节
+        int he_length = 0;//身高3个字节
+
+        number_length = number.getBytes().length;//编号长度18字节
+        try {
+            name_length = name.getBytes("gbk").length;//姓名长度8字节
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        he_length = he.getBytes().length;//身高长度3字节
+
+        if (number_length < 18) {
+            for (int i = 0; i < 18 - number_length; i++) {
+                number = number + " ";
+            }
+        }
+        if (name_length < 8) {
+            for (int i = 0; i < 8 - name_length; i++) {
+                name = name + " ";
+            }
+        }
+        if (!column) {
+            if (he_length < 3) {
+                for (int i = 0; i < 18 - name_length; i++) {
+                    he = he + " ";
+                }
+            }
+        } else {
+            he = "   ";
+        }
+        String bi = birthday.getText().toString();
+        String[] b = bi.split("-");
+        strBirth = b[0] + b[1] + b[2];
+
+        result = number + name + (boy.isChecked() ? 1 : 0) + strBirth +
+                (column == false ? 0 : 1) + he;
+        return result;
     }
 
     private void showDialog(Boolean bool) {
@@ -297,7 +326,11 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
                     if ((month + 1) < 10) {
                         mon = "0" + (month + 1);
                     }
-                    String data = year + "-" + mon + "-" + dayOfMonth;
+                    String day = dayOfMonth + "";
+                    if (dayOfMonth < 10) {
+                        day = "0" + dayOfMonth;
+                    }
+                    String data = year + "-" + mon + "-" + day;
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                     Date date = null;
                     try {
@@ -308,7 +341,6 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
                     if (date.getTime() > currentTime.getTime()) {
                         showToast("出生日期大于当前日期！");
                     } else {
-
                         birthday.setText(data);
                         age.setText((cal.get(Calendar.YEAR) - year) + "");
                     }

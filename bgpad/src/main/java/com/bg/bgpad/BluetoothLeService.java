@@ -31,6 +31,7 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
+
 import com.bg.utils.LogUtil;
 
 import java.util.List;
@@ -195,9 +196,9 @@ public class BluetoothLeService extends Service {
         final byte[] data = characteristic.getValue();
         if (data != null && data.length > 0) {
             final StringBuilder stringBuilder = new StringBuilder(data.length);
-			for (byte byteChar : data)
-				stringBuilder.append(String.format("%02X ", byteChar));
-			intent.putExtra(EXTRA_DATA, stringBuilder.toString()); // 以16进制接收
+            for (byte byteChar : data)
+                stringBuilder.append(String.format("%02X ", byteChar));
+            intent.putExtra(EXTRA_DATA, stringBuilder.toString()); // 以16进制接收
             // intent.putExtra(EXTRA_DATA, new String(data)); // 以字符串形式接收
 
 //            String str = StringFormat.byte2HexStr(data);
@@ -355,7 +356,7 @@ public class BluetoothLeService extends Service {
             return;
         }
         mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
-		/*
+        /*
 		 * // This is specific to Heart Rate Measurement. if
 		 * (UUID_HEART_RATE_MEASUREMENT.equals(characteristic.getUuid())) {
 		 * BluetoothGattDescriptor descriptor = characteristic.getDescriptor(

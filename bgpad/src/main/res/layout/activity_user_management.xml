@@ -33,6 +33,14 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/general_small_text"
+                android:layout_gravity="right"/>
+
             <include layout="@layout/usersetlist_item" />
 
             <ListView

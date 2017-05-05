@@ -17,6 +17,7 @@ import com.bg.constant.Constant;
 import com.bg.utils.FormatString;
 import com.bg.utils.MyDialog;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -25,8 +26,8 @@ public abstract class BleActivityResult extends BleActivityStart {
     private ServiceConnection mServiceConnection = null;
     private BroadcastReceiver mGattUpdateReceiver = null;
     private boolean is_change;
-    private Timer timer = new Timer();
-    private String data;
+    private Timer timer;
+    private String data = "";
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -43,35 +44,45 @@ public abstract class BleActivityResult extends BleActivityStart {
     }
 
     private int time = 0;
-    TimerTask task = new TimerTask() {
-        @Override
-        public void run() {
-            if (time < 3) {
-                time = time + 1;
-                writeBle(data);
-            } else {
-                time = 0;
-                timer.cancel();
-                handler.sendEmptyMessage(0);
-            }
-        }
-    };
 
-    protected void writeData(String data) {
+
+    private byte[] head;
+
+    protected void writeData(String data, byte[] by) {
         this.data = data;
+        this.head = by;//byte[]{(byte) 0xEA, (byte) 0x52, (byte) 0x0A, (byte) 0x20, (byte) 0xFF};
+        timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                if (time < 3) {
+                    time = time + 1;
+                    writeBle();
+                } else {
+                    time = 0;
+                    timer.cancel();
+                    handler.sendEmptyMessage(0);
+                }
+            }
+        };
         timer.schedule(task, 0, 300);//300毫秒发一次，3次之后未收到数据则下位机忙或蓝牙故障
     }
 
-    private boolean writeBle(String data) {  //分包向蓝牙写数据
-        // 将字符串转换成16进制的字节数组，并插入包头
-        this.data = data;
-        byte[] head = {(byte) 0xAA, (byte) 0xAA, (byte) 0x09, (byte) 0x20, (byte) 0xFF};
-        String s = FormatString.str2HexStr(data); //字符串转16进制字符串
-        byte[] content = FormatString.hexStringToBytes(s); //16进制字符串转字节数组
-        byte[] data3 = new byte[head.length + content.length];
-        System.arraycopy(head, 0, data3, 0, head.length - 1);
-        System.arraycopy(content, 0, data3, 4, content.length);
-        System.arraycopy(head, 4, data3, content.length + 4, 1);
+    private boolean writeBle() {  //分包向蓝牙写数据
+        byte[] data3 = head;
+        if (data != null) {
+            // 将字符串转换成16进制的字节数组，并插入包头
+            byte[] content = new byte[0]; //字符串转字节数组
+            try {
+                content = data.getBytes("gbk");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            data3 = new byte[head.length + content.length];
+            System.arraycopy(head, 0, data3, 0, head.length - 1);
+            System.arraycopy(content, 0, data3, 4, content.length);
+            System.arraycopy(head, 4, data3, content.length + 4, 1);
+        }
         // 将字节数组写入蓝牙
         boolean result = false;
         int len = data3.length;
@@ -181,8 +192,8 @@ public abstract class BleActivityResult extends BleActivityStart {
                         } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED
                                 .equals(action)) { // 断开连接
                             updateState(false);
-                            new MyDialog(BleActivityResult.this).setDialog("蓝牙已断开，请重新连接！"
-                                    , true, false, null).show();
+//                            new MyDialog(AppContext.getContext()).setDialog("蓝牙已断开，请重新连接！"
+//                                    , true, false, null).show();
                             if (Constant.mBluetoothLeService != null) {
                                 Constant.mBluetoothLeService.close();
                                 Constant.mBluetoothLeService = null;
@@ -195,13 +206,24 @@ public abstract class BleActivityResult extends BleActivityStart {
 
                         } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) { // 收到数据
                             time = 0;
-                            timer.cancel();
+                            if (timer != null) {
+                                timer.cancel();
+                            }
                             String data = intent.getStringExtra(BluetoothLeService.EXTRA_DATA);
                             String[] da = data.split(" ");
                             builder.append(data);
                             if (da[da.length - 1].equals("FF")) {  //判断蓝牙数据是否结束
-                                updateData(builder.toString());
-                                builder.delete(0, builder.length());
+                                if (da.length != 1) {
+                                    updateData(builder.toString());
+                                    builder.delete(0, builder.length());
+                                } else {
+                                    updateState(false);//"FF" 设备断开
+                                    if (Constant.mBluetoothLeService != null) {
+                                        Constant.mBluetoothLeService.close();
+                                        Constant.mBluetoothLeService = null;
+                                    }
+                                }
+
                             }
                         }
                     }

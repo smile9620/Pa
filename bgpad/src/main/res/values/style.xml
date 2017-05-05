@@ -124,9 +124,10 @@
         <item name="android:textColor">@color/share_view</item>
         <item name="android:layout_marginLeft">1dp</item>
         <item name="android:layout_marginRight">1dp</item>
-        <item name="android:gravity">center</item>
         <item name="android:padding">@dimen/inbody_report_table_padding</item>
         <item name="android:layout_gravity">fill</item>
+        <item name="android:drawableLeft">@drawable/check_up</item>
+        <item name="android:drawablePadding">3dp</item>
         <item name="android:textSize">@dimen/general_small_text</item>
     </style>
 

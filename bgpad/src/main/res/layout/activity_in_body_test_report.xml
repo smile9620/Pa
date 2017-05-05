@@ -27,23 +27,28 @@
 
                 <TextView
                     style="@style/seluser_userlist_text"
-                    android:layout_weight="9"
+                    android:layout_weight="3"
                     android:text="编号" />
 
                 <TextView
                     style="@style/seluser_userlist_text"
-                    android:layout_weight="6"
+                    android:layout_weight="2"
                     android:text="姓名" />
 
                 <TextView
                     style="@style/seluser_userlist_text"
-                    android:layout_weight="3"
+                    android:layout_weight="1"
                     android:text="性别" />
 
                 <TextView
                     style="@style/seluser_userlist_text"
-                    android:layout_weight="5"
-                    android:text="测试日期" />
+                    android:layout_weight="1"
+                    android:text="身高" />
+
+                <TextView
+                    style="@style/seluser_userlist_text"
+                    android:layout_weight="1"
+                    android:text="体重" />
             </TableRow>
 
             <TableRow
@@ -54,26 +59,32 @@
                 <TextView
                     android:id="@+id/usernumber"
                     style="@style/seluser_userlist_text"
-                    android:layout_weight="9"
+                    android:layout_weight="3"
                     android:text="编号" />
 
                 <TextView
                     android:id="@+id/username"
                     style="@style/seluser_userlist_text"
-                    android:layout_weight="6"
+                    android:layout_weight="2"
                     android:text="姓名" />
 
                 <TextView
                     android:id="@+id/sex"
                     style="@style/seluser_userlist_text"
-                    android:layout_weight="3"
+                    android:layout_weight="1"
                     android:text="性别" />
 
                 <TextView
-                    android:id="@+id/testdate"
+                    android:id="@+id/testheight"
                     style="@style/seluser_userlist_text"
-                    android:layout_weight="5"
-                    android:text="测试日期" />
+                    android:layout_weight="1"
+                    android:text="0" />
+
+                <TextView
+                    android:id="@+id/testweight"
+                    style="@style/seluser_userlist_text"
+                    android:layout_weight="1"
+                    android:text="0" />
             </TableRow>
         </TableLayout>
 
@@ -103,7 +114,7 @@
                 android:background="@drawable/score_bg"
                 android:gravity="center"
                 android:padding="@dimen/inbody_report_score_padding"
-                android:text="99"
+                android:text="0"
                 android:textColor="@color/score_text"
                 android:textSize="@dimen/general_text" />
         </LinearLayout>
@@ -193,147 +204,147 @@
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="0"
                         android:layout_row="1"
-                        android:background="@drawable/report_table_green_light"
+                        android:background="@color/report_green_light"
                         android:text="细胞内液" />
 
                     <TextView
+                        android:id="@+id/inliquid"
                         style="@style/inbody_test_report_table_text"
                         android:layout_height="wrap_content"
                         android:layout_column="1"
                         android:layout_row="1"
-                        android:background="@drawable/report_table_blue_light"
-                        android:text="27.7" />
+                        android:background="@color/report_blue_light" />
 
 
                     <TextView
+                        android:id="@+id/totalwater"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="2"
                         android:layout_gravity="fill"
                         android:layout_row="1"
                         android:layout_rowSpan="2"
-                        android:background="@color/report_blue_light"
-                        android:text="43.6" />
+                        android:background="@color/report_blue_light" />
 
                     <TextView
+                        android:id="@+id/muscle"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="3"
                         android:layout_row="1"
                         android:layout_rowSpan="3"
-                        android:background="@color/report_green_light"
-                        android:text="55.5" />
+                        android:background="@color/report_green_light" />
 
                     <TextView
+                        android:id="@+id/fatfree"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="4"
                         android:layout_row="1"
                         android:layout_rowSpan="4"
-                        android:background="@color/report_blue_light"
-                        android:text="59.5" />
+                        android:background="@color/report_blue_light" />
 
                     <TextView
+                        android:id="@+id/totalweight"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="5"
                         android:layout_row="1"
                         android:layout_rowSpan="5"
-                        android:background="@color/report_green_light"
-                        android:text="77.2" />
+                        android:background="@color/report_green_light" />
 
                     <TextView
+                        android:id="@+id/normalrange0"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="6"
                         android:layout_row="1"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="21.4-26.2" />
+                        android:background="@color/report_green_light" />
 
                     <TextView
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="0"
                         android:layout_row="2"
-                        android:background="@drawable/report_table_green_dark"
+                        android:background="@color/title_bar"
                         android:text="细胞外液" />
 
                     <TextView
+                        android:id="@+id/outliquid"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="1"
                         android:layout_row="2"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="27.7" />
+                        android:background="@drawable/report_table_green_light" />
 
 
                     <TextView
+                        android:id="@+id/normalrange1"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="6"
                         android:layout_row="2"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="21.4-26.2" />
+                        android:background="@drawable/report_table_green_light" />
 
                     <TextView
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="0"
                         android:layout_row="3"
-                        android:background="@drawable/report_table_green_light"
+                        android:background="@color/report_green_light"
                         android:text="蛋白质" />
 
                     <TextView
+                        android:id="@+id/totalprotein"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="1"
                         android:layout_columnSpan="2"
                         android:layout_row="3"
-                        android:background="@drawable/report_table_blue_light"
-                        android:text="27.7" />
+                        android:background="@drawable/report_table_blue_light" />
 
 
                     <TextView
+                        android:id="@+id/normalrange2"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="6"
                         android:layout_row="3"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="21.4-26.2" />
+                        android:background="@drawable/report_table_green_light" />
 
                     <TextView
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="0"
                         android:layout_row="4"
-                        android:background="@drawable/report_table_green_dark"
+                        android:background="@color/title_bar"
                         android:text="无机盐" />
 
                     <TextView
+                        android:id="@+id/totalinorganicsalt"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="1"
                         android:layout_columnSpan="3"
                         android:layout_row="4"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="27.7" />
+                        android:background="@drawable/report_table_green_light" />
 
                     <TextView
+                        android:id="@+id/normalrange3"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="6"
                         android:layout_row="4"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="21.4-26.2" />
+                        android:background="@drawable/report_table_green_light" />
 
                     <TextView
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="0"
                         android:layout_row="5"
                         android:background="@color/report_green_light"
-                        android:text="体脂肪量" />
+                        android:text="体脂肪" />
 
                     <TextView
+                        android:id="@+id/bodyfat"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="1"
                         android:layout_columnSpan="4"
                         android:layout_row="5"
-                        android:background="@color/report_blue_light"
-                        android:text="27.7" />
+                        android:background="@drawable/report_table_blue_light" />
 
 
                     <TextView
+                        android:id="@+id/normalrange4"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="6"
                         android:layout_row="5"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="21.4-26.2" />
+                        android:background="@drawable/report_table_green_light" />
 
                 </GridLayout>
 
@@ -354,7 +365,7 @@
                 <GridLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:columnCount="5"
+                    android:columnCount="6"
                     android:rowCount="4">
 
                     <TextView
@@ -369,133 +380,188 @@
                         android:layout_column="1"
                         android:layout_row="0"
                         android:background="@color/title_bar"
-                        android:text="低标准" />
+                        android:text="测量值" />
 
                     <TextView
                         style="@style/inbody_test_report_table_title"
                         android:layout_column="2"
                         android:layout_row="0"
                         android:background="@color/report_green_dark"
-                        android:text="正常" />
+                        android:text="低标准" />
 
                     <TextView
                         style="@style/inbody_test_report_table_title"
                         android:layout_column="3"
                         android:layout_row="0"
                         android:background="@color/title_bar"
-                        android:text="超标准" />
+                        android:text="正常" />
 
                     <TextView
                         style="@style/inbody_test_report_table_title"
                         android:layout_column="4"
                         android:layout_row="0"
                         android:background="@color/report_green_dark"
+                        android:text="超标准" />
+
+                    <TextView
+                        style="@style/inbody_test_report_table_title"
+                        android:layout_column="5"
+                        android:layout_row="0"
+                        android:background="@color/title_bar"
                         android:text="正常范围" />
 
                     <TextView
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="0"
                         android:layout_row="1"
-                        android:background="@drawable/report_table_green_light"
+                        android:background="@color/report_green_light"
                         android:text="体重" />
 
                     <TextView
+                        android:id="@+id/weight"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="1"
                         android:layout_row="1"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
+                        android:background="@color/report_green_light" />
 
-                    <TextView
-                        style="@style/inbody_test_report_table_text"
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_column="2"
+                        android:layout_columnSpan="3"
+                        android:layout_gravity="fill"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginRight="1dp"
                         android:layout_row="1"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
+                        android:background="@color/report_green_light">
+
+                        <ProgressBar
+                            android:id="@+id/weightprogress"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:progress="25"
+                            android:progressDrawable="@drawable/progress_range" />
+
+                        <TextView
+                            android:id="@+id/weightrange"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="正常"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/general_small_text" />
+                    </FrameLayout>
 
                     <TextView
+                        android:id="@+id/normalrange5"
                         style="@style/inbody_test_report_table_text"
-                        android:layout_column="3"
+                        android:layout_column="5"
                         android:layout_row="1"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
-
-                    <TextView
-                        style="@style/inbody_test_report_table_text"
-                        android:layout_column="4"
-                        android:layout_row="1"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
+                        android:background="@color/report_green_light" />
 
                     <TextView
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="0"
                         android:layout_row="2"
                         android:background="@drawable/report_table_green_light"
-                        android:text="骨骼肌肉量" />
+                        android:text="骨骼肌" />
 
                     <TextView
+                        android:id="@+id/bones"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="1"
                         android:layout_row="2"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
+                        android:background="@drawable/report_table_green_light" />
 
-                    <TextView
-                        style="@style/inbody_test_report_table_text"
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_column="2"
+                        android:layout_columnSpan="3"
+                        android:layout_gravity="fill"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginRight="1dp"
                         android:layout_row="2"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
+                        android:background="@drawable/report_table_green_light">
+
+                        <ProgressBar
+                            android:id="@+id/bonesprogress"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:progress="25"
+                            android:progressDrawable="@drawable/progress_range" />
+
+                        <TextView
+                            android:id="@+id/bonesrange"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="正常"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/general_small_text" />
+                    </FrameLayout>
 
                     <TextView
+                        android:id="@+id/normalrange6"
                         style="@style/inbody_test_report_table_text"
-                        android:layout_column="3"
+                        android:layout_column="5"
                         android:layout_row="2"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
-
-                    <TextView
-                        style="@style/inbody_test_report_table_text"
-                        android:layout_column="4"
-                        android:layout_row="2"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
+                        android:background="@drawable/report_table_green_light" />
 
                     <TextView
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="0"
                         android:layout_row="3"
-                        android:background="@color/report_green_light"
-                        android:text="体脂肪量" />
+                        android:background="@drawable/report_table_green_light"
+                        android:text="体脂肪" />
 
                     <TextView
+                        android:id="@+id/musclefat"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="1"
                         android:layout_row="3"
-                        android:background="@color/report_green_light"
-                        android:text="-" />
+                        android:background="@drawable/report_table_green_light" />
 
-                    <TextView
-                        style="@style/inbody_test_report_table_text"
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_column="2"
+                        android:layout_columnSpan="3"
+                        android:layout_gravity="fill"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginRight="1dp"
                         android:layout_row="3"
-                        android:background="@color/report_green_light"
-                        android:text="-" />
+                        android:background="@drawable/report_table_green_light">
+
+                        <ProgressBar
+                            android:id="@+id/fatprogress"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:progress="25"
+                            android:progressDrawable="@drawable/progress_range" />
+
+                        <TextView
+                            android:id="@+id/fatrange"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="正常"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/general_small_text" />
+                    </FrameLayout>
 
                     <TextView
+                        android:id="@+id/normalrange7"
                         style="@style/inbody_test_report_table_text"
-                        android:layout_column="3"
+                        android:layout_column="5"
                         android:layout_row="3"
-                        android:background="@color/report_green_light"
-                        android:text="-" />
-
-                    <TextView
-                        style="@style/inbody_test_report_table_text"
-                        android:layout_column="4"
-                        android:layout_row="3"
-                        android:background="@color/report_green_light"
-                        android:text="-" />
+                        android:background="@drawable/report_table_green_light" />
                 </GridLayout>
 
                 <TextView
@@ -509,8 +575,8 @@
                 <GridLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:columnCount="5"
-                    android:rowCount="5">
+                    android:columnCount="6"
+                    android:rowCount="4">
 
                     <TextView
                         style="@style/inbody_test_report_table_title"
@@ -524,574 +590,501 @@
                         android:layout_column="1"
                         android:layout_row="0"
                         android:background="@color/title_bar"
-                        android:text="低标准" />
+                        android:text="测量值" />
 
                     <TextView
                         style="@style/inbody_test_report_table_title"
                         android:layout_column="2"
                         android:layout_row="0"
                         android:background="@color/report_green_dark"
-                        android:text="正常" />
+                        android:text="低标准" />
 
                     <TextView
                         style="@style/inbody_test_report_table_title"
                         android:layout_column="3"
                         android:layout_row="0"
                         android:background="@color/title_bar"
-                        android:text="超标准" />
+                        android:text="正常" />
 
                     <TextView
                         style="@style/inbody_test_report_table_title"
                         android:layout_column="4"
                         android:layout_row="0"
                         android:background="@color/report_green_dark"
+                        android:text="超标准" />
+
+                    <TextView
+                        style="@style/inbody_test_report_table_title"
+                        android:layout_column="5"
+                        android:layout_row="0"
+                        android:background="@color/title_bar"
                         android:text="正常范围" />
 
                     <TextView
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="0"
                         android:layout_row="1"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="身体质量指数kg/m²" />
+                        android:background="@color/report_green_light"
+                        android:text="BMI\nkg/m2" />
 
                     <TextView
+                        android:id="@+id/bmi"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="1"
                         android:layout_row="1"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
+                        android:background="@color/report_green_light" />
 
-                    <TextView
-                        style="@style/inbody_test_report_table_text"
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_column="2"
+                        android:layout_columnSpan="3"
+                        android:layout_gravity="fill"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginRight="1dp"
                         android:layout_row="1"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
+                        android:background="@color/report_green_light">
+
+                        <ProgressBar
+                            android:id="@+id/bmiprogress"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:progress="25"
+                            android:progressDrawable="@drawable/progress_range" />
+
+                        <TextView
+                            android:id="@+id/bmirange"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="正常"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/general_small_text" />
+                    </FrameLayout>
 
                     <TextView
+                        android:id="@+id/normalrange8"
                         style="@style/inbody_test_report_table_text"
-                        android:layout_column="3"
+                        android:layout_column="5"
                         android:layout_row="1"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
-
-                    <TextView
-                        style="@style/inbody_test_report_table_text"
-                        android:layout_column="4"
-                        android:layout_row="1"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
+                        android:background="@color/report_green_light" />
 
                     <TextView
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="0"
                         android:layout_row="2"
                         android:background="@drawable/report_table_green_light"
-                        android:text="体脂肪率%" />
+                        android:text="体脂率\n%" />
 
                     <TextView
+                        android:id="@+id/fatrate"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="1"
                         android:layout_row="2"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
+                        android:background="@drawable/report_table_green_light" />
 
-                    <TextView
-                        style="@style/inbody_test_report_table_text"
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_column="2"
+                        android:layout_columnSpan="3"
+                        android:layout_gravity="fill"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginRight="1dp"
                         android:layout_row="2"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
+                        android:background="@drawable/report_table_green_light">
+
+                        <ProgressBar
+                            android:id="@+id/fatrateprogress"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:progress="25"
+                            android:progressDrawable="@drawable/progress_range" />
+
+                        <TextView
+                            android:id="@+id/fatraterange"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="正常"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/general_small_text" />
+                    </FrameLayout>
 
                     <TextView
+                        android:id="@+id/normalrange9"
                         style="@style/inbody_test_report_table_text"
-                        android:layout_column="3"
+                        android:layout_column="5"
                         android:layout_row="2"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
-
-                    <TextView
-                        style="@style/inbody_test_report_table_text"
-                        android:layout_column="4"
-                        android:layout_row="2"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
+                        android:background="@drawable/report_table_green_light" />
 
                     <TextView
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="0"
                         android:layout_row="3"
                         android:background="@drawable/report_table_green_light"
-                        android:text="腰臀比" />
+                        android:text="腰臀比\n%" />
 
                     <TextView
+                        android:id="@+id/waistrate"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="1"
                         android:layout_row="3"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
+                        android:background="@drawable/report_table_green_light" />
 
-                    <TextView
-                        style="@style/inbody_test_report_table_text"
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_column="2"
+                        android:layout_columnSpan="3"
+                        android:layout_gravity="fill"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginRight="1dp"
                         android:layout_row="3"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
+                        android:background="@drawable/report_table_green_light">
+
+                        <ProgressBar
+                            android:id="@+id/waistrateprogress"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:progress="25"
+                            android:progressDrawable="@drawable/progress_range" />
+
+                        <TextView
+                            android:id="@+id/waistraterange"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="正常"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/general_small_text" />
+                    </FrameLayout>
 
                     <TextView
+                        android:id="@+id/normalrange10"
                         style="@style/inbody_test_report_table_text"
-                        android:layout_column="3"
+                        android:layout_column="5"
                         android:layout_row="3"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
-
-                    <TextView
-                        style="@style/inbody_test_report_table_text"
-                        android:layout_column="4"
-                        android:layout_row="3"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
-
-                    <TextView
-                        style="@style/inbody_test_report_table_text"
-                        android:layout_column="0"
-                        android:layout_row="4"
-                        android:background="@color/report_green_light"
-                        android:text="内脏脂肪面积cm²" />
-
-                    <TextView
-                        style="@style/inbody_test_report_table_text"
-                        android:layout_column="1"
-                        android:layout_row="4"
-                        android:background="@color/report_green_light"
-                        android:text="-" />
-
-                    <TextView
-                        style="@style/inbody_test_report_table_text"
-                        android:layout_column="2"
-                        android:layout_row="4"
-                        android:background="@color/report_green_light"
-                        android:text="-" />
-
-                    <TextView
-                        style="@style/inbody_test_report_table_text"
-                        android:layout_column="3"
-                        android:layout_row="4"
-                        android:background="@color/report_green_light"
-                        android:text="-" />
-
-                    <TextView
-                        style="@style/inbody_test_report_table_text"
-                        android:layout_column="4"
-                        android:layout_row="4"
-                        android:background="@color/report_green_light"
-                        android:text="-" />
+                        android:background="@drawable/report_table_green_light" />
                 </GridLayout>
 
-                <LinearLayout
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/inbody_report_score_padding"
+                    android:text="节段肌肉分析"
+                    android:textColor="@color/title_bar"
+                    android:textSize="@dimen/general_text" />
+
+                <GridLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:columnCount="6"
+                    android:rowCount="6">
 
-                    <LinearLayout
+                    <TextView
+                        style="@style/inbody_test_report_table_title"
+                        android:layout_column="0"
+                        android:layout_row="0"
+                        android:background="@color/report_green_dark"
+                        android:text="" />
+
+                    <TextView
+                        style="@style/inbody_test_report_table_title"
+                        android:layout_column="1"
+                        android:layout_row="0"
+                        android:background="@color/title_bar"
+                        android:text="测量值" />
+
+                    <TextView
+                        style="@style/inbody_test_report_table_title"
+                        android:layout_column="2"
+                        android:layout_row="0"
+                        android:background="@color/report_green_dark"
+                        android:text="低标准" />
+
+                    <TextView
+                        style="@style/inbody_test_report_table_title"
+                        android:layout_column="3"
+                        android:layout_row="0"
+                        android:background="@color/title_bar"
+                        android:text="正常" />
+
+                    <TextView
+                        style="@style/inbody_test_report_table_title"
+                        android:layout_column="4"
+                        android:layout_row="0"
+                        android:background="@color/report_green_dark"
+                        android:text="超标准" />
+
+                    <TextView
+                        style="@style/inbody_test_report_table_title"
+                        android:layout_column="5"
+                        android:layout_row="0"
+                        android:background="@color/title_bar"
+                        android:text="正常范围" />
+
+                    <TextView
+                        style="@style/inbody_test_report_table_text"
+                        android:layout_column="0"
+                        android:layout_row="1"
+                        android:background="@color/report_green_light"
+                        android:text="左臂" />
+
+                    <TextView
+                        android:id="@+id/leftarm"
+                        style="@style/inbody_test_report_table_text"
+                        android:layout_column="1"
+                        android:layout_row="1"
+                        android:background="@color/report_green_light" />
+
+                    <FrameLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/inbody_report_score_padding">
-
-                            <TextView
-                                style="@style/inbody_test_report_title"
-                                android:text="节段肌肉分析" />
-
-                            <TextView
-                                style="@style/inbody_test_report_unit"
-                                android:text="单位（kg）" />
-                        </LinearLayout>
-
-                        <GridLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:columnCount="5"
-                            android:rowCount="6">
-
-                            <TextView
-                                style="@style/inbody_test_report_table_title"
-                                android:layout_column="0"
-                                android:layout_row="0"
-                                android:background="@color/report_green_dark"
-                                android:text="" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_title"
-                                android:layout_column="1"
-                                android:layout_row="0"
-                                android:background="@color/title_bar"
-                                android:text="低标准" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_title"
-                                android:layout_column="2"
-                                android:layout_row="0"
-                                android:background="@color/report_green_dark"
-                                android:text="正常" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_title"
-                                android:layout_column="3"
-                                android:layout_row="0"
-                                android:background="@color/title_bar"
-                                android:text="超标准" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_title"
-                                android:layout_column="4"
-                                android:layout_row="0"
-                                android:background="@color/report_green_dark"
-                                android:text="正常范围" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="0"
-                                android:layout_row="1"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="左臂" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="1"
-                                android:layout_row="1"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="2"
-                                android:layout_row="1"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="3"
-                                android:layout_row="1"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="4"
-                                android:layout_row="1"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="0"
-                                android:layout_row="2"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="右臂" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="1"
-                                android:layout_row="2"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="2"
-                                android:layout_row="2"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="3"
-                                android:layout_row="2"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="4"
-                                android:layout_row="2"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="0"
-                                android:layout_row="3"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="驱干" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="1"
-                                android:layout_row="3"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="2"
-                                android:layout_row="3"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="3"
-                                android:layout_row="3"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="4"
-                                android:layout_row="3"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="0"
-                                android:layout_row="4"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="左腿" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="1"
-                                android:layout_row="4"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="2"
-                                android:layout_row="4"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="3"
-                                android:layout_row="4"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="4"
-                                android:layout_row="4"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="0"
-                                android:layout_row="5"
-                                android:background="@color/report_green_light"
-                                android:text="右腿" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="1"
-                                android:layout_row="5"
-                                android:background="@color/report_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="2"
-                                android:layout_row="5"
-                                android:background="@color/report_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="3"
-                                android:layout_row="5"
-                                android:background="@color/report_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="4"
-                                android:layout_row="5"
-                                android:background="@color/report_green_light"
-                                android:text="-" />
-                        </GridLayout>
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/inbody_report_table_padding"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/inbody_report_score_padding"
-                            android:text="节段浮肿"
-                            android:textColor="@color/title_bar"
-                            android:textSize="@dimen/general_text" />
-
-                        <GridLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:columnCount="2"
-                            android:rowCount="6">
-
-                            <TextView
-                                style="@style/inbody_test_report_table_title"
-                                android:layout_column="0"
-                                android:layout_row="0"
-                                android:background="@color/report_green_dark"
-                                android:text="ECW/TBW" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_title"
-                                android:layout_column="1"
-                                android:layout_row="0"
-                                android:background="@color/title_bar"
-                                android:text="ECF/TBF" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="0"
-                                android:layout_row="1"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="1"
-                                android:layout_row="1"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="0"
-                                android:layout_row="2"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="1"
-                                android:layout_row="2"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="0"
-                                android:layout_row="3"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="1"
-                                android:layout_row="3"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="0"
-                                android:layout_row="4"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="1"
-                                android:layout_row="4"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="0"
-                                android:layout_row="5"
-                                android:background="@color/report_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="1"
-                                android:layout_row="5"
-                                android:background="@color/report_green_light"
-                                android:text="-" />
-                        </GridLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_column="2"
+                        android:layout_columnSpan="3"
+                        android:layout_gravity="fill"
                         android:layout_marginLeft="1dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:layout_marginRight="1dp"
+                        android:layout_row="1"
+                        android:background="@drawable/report_table_green_light">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/inbody_report_score_padding"
-                            android:text="浮肿"
-                            android:textColor="@color/title_bar"
-                            android:textSize="@dimen/general_text" />
-
-                        <GridLayout
+                        <ProgressBar
+                            android:id="@+id/leftarmprogress"
+                            style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:columnCount="2"
-                            android:rowCount="2">
+                            android:layout_gravity="center"
+                            android:progress="25"
+                            android:progressDrawable="@drawable/progress_range" />
 
-                            <TextView
-                                style="@style/inbody_test_report_table_title"
-                                android:layout_column="0"
-                                android:layout_row="0"
-                                android:background="@color/report_green_dark"
-                                android:text="ECW/TBW" />
+                        <TextView
+                            android:id="@+id/leftarmrange"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="正常"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/general_small_text" />
+                    </FrameLayout>
 
-                            <TextView
-                                style="@style/inbody_test_report_table_title"
-                                android:layout_column="1"
-                                android:layout_row="0"
-                                android:background="@color/title_bar"
-                                android:text="ECF/TBF" />
+                    <TextView
+                        android:id="@+id/normalrange11"
+                        style="@style/inbody_test_report_table_text"
+                        android:layout_column="5"
+                        android:layout_row="1"
+                        android:background="@color/report_green_light" />
 
-                            <FrameLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_column="0"
-                                android:layout_columnSpan="2"
-                                android:layout_marginLeft="1dp"
-                                android:layout_marginRight="1dp"
-                                android:layout_row="1"
-                                android:background="@color/report_green_light">
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:background="@drawable/edema_bg" />
-                            </FrameLayout>
-                        </GridLayout>
-                    </LinearLayout>
-                </LinearLayout>
+                    <TextView
+                        style="@style/inbody_test_report_table_text"
+                        android:layout_column="0"
+                        android:layout_row="2"
+                        android:background="@drawable/report_table_green_light"
+                        android:text="右臂" />
+
+                    <TextView
+                        android:id="@+id/rightarm"
+                        style="@style/inbody_test_report_table_text"
+                        android:layout_column="1"
+                        android:layout_row="2"
+                        android:background="@drawable/report_table_green_light" />
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="2"
+                        android:layout_columnSpan="3"
+                        android:layout_gravity="fill"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginRight="1dp"
+                        android:layout_row="2"
+                        android:background="@drawable/report_table_green_light">
+
+                        <ProgressBar
+                            android:id="@+id/rightarmprogress"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:progress="25"
+                            android:progressDrawable="@drawable/progress_range" />
+
+                        <TextView
+                            android:id="@+id/rightarmrange"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="正常"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/general_small_text" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/normalrange12"
+                        style="@style/inbody_test_report_table_text"
+                        android:layout_column="5"
+                        android:layout_row="2"
+                        android:background="@drawable/report_table_green_light" />
+
+                    <TextView
+                        style="@style/inbody_test_report_table_text"
+                        android:layout_column="0"
+                        android:layout_row="3"
+                        android:background="@drawable/report_table_green_light"
+                        android:text="躯干" />
+
+                    <TextView
+                        android:id="@+id/trunk"
+                        style="@style/inbody_test_report_table_text"
+                        android:layout_column="1"
+                        android:layout_row="3"
+                        android:background="@drawable/report_table_green_light" />
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="2"
+                        android:layout_columnSpan="3"
+                        android:layout_gravity="fill"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginRight="1dp"
+                        android:layout_row="3"
+                        android:background="@drawable/report_table_green_light">
+
+                        <ProgressBar
+                            android:id="@+id/trunkprogress"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:progress="25"
+                            android:progressDrawable="@drawable/progress_range" />
+
+                        <TextView
+                            android:id="@+id/trunkrange"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="正常"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/general_small_text" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/normalrange13"
+                        style="@style/inbody_test_report_table_text"
+                        android:layout_column="5"
+                        android:layout_row="3"
+                        android:background="@drawable/report_table_green_light" />
+
+                    <TextView
+                        style="@style/inbody_test_report_table_text"
+                        android:layout_column="0"
+                        android:layout_row="4"
+                        android:background="@drawable/report_table_green_light"
+                        android:text="左腿" />
+
+                    <TextView
+                        android:id="@+id/leftleg"
+                        style="@style/inbody_test_report_table_text"
+                        android:layout_column="1"
+                        android:layout_row="4"
+                        android:background="@drawable/report_table_green_light" />
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="2"
+                        android:layout_columnSpan="3"
+                        android:layout_gravity="fill"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginRight="1dp"
+                        android:layout_row="4"
+                        android:background="@drawable/report_table_green_light">
+
+                        <ProgressBar
+                            android:id="@+id/leftlegprogress"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:progress="25"
+                            android:progressDrawable="@drawable/progress_range" />
+
+                        <TextView
+                            android:id="@+id/leftlegrange"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="正常"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/general_small_text" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/normalrange14"
+                        style="@style/inbody_test_report_table_text"
+                        android:layout_column="5"
+                        android:layout_row="4"
+                        android:background="@drawable/report_table_green_light" />
+
+                    <TextView
+                        style="@style/inbody_test_report_table_text"
+                        android:layout_column="0"
+                        android:layout_row="5"
+                        android:background="@drawable/report_table_green_light"
+                        android:text="右腿" />
+
+                    <TextView
+                        android:id="@+id/rightleg"
+                        style="@style/inbody_test_report_table_text"
+                        android:layout_column="1"
+                        android:layout_row="5"
+                        android:background="@drawable/report_table_green_light" />
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="2"
+                        android:layout_columnSpan="3"
+                        android:layout_gravity="fill"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginRight="1dp"
+                        android:layout_row="5"
+                        android:background="@drawable/report_table_green_light">
+
+                        <ProgressBar
+                            android:id="@+id/rightlegprogress"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:progress="25"
+                            android:progressDrawable="@drawable/progress_range" />
+
+                        <TextView
+                            android:id="@+id/rightlegrange"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="正常"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/general_small_text" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/normalrange15"
+                        style="@style/inbody_test_report_table_text"
+                        android:layout_column="5"
+                        android:layout_row="5"
+                        android:background="@drawable/report_table_green_light" />
+                </GridLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -1111,616 +1104,473 @@
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="0"
                         android:layout_row="0"
-                        android:background="@drawable/report_table_green_dark"
-                        android:text="标准体重" />
-
-                    <TextView
-                        style="@style/inbody_test_report_table_text"
-                        android:layout_column="1"
-                        android:layout_row="0"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
-
-                    <TextView
-                        style="@style/inbody_test_report_table_text"
-                        android:layout_column="2"
-                        android:layout_row="0"
-                        android:background="@drawable/report_table_green_dark"
-                        android:text="体重控制" />
-
-                    <TextView
-                        style="@style/inbody_test_report_table_text"
-                        android:layout_column="3"
-                        android:layout_row="0"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
-
-                    <TextView
-                        style="@style/inbody_test_report_table_text"
-                        android:layout_column="0"
-                        android:layout_row="1"
-                        android:background="@drawable/report_table_green_dark"
-                        android:text="标准身高" />
-
-                    <TextView
-                        style="@style/inbody_test_report_table_text"
-                        android:layout_column="1"
-                        android:layout_row="1"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
-
-                    <TextView
-                        style="@style/inbody_test_report_table_text"
-                        android:layout_column="2"
-                        android:layout_row="1"
-                        android:background="@drawable/report_table_green_dark"
-                        android:text="脂肪控制" />
-
-                    <TextView
-                        style="@style/inbody_test_report_table_text"
-                        android:layout_column="3"
-                        android:layout_row="1"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
-
-                    <TextView
-                        style="@style/inbody_test_report_table_text"
-                        android:layout_column="0"
-                        android:layout_row="1"
-                        android:background="@drawable/report_table_green_dark"
-                        android:text="标准身高" />
-
-                    <TextView
-                        style="@style/inbody_test_report_table_text"
-                        android:layout_column="1"
-                        android:layout_row="1"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
-
-                    <TextView
-                        style="@style/inbody_test_report_table_text"
-                        android:layout_column="2"
-                        android:layout_row="1"
-                        android:background="@drawable/report_table_green_dark"
-                        android:text="脂肪控制" />
-
-                    <TextView
-                        style="@style/inbody_test_report_table_text"
-                        android:layout_column="3"
-                        android:layout_row="1"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
-
-                    <TextView
-                        style="@style/inbody_test_report_table_title"
-                        android:layout_column="0"
-                        android:layout_row="2"
                         android:background="@color/report_green_dark"
-                        android:text="肌肉控制"
-                        android:textColor="@color/text_color" />
+                        android:text="标准体重(kg)" />
+
+                    <TextView
+                        android:id="@+id/standardweight"
+                        style="@style/inbody_test_report_table_text"
+                        android:layout_column="1"
+                        android:layout_row="0"
+                        android:background="@color/report_green_light" />
+
+                    <TextView
+                        style="@style/inbody_test_report_table_text"
+                        android:layout_column="2"
+                        android:layout_row="0"
+                        android:background="@color/report_green_dark"
+                        android:text="体重控制(kg)" />
+
+                    <TextView
+                        android:id="@+id/weightcontrol"
+                        style="@style/inbody_test_report_table_text"
+                        android:layout_column="3"
+                        android:layout_row="0"
+                        android:background="@color/report_green_light" />
+
+                    <TextView
+                        style="@style/inbody_test_report_table_text"
+                        android:layout_column="0"
+                        android:layout_row="1"
+                        android:background="@drawable/report_table_green_dark"
+                        android:text="标准身高(cm)" />
+
+                    <TextView
+                        android:id="@+id/standardheight"
+                        style="@style/inbody_test_report_table_text"
+                        android:layout_column="1"
+                        android:layout_row="1"
+                        android:background="@drawable/report_table_green_light" />
+
+                    <TextView
+                        style="@style/inbody_test_report_table_text"
+                        android:layout_column="2"
+                        android:layout_row="1"
+                        android:background="@drawable/report_table_green_dark"
+                        android:text="脂肪控制(kg)" />
+
+                    <TextView
+                        android:id="@+id/fatcontrol"
+                        style="@style/inbody_test_report_table_text"
+                        android:layout_column="3"
+                        android:layout_row="1"
+                        android:background="@drawable/report_table_green_light" />
 
                     <TextView
                         style="@style/inbody_test_report_table_title"
+                        android:layout_column="0"
+                        android:layout_row="2"
+                        android:background="@drawable/report_table_green_dark"
+                        android:text="肌肉控制(kg)"
+                        android:textColor="@color/text_color" />
+
+                    <TextView
+                        android:id="@+id/musclecontrol"
+                        style="@style/inbody_test_report_table_title"
                         android:layout_column="1"
                         android:layout_row="2"
-                        android:background="@color/report_green_light"
-                        android:text="-"
+                        android:background="@drawable/report_table_green_light"
                         android:textColor="@color/text_color" />
 
                     <TextView
                         style="@style/inbody_test_report_table_title"
                         android:layout_column="2"
                         android:layout_row="2"
-                        android:background="@color/report_green_dark"
-                        android:text="基础代谢量"
+                        android:background="@drawable/report_table_green_dark"
+                        android:text="基础代谢量(kcal)"
                         android:textColor="@color/text_color" />
 
                     <TextView
+                        android:id="@+id/basalmetabolism"
                         style="@style/inbody_test_report_table_title"
                         android:layout_column="3"
                         android:layout_row="2"
-                        android:background="@color/report_green_light"
-                        android:text="-"
+                        android:background="@drawable/report_table_green_light"
                         android:textColor="@color/text_color" />
                 </GridLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="1dp"
-                    android:layout_marginRight="1dp"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/inbody_report_score_padding"
-                            android:text="营养评估"
-                            android:textColor="@color/title_bar"
-                            android:textSize="@dimen/general_text" />
-
-                        <GridLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:columnCount="4"
-                            android:rowCount="4">
-
-                            <TextView
-                                style="@style/inbody_test_report_table_title"
-                                android:layout_column="0"
-                                android:layout_row="0"
-                                android:background="@color/report_green_light"
-                                android:text="" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_title"
-                                android:layout_column="1"
-                                android:layout_row="0"
-                                android:background="@color/title_bar"
-                                android:text="低标准" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_title"
-                                android:layout_column="2"
-                                android:layout_row="0"
-                                android:background="@color/report_green_dark"
-                                android:text="正常" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_title"
-                                android:layout_column="3"
-                                android:layout_row="0"
-                                android:background="@color/title_bar"
-                                android:text="超标准" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_title"
-                                android:layout_column="0"
-                                android:layout_row="1"
-                                android:background="@color/report_green_dark"
-                                android:text="蛋白质" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="1"
-                                android:layout_row="1"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="2"
-                                android:layout_row="1"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="3"
-                                android:layout_row="1"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_title"
-                                android:layout_column="0"
-                                android:layout_row="2"
-                                android:background="@color/title_bar"
-                                android:text="无机盐" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="1"
-                                android:layout_row="2"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="2"
-                                android:layout_row="2"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="3"
-                                android:layout_row="2"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_title"
-                                android:layout_column="0"
-                                android:layout_row="3"
-                                android:background="@color/report_green_dark"
-                                android:text="体脂肪" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="1"
-                                android:layout_row="3"
-                                android:background="@color/report_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="2"
-                                android:layout_row="3"
-                                android:background="@color/report_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="3"
-                                android:layout_row="3"
-                                android:background="@color/report_green_light"
-                                android:text="-" />
-                        </GridLayout>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/inbody_report_score_padding"
-                            android:text="健康诊断"
-                            android:textColor="@color/title_bar"
-                            android:textSize="@dimen/general_text" />
-
-                        <GridLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:columnCount="3"
-                            android:rowCount="3">
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_column="0"
-                                android:layout_columnWeight="1"
-                                android:layout_gravity="fill"
-                                android:layout_marginLeft="1dp"
-                                android:layout_marginRight="1dp"
-                                android:layout_row="0"
-                                android:background="@color/report_green_light"
-                                android:gravity="center"
-                                android:padding="@dimen/inbody_report_table_padding">
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:gravity="center"
-                                    android:text="身体水分"
-                                    android:textColor="@color/share_view"
-                                    android:textSize="@dimen/general_small_text" />
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:gravity="right"
-                                    android:text="正常"
-                                    android:textColor="@color/text_color"
-                                    android:textSize="@dimen/general_small_text" />
-                            </LinearLayout>
-
-                            <TextView
-                                style="@style/inbody_test_Diagnosis_table_text"
-                                android:layout_column="1"
-                                android:layout_row="0"
-                                android:background="@color/report_green_light"
-                                android:text="缺乏" />
-
-                            <TextView
-                                style="@style/inbody_test_Diagnosis_table_text"
-                                android:layout_column="2"
-                                android:layout_row="0"
-                                android:background="@color/report_green_light"
-                                android:text="" />
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_column="0"
-                                android:layout_columnWeight="1"
-                                android:layout_gravity="fill"
-                                android:layout_marginLeft="1dp"
-                                android:layout_marginRight="1dp"
-                                android:layout_row="1"
-                                android:background="@color/report_green_dark"
-                                android:gravity="center"
-                                android:padding="@dimen/inbody_report_table_padding">
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:gravity="center"
-                                    android:text="浮肿"
-                                    android:textColor="@color/share_view"
-                                    android:textSize="@dimen/general_small_text" />
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:gravity="right"
-                                    android:text="正常"
-                                    android:textColor="@color/text_color"
-                                    android:textSize="@dimen/general_small_text" />
-                            </LinearLayout>
-
-                            <TextView
-                                style="@style/inbody_test_Diagnosis_table_text"
-                                android:layout_column="1"
-                                android:layout_row="1"
-                                android:background="@color/report_green_dark"
-                                android:text="轻度浮肿" />
-
-                            <TextView
-                                style="@style/inbody_test_Diagnosis_table_text"
-                                android:layout_column="2"
-                                android:layout_row="1"
-                                android:background="@color/report_green_dark"
-                                android:text="浮肿" />
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_column="0"
-                                android:layout_columnWeight="1"
-                                android:layout_gravity="fill"
-                                android:layout_marginLeft="1dp"
-                                android:layout_marginRight="1dp"
-                                android:layout_row="2"
-                                android:background="@color/report_green_light"
-                                android:gravity="center"
-                                android:padding="@dimen/inbody_report_table_padding">
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:gravity="center"
-                                    android:text="生活方式"
-                                    android:textColor="@color/share_view"
-                                    android:textSize="@dimen/general_small_text" />
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:gravity="right"
-                                    android:text="正常"
-                                    android:textColor="@color/text_color"
-                                    android:textSize="@dimen/general_small_text" />
-                            </LinearLayout>
-
-                            <TextView
-                                style="@style/inbody_test_Diagnosis_table_text"
-                                android:layout_column="1"
-                                android:layout_row="2"
-                                android:background="@color/report_green_light"
-                                android:text="警惕" />
-
-                            <TextView
-                                style="@style/inbody_test_Diagnosis_table_text"
-                                android:layout_column="2"
-                                android:layout_row="2"
-                                android:background="@color/report_green_light"
-                                android:text="风险" />
-                        </GridLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="1dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/inbody_report_score_padding"
-                            android:text="肌肉评估"
-                            android:textColor="@color/title_bar"
-                            android:textSize="@dimen/general_text" />
-
-                        <GridLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:columnCount="4"
-                            android:rowCount="4">
-
-                            <TextView
-                                style="@style/inbody_test_report_table_title"
-                                android:layout_column="0"
-                                android:layout_row="0"
-                                android:background="@color/report_green_dark"
-                                android:text="上肢均横" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_title"
-                                android:layout_column="1"
-                                android:layout_row="0"
-                                android:background="@color/title_bar"
-                                android:text="不均衡" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_title"
-                                android:layout_column="2"
-                                android:layout_row="0"
-                                android:background="@color/report_green_dark"
-                                android:text="均衡" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_title"
-                                android:layout_column="3"
-                                android:layout_row="0"
-                                android:background="@color/title_bar"
-                                android:text="发达" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_title"
-                                android:layout_column="0"
-                                android:layout_row="1"
-                                android:background="@color/title_bar"
-                                android:text="下肢均衡" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="1"
-                                android:layout_row="1"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="2"
-                                android:layout_row="1"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="3"
-                                android:layout_row="1"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_title"
-                                android:layout_column="0"
-                                android:layout_row="2"
-                                android:background="@color/report_green_dark"
-                                android:text="上肢发达" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="1"
-                                android:layout_row="2"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="2"
-                                android:layout_row="2"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="3"
-                                android:layout_row="2"
-                                android:background="@drawable/report_table_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_title"
-                                android:layout_column="0"
-                                android:layout_row="3"
-                                android:background="@color/title_bar"
-                                android:text="下肢发达" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="1"
-                                android:layout_row="3"
-                                android:background="@color/report_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="2"
-                                android:layout_row="3"
-                                android:background="@color/report_green_light"
-                                android:text="-" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_text"
-                                android:layout_column="3"
-                                android:layout_row="3"
-                                android:background="@color/report_green_light"
-                                android:text="-" />
-                        </GridLayout>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/inbody_report_score_padding"
-                            android:text="内脏等级"
-                            android:textColor="@color/title_bar"
-                            android:textSize="@dimen/general_text" />
-
-                        <GridLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:columnCount="3"
-                            android:rowCount="3">
-
-                            <TextView
-                                style="@style/inbody_test_report_table_title"
-                                android:layout_column="0"
-                                android:layout_columnWeight="1"
-                                android:layout_row="0"
-                                android:layout_rowSpan="3"
-                                android:layout_rowWeight="3"
-                                android:background="@color/report_green_dark"
-                                android:text="体脂肪" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_title"
-                                android:layout_column="1"
-                                android:layout_columnSpan="2"
-                                android:layout_columnWeight="2"
-                                android:layout_row="0"
-                                android:background="#b1c789"
-                                android:text="10" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_title"
-                                android:layout_column="1"
-                                android:layout_row="1"
-                                android:background="@color/report_green_light"
-                                android:text="低" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_title"
-                                android:layout_column="2"
-                                android:layout_row="1"
-                                android:background="@color/report_green_dark"
-                                android:text="高" />
-
-                            <TextView
-                                style="@style/inbody_test_report_table_title"
-                                android:layout_column="1"
-                                android:layout_columnSpan="2"
-                                android:layout_columnWeight="2"
-                                android:layout_row="2"
-                                android:background="#b1c789"
-                                android:text="" />
-                        </GridLayout>
-
-
-                    </LinearLayout>
-                </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/inbody_report_score_padding"
-                    android:text="生物电阻抗"
+                    android:text="健康诊断"
                     android:textColor="@color/title_bar"
                     android:textSize="@dimen/general_text" />
+
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="4"
+                    android:rowCount="2">
+
+                    <TextView
+                        style="@style/inbody_test_report_table_title"
+                        android:layout_column="0"
+                        android:layout_row="0"
+                        android:background="@color/report_green_light"
+                        android:text="身体水分" />
+
+                    <com.bg.views.DrawableTextView
+                        android:id="@+id/waternormal"
+                        style="@style/inbody_test_Diagnosis_table_text"
+                        android:layout_column="1"
+                        android:layout_row="0"
+                        android:background="@color/report_green_light"
+                        android:text="正常" />
+
+                    <com.bg.views.DrawableTextView
+                        android:id="@+id/waterlack"
+                        style="@style/inbody_test_Diagnosis_table_text"
+                        android:layout_column="2"
+                        android:layout_row="0"
+                        android:background="@color/report_green_light"
+                        android:text="缺        乏" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_column="3"
+                        android:layout_columnWeight="1"
+                        android:layout_gravity="fill"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginRight="1dp"
+                        android:layout_row="0"
+                        android:background="@color/report_green_light"
+                        android:padding="@dimen/inbody_report_table_padding"
+                        android:text="" />
+
+                    <TextView
+                        style="@style/inbody_test_report_table_title"
+                        android:layout_column="0"
+                        android:layout_row="1"
+                        android:background="@color/report_green_dark"
+                        android:text="浮        肿" />
+
+                    <com.bg.views.DrawableTextView
+                        android:id="@+id/edemanormal"
+                        style="@style/inbody_test_Diagnosis_table_text"
+                        android:layout_column="1"
+                        android:layout_row="1"
+                        android:background="@color/report_green_dark"
+                        android:text="正常" />
+
+                    <com.bg.views.DrawableTextView
+                        android:id="@+id/slightedema"
+                        style="@style/inbody_test_Diagnosis_table_text"
+                        android:layout_column="2"
+                        android:layout_row="1"
+                        android:background="@color/report_green_dark"
+                        android:text="轻度浮肿" />
+
+                    <com.bg.views.DrawableTextView
+                        android:id="@+id/edema"
+                        style="@style/inbody_test_Diagnosis_table_text"
+                        android:layout_column="3"
+                        android:layout_row="1"
+                        android:background="@color/report_green_dark"
+                        android:text="浮肿" />
+                </GridLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/inbody_report_score_padding"
+                    android:text="营养评估"
+                    android:textColor="@color/title_bar"
+                    android:textSize="@dimen/general_text" />
+
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="4"
+                    android:rowCount="3">
+
+                    <TextView
+                        style="@style/inbody_test_report_table_title"
+                        android:layout_column="0"
+                        android:layout_row="0"
+                        android:background="@color/report_green_dark"
+                        android:text="蛋白质" />
+
+                    <com.bg.views.DrawableTextView
+                        android:id="@+id/proteinlack"
+                        style="@style/inbody_test_Diagnosis_table_text"
+                        android:layout_column="1"
+                        android:layout_row="0"
+                        android:background="@color/report_green_light"
+                        android:text="缺乏" />
+
+                    <com.bg.views.DrawableTextView
+                        android:id="@+id/proteinnormal"
+                        style="@style/inbody_test_Diagnosis_table_text"
+                        android:layout_column="2"
+                        android:layout_row="0"
+                        android:background="@color/report_green_light"
+                        android:text="正常" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_column="3"
+                        android:layout_columnWeight="1"
+                        android:layout_gravity="fill"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginRight="1dp"
+                        android:layout_row="0"
+                        android:background="@color/report_green_light"
+                        android:padding="@dimen/inbody_report_table_padding"
+                        android:text="" />
+
+                    <com.bg.views.DrawableTextView
+                        style="@style/inbody_test_report_table_title"
+                        android:layout_column="0"
+                        android:layout_row="1"
+                        android:background="@color/title_bar"
+                        android:text="无机盐" />
+
+                    <com.bg.views.DrawableTextView
+                        android:id="@+id/inorganicsaltlack"
+                        style="@style/inbody_test_Diagnosis_table_text"
+                        android:layout_column="1"
+                        android:layout_row="1"
+                        android:background="@drawable/report_table_green_light"
+                        android:text="缺乏" />
+
+                    <com.bg.views.DrawableTextView
+                        android:id="@+id/inorganicsaltnormal"
+                        style="@style/inbody_test_Diagnosis_table_text"
+                        android:layout_column="2"
+                        android:layout_row="1"
+                        android:background="@drawable/report_table_green_light"
+                        android:text="正常" />
+
+                    <com.bg.views.DrawableTextView
+                        android:id="@+id/inorganicsaltoverdose"
+                        style="@style/inbody_test_Diagnosis_table_text"
+                        android:layout_column="3"
+                        android:layout_row="1"
+                        android:background="@drawable/report_table_green_light"
+                        android:text="过量" />
+
+                    <TextView
+                        style="@style/inbody_test_report_table_title"
+                        android:layout_column="0"
+                        android:layout_row="2"
+                        android:background="@color/report_green_dark"
+                        android:text="体脂肪" />
+
+                    <com.bg.views.DrawableTextView
+                        android:id="@+id/fatlack"
+                        style="@style/inbody_test_Diagnosis_table_text"
+                        android:layout_column="1"
+                        android:layout_row="2"
+                        android:background="@drawable/report_table_green_light"
+                        android:text="缺乏" />
+
+                    <com.bg.views.DrawableTextView
+                        android:id="@+id/fatnormal"
+                        style="@style/inbody_test_Diagnosis_table_text"
+                        android:layout_column="2"
+                        android:layout_row="2"
+                        android:background="@drawable/report_table_green_light"
+                        android:text="正常" />
+
+                    <com.bg.views.DrawableTextView
+                        android:id="@+id/fatoverdose"
+                        style="@style/inbody_test_Diagnosis_table_text"
+                        android:layout_column="3"
+                        android:layout_row="2"
+                        android:background="@drawable/report_table_green_light"
+                        android:text="过量" />
+                </GridLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/inbody_report_score_padding"
+                    android:text="肌肉评估"
+                    android:textColor="@color/title_bar"
+                    android:textSize="@dimen/general_text" />
+
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="3"
+                    android:rowCount="2">
+
+                    <TextView
+                        style="@style/inbody_test_report_table_title"
+                        android:layout_column="0"
+                        android:layout_row="0"
+                        android:background="@color/report_green_dark"
+                        android:text="上肢均横" />
+
+                    <com.bg.views.DrawableTextView
+                        android:id="@+id/upunbalanced"
+                        style="@style/inbody_test_Diagnosis_table_text"
+                        android:layout_column="1"
+                        android:layout_row="0"
+                        android:background="@color/title_bar"
+                        android:text="不均衡" />
+
+                    <com.bg.views.DrawableTextView
+                        android:id="@+id/upbalanced"
+                        style="@style/inbody_test_Diagnosis_table_text"
+                        android:layout_column="2"
+                        android:layout_row="0"
+                        android:background="@color/report_green_dark"
+                        android:text="均衡" />
+
+                    <TextView
+                        style="@style/inbody_test_report_table_title"
+                        android:layout_column="0"
+                        android:layout_row="1"
+                        android:background="@color/title_bar"
+                        android:text="下肢均衡" />
+
+                    <com.bg.views.DrawableTextView
+                        android:id="@+id/downunbalanced"
+                        style="@style/inbody_test_Diagnosis_table_text"
+                        android:layout_column="1"
+                        android:layout_row="1"
+                        android:background="@color/report_green_light"
+                        android:text="不均衡" />
+
+                    <com.bg.views.DrawableTextView
+                        android:id="@+id/downbalanced"
+                        style="@style/inbody_test_Diagnosis_table_text"
+                        android:layout_column="2"
+                        android:layout_row="1"
+                        android:background="@color/report_green_light"
+                        android:text="均衡" />
+                </GridLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/inbody_report_score_padding"
+                    android:text="浮肿分析"
+                    android:textColor="@color/title_bar"
+                    android:textSize="@dimen/general_text" />
+
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="5"
+                    android:rowCount="3">
+
+                    <TextView
+                        style="@style/inbody_test_report_table_title"
+                        android:layout_column="0"
+                        android:layout_columnWeight="1"
+                        android:layout_row="0"
+                        android:layout_rowSpan="3"
+                        android:background="@color/report_green_dark"
+                        android:text="ECW/TBW" />
+
+                    <TextView
+                        android:id="@+id/edemavalue"
+                        style="@style/inbody_test_report_table_title"
+                        android:layout_column="1"
+                        android:layout_columnSpan="4"
+                        android:layout_columnWeight="4"
+                        android:layout_row="0"
+                        android:background="#b1c789"
+                        android:text="25%" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:layout_columnSpan="4"
+                        android:layout_columnWeight="4"
+                        android:layout_gravity="fill"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginRight="1dp"
+                        android:layout_row="1"
+                        android:background="@color/report_green_dark"
+                        android:gravity="center">
+
+                        <ProgressBar
+                            android:id="@+id/edemaprogess"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:progress="25"
+                            android:progressDrawable="@drawable/progress_edema" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:layout_columnWeight="1"
+                        android:layout_gravity="fill"
+                        android:layout_marginLeft="1dp"
+                        android:layout_row="2"
+                        android:background="#b1c789"
+                        android:gravity="center"
+                        android:padding="@dimen/inbody_report_table_padding"
+                        android:textColor="@color/share_view"
+                        android:textSize="@dimen/general_small_text" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="2"
+                        android:layout_columnWeight="1"
+                        android:layout_gravity="fill"
+                        android:layout_row="2"
+                        android:background="#71c77a"
+                        android:gravity="center"
+                        android:padding="@dimen/inbody_report_table_padding"
+                        android:text="正常"
+                        android:textColor="@color/share_view"
+                        android:textSize="@dimen/general_small_text" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="3"
+                        android:layout_columnWeight="1"
+                        android:layout_gravity="fill"
+                        android:layout_row="2"
+                        android:background="#f5c987"
+                        android:gravity="center"
+                        android:padding="@dimen/inbody_report_table_padding"
+                        android:text="轻微"
+                        android:textColor="@color/share_view"
+                        android:textSize="@dimen/general_small_text" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="4"
+                        android:layout_columnWeight="1"
+                        android:layout_gravity="fill"
+                        android:layout_marginRight="1dp"
+                        android:layout_row="2"
+                        android:background="#f2af57"
+                        android:gravity="center"
+                        android:padding="@dimen/inbody_report_table_padding"
+                        android:text="浮肿"
+                        android:textColor="@color/share_view"
+                        android:textSize="@dimen/general_small_text" />
+                </GridLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/inbody_report_score_padding">
+
+                    <TextView
+                        style="@style/inbody_test_report_title"
+                        android:text="生物电阻抗" />
+
+                    <TextView
+                        style="@style/inbody_test_report_unit"
+                        android:text="单位（Ω）" />
+                </LinearLayout>
 
                 <GridLayout
                     android:layout_width="match_parent"
@@ -1761,7 +1611,7 @@
                         android:layout_column="4"
                         android:layout_row="0"
                         android:background="@color/title_bar"
-                        android:text="PL" />
+                        android:text="RL" />
 
                     <TextView
                         style="@style/inbody_test_report_table_title"
@@ -1774,43 +1624,43 @@
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="0"
                         android:layout_row="1"
-                        android:background="@drawable/report_table_green_dark"
+                        android:background="@color/report_green_dark"
                         android:text="5kHz" />
 
                     <TextView
+                        android:id="@+id/ra0"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="1"
                         android:layout_row="1"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
+                        android:background="@color/report_green_light" />
 
                     <TextView
+                        android:id="@+id/la0"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="2"
                         android:layout_row="1"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
+                        android:background="@color/report_green_light" />
 
                     <TextView
+                        android:id="@+id/tr0"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="3"
                         android:layout_row="1"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
+                        android:background="@color/report_green_light" />
 
                     <TextView
+                        android:id="@+id/rl0"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="4"
                         android:layout_row="1"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
+                        android:background="@color/report_green_light" />
 
                     <TextView
+                        android:id="@+id/ll0"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="5"
                         android:layout_row="1"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
+                        android:background="@color/report_green_light" />
 
                     <TextView
                         style="@style/inbody_test_report_table_text"
@@ -1820,39 +1670,39 @@
                         android:text="50kHz" />
 
                     <TextView
+                        android:id="@+id/ra1"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="1"
                         android:layout_row="2"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
+                        android:background="@drawable/report_table_green_light" />
 
                     <TextView
+                        android:id="@+id/la1"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="2"
                         android:layout_row="2"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
+                        android:background="@drawable/report_table_green_light" />
 
                     <TextView
+                        android:id="@+id/tr1"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="3"
                         android:layout_row="2"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
+                        android:background="@drawable/report_table_green_light" />
 
                     <TextView
+                        android:id="@+id/rl1"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="4"
                         android:layout_row="2"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
+                        android:background="@drawable/report_table_green_light" />
 
                     <TextView
+                        android:id="@+id/ll1"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="5"
                         android:layout_row="2"
-                        android:background="@drawable/report_table_green_light"
-                        android:text="-" />
+                        android:background="@drawable/report_table_green_light" />
 
                     <TextView
                         style="@style/inbody_test_report_table_text"
@@ -1862,42 +1712,43 @@
                         android:text="250kHz" />
 
                     <TextView
+                        android:id="@+id/ra2"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="1"
                         android:layout_row="3"
-                        android:background="@color/report_green_light"
-                        android:text="-" />
+                        android:background="@drawable/report_table_green_light" />
 
                     <TextView
+                        android:id="@+id/la2"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="2"
                         android:layout_row="3"
-                        android:background="@color/report_green_light"
-                        android:text="-" />
+                        android:background="@drawable/report_table_green_light" />
 
                     <TextView
+                        android:id="@+id/tr2"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="3"
                         android:layout_row="3"
-                        android:background="@color/report_green_light"
-                        android:text="-" />
+                        android:background="@drawable/report_table_green_light" />
 
                     <TextView
+                        android:id="@+id/rl2"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="4"
                         android:layout_row="3"
-                        android:background="@color/report_green_light"
-                        android:text="-" />
+                        android:background="@drawable/report_table_green_light" />
 
                     <TextView
+                        android:id="@+id/ll2"
                         style="@style/inbody_test_report_table_text"
                         android:layout_column="5"
                         android:layout_row="3"
-                        android:background="@color/report_green_light"
-                        android:text="-" />
+                        android:background="@drawable/report_table_green_light" />
                 </GridLayout>
 
                 <include layout="@layout/shape_judge"></include>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -1905,12 +1756,13 @@
                     android:text="专家建议"
                     android:textColor="@color/title_bar"
                     android:textSize="@dimen/general_text" />
+
                 <TextView
                     android:id="@+id/advice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="专家建议"
-                    android:background="@color/list_item" />
+                    android:background="@color/list_item"
+                    android:text="专家建议" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -1918,25 +1770,25 @@
                     android:layout_marginTop="@dimen/inbody_report_score_padding">
 
                     <Button
-                        android:id="@+id/save"
+                        android:id="@+id/print"
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/selectuser_edit_height"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentTop="true"
                         android:background="@drawable/test_bg"
-                        android:text="保存"
+                        android:text="打印"
                         android:textColor="@color/share_view"
                         android:textSize="@dimen/general_text" />
 
                     <Button
-                        android:id="@+id/print"
+                        android:id="@+id/save"
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/selectuser_edit_height"
                         android:layout_alignParentTop="true"
                         android:layout_marginRight="@dimen/selectuser_userlist_marginleft"
-                        android:layout_toLeftOf="@id/save"
+                        android:layout_toLeftOf="@id/print"
                         android:background="@drawable/test_bg"
-                        android:text="打印"
+                        android:text="保存"
                         android:textColor="@color/share_view"
                         android:textSize="@dimen/general_text" />
                 </RelativeLayout>
@@ -1944,5 +1796,9 @@
         </ScrollView>
 
     </LinearLayout>
+
+    <include
+        android:id="@+id/title"
+        layout="@layout/title_bar" />
 
 </LinearLayout>

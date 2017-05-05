@@ -13,10 +13,13 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+
 import com.bg.constant.Constant;
 import com.bg.constant.DeviceName;
 import com.bg.model.InBodyData;
 import com.bg.model.User;
+import com.bg.utils.FormatString;
+import com.bg.utils.MyDialog;
 import com.bg.utils.SelectionUser;
 import com.bg.utils.SetTitle;
 
@@ -40,10 +43,11 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
     ListView listview;
     @BindView(R.id.datatip)
     TextView datatip;
+    @BindView(R.id.total)
+    TextView total;
 
-    //    private List<User> userlist = new ArrayList<User>();
     private List<Map<String, String>> list_maps = new ArrayList<>();
-    private boolean bt_enable;
+    private boolean ble_enable;
     private boolean column = true;  //是否有立柱，默认为有
     private SimpleAdapter simpleAdapter;
     private int[] colors = new int[]{0xFFFFFFFF, 0xFFEFEFEF};
@@ -65,7 +69,6 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
         new SelectionUser(this, this, selection, true);
 
         getBle(DeviceName.InBody); //启动蓝牙
-        getData();
         simpleAdapter = new SimpleAdapter(this, list_maps, R.layout.userlist_item,
                 new String[]{"user_number", "user_name", "sex", "strDate"},
                 new int[]{R.id.usernumber, R.id.username, R.id.sex, R.id.testdate}) {
@@ -77,27 +80,35 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
                 return adapterView;
             }
         };
-
         listview.setAdapter(simpleAdapter);
         listview.setOnItemClickListener(this);
     }
 
     private void getData() {
         List<InBodyData> inbodylist = DataSupport.order("testDate desc").limit(15).find(InBodyData.class);
-        addData(inbodylist);
+        List<Map<String, String>> datalist = new ArrayList<Map<String, String>>();
+        for (int i = 0; i < inbodylist.size(); i++) {
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("user_number", inbodylist.get(i).getUser_number());
+            map.put("user_name", inbodylist.get(i).getUser().getUser_name());
+            map.put("sex", inbodylist.get(i).getUser().getSex() == 0 ? "男" : "女");
+            map.put("strDate", inbodylist.get(i).getStrDate());
+            datalist.add(map);
+        }
+        total.setText("前 " + datalist.size() + " 条数据");
+        addData(datalist);
     }
 
-    private void addData(List<InBodyData> list) {
+    private void addData(List<Map<String, String>> list) {
         list_maps.clear();
         if (list.size() != 0) {
             datatip.setVisibility(View.GONE);
             for (int i = 0; i < list.size(); i++) {
-                User user = list.get(i).getUser();
                 Map<String, String> map = new HashMap<>();
-                map.put("user_number", user.getUser_number().toString());
-                map.put("user_name", user.getUser_name());
-                map.put("sex", user.getSex() == 0 ? "男" : "女");
-                map.put("strDate", list.get(i).getStrDate());
+                map.put("user_number", list.get(i).get("user_number"));
+                map.put("user_name", list.get(i).get("user_name"));
+                map.put("sex", list.get(i).get("sex"));
+                map.put("strDate", list.get(i).get("strDate"));
                 list_maps.add(map);
             }
         } else {
@@ -108,22 +119,36 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
 
     @Override
     protected void updateState(boolean bool) {
-        bt_enable = bool;
         if (bool) {
-//            writeBle("66666666");
-            writeData("66666666");
+            writeData(null, new byte[]{(byte) 0xEA, (byte) 0x52, (byte) 0x02, (byte) 0x20, (byte) 0xFF});
+        } else {
+            ble_enable = bool;
+            new MyDialog(this).setDialog("蓝牙已断开，请重新连接！", true, false, null).show();
         }
     }
 
     @Override
     protected void updateData(String str) {
 
-        showToast("UserSelectActivity" + str);
-
-//        column = data[data.length - 3].equals("0") ? false : true;
-//        showToast(column == true ? "有立柱" : "没有立柱");
-
-
+        String[] datas = str.split(" ");
+        //第一次接收数据时，判断蓝牙包头是否正确，不正确则认为蓝牙连接错误，断开
+        if ((datas[0] + datas[1]).toString().equals(DeviceName.InBody_Head)) {
+            if (datas[3].equals("11")) {
+                //立柱信息
+                int[][] start_end = new int[][]{{4, 4}};
+                String[] allData = FormatString.formateData(datas, start_end);
+                column = allData[0].equals("0") ? false : true;
+                ble_enable = true;
+                showToast(column == true ? "有立柱" : "没有立柱");
+            }
+        } else {
+            ble_enable = false;
+            if (Constant.mBluetoothLeService != null) {
+                Constant.mBluetoothLeService.close();
+                Constant.mBluetoothLeService = null;
+            }
+            showToast("该设备不可用,蓝牙已断开！");
+        }
     }
 
     @Override
@@ -138,18 +163,27 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        view.setBackgroundColor(ContextCompat.getColor(this, R.color.title_bar));
-        String number = list_maps.get(position).get("user_number");
-        Intent intent = new Intent(this, UserInformationActivity.class);
-        intent.putExtra("user_number", number);
-        intent.putExtra("column", column);
-        startActivity(intent);
+        if (Constant.mBluetoothLeService != null) {
+            if (ble_enable) {
+                view.setBackgroundColor(ContextCompat.getColor(this, R.color.title_bar));
+                String number = list_maps.get(position).get("user_number");
+                Intent intent = new Intent(this, UserInformationActivity.class);
+                intent.putExtra("user_number", number);
+                intent.putExtra("column", column);
+                startActivity(intent);
+            } else {
+                showToast("蓝牙初始化中，请稍后...");
+            }
+        } else {
+            showToast("蓝牙未连接!");
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         getData();
+        SelectionUser.fresh();
     }
 
     @Override
@@ -163,13 +197,22 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
     }
 
     @Override
-    public void sendList(List<InBodyData> list) {
+    public void sendList(List<Map<String, String>> list) {
+        total.setText("共 " + list.size() + " 条数据");
         addData(list);
     }
 
     @Override
     public void onAdd() {
-        Intent intent = new Intent(this, UserInformationActivity.class);
-        startActivity(intent);
+        if (Constant.mBluetoothLeService != null) {
+            if (ble_enable) {
+                Intent intent = new Intent(this, UserInformationActivity.class);
+                startActivity(intent);
+            } else {
+                showToast("蓝牙初始化中，请稍后...");
+            }
+        } else {
+            showToast("蓝牙未连接!");
+        }
     }
 }

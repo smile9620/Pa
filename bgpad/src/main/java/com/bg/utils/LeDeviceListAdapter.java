@@ -30,8 +30,10 @@ public class LeDeviceListAdapter extends BaseAdapter {
     }
 
     public void addDevice(BluetoothDevice device) {
-        if (!mLeDevices.contains(device) && device.getName().equals(deviceName)) {
-            mLeDevices.add(device);
+        if (!mLeDevices.contains(device)) {
+            if (device.getName().equals(deviceName)){
+                mLeDevices.add(device);
+            }
         }
     }
 

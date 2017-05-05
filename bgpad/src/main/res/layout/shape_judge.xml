@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/shape_judge"
-    android:layout_width="match_parent"
+    android:layout_width="@dimen/shape_judge_width"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
@@ -12,32 +12,15 @@
         android:text="体型判断"
         android:textColor="@color/title_bar"
         android:textSize="@dimen/general_text" />
-
-    <RelativeLayout
-        android:layout_width="@dimen/shape_judge_width"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/current"
-            android:drawableLeft="@drawable/current"
-            android:padding="1dp"
-            android:text="本次"
-            android:textSize="@dimen/small_text"
-            android:textColor="@color/text_color"/>
-
-        <TextView
-            android:id="@+id/current"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:drawableLeft="@drawable/before"
-            android:padding="1dp"
-            android:text="前次"
-            android:textSize="@dimen/small_text"
-            android:textColor="@color/text_color"/>
-    </RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="1dp"
+        android:drawableLeft="@drawable/current"
+        android:layout_gravity="right"
+        android:text="本次"
+        android:textSize="@dimen/small_text"
+        android:textColor="@color/text_color"/>
 
     <FrameLayout
         android:layout_width="@dimen/shape_judge_width"
@@ -71,6 +54,7 @@
             android:rowCount="4">
 
             <TextView
+                android:id="@+id/shape0"
                 style="@style/inbody_test_report_table_text"
                 android:layout_column="0"
                 android:layout_columnSpan="2"
@@ -82,6 +66,7 @@
                 android:text="远动员型" />
 
             <TextView
+                android:id="@+id/shape1"
                 style="@style/inbody_test_report_table_text"
                 android:layout_column="2"
                 android:layout_columnWeight="1"
@@ -93,6 +78,7 @@
                 android:text="偏胖" />
 
             <TextView
+                android:id="@+id/shape2"
                 style="@style/inbody_test_report_table_text"
                 android:layout_column="3"
                 android:layout_columnWeight="1"
@@ -103,6 +89,7 @@
                 android:text="肥胖" />
 
             <TextView
+                android:id="@+id/shape3"
                 style="@style/inbody_test_report_table_text"
                 android:layout_column="0"
                 android:layout_columnSpan="2"
@@ -114,6 +101,7 @@
                 android:text="肌肉型" />
 
             <TextView
+                android:id="@+id/shape6"
                 style="@style/inbody_test_report_table_text"
                 android:layout_column="2"
                 android:layout_columnWeight="1"
@@ -126,6 +114,7 @@
                 android:text="健康型" />
 
             <TextView
+                android:id="@+id/shape7"
                 style="@style/inbody_test_report_table_text"
                 android:layout_column="3"
                 android:layout_columnWeight="1"
@@ -136,6 +125,7 @@
                 android:text="偏胖" />
 
             <TextView
+                android:id="@+id/shape4"
                 style="@style/inbody_test_report_table_text"
                 android:layout_column="0"
                 android:layout_columnWeight="1"
@@ -146,6 +136,7 @@
                 android:text="苗条肌肉型" />
 
             <TextView
+                android:id="@+id/shape5"
                 style="@style/inbody_test_report_table_text"
                 android:layout_column="1"
                 android:layout_columnWeight="1"
@@ -157,6 +148,7 @@
                 android:text="苗条" />
 
             <TextView
+                android:id="@+id/shape10"
                 style="@style/inbody_test_report_table_text"
                 android:layout_column="3"
                 android:layout_columnWeight="1"
@@ -169,6 +161,7 @@
                 android:text="隐性肥胖" />
 
             <TextView
+                android:id="@+id/shape8"
                 style="@style/inbody_test_report_table_text"
                 android:layout_column="0"
                 android:layout_columnWeight="1"
@@ -179,6 +172,7 @@
                 android:text="消瘦型" />
 
             <TextView
+                android:id="@+id/shape9"
                 style="@style/inbody_test_report_table_text"
                 android:layout_column="1"
                 android:layout_columnSpan="2"
@@ -190,5 +184,4 @@
                 android:text="偏瘦型" />
         </GridLayout>
     </FrameLayout>
-
 </LinearLayout>

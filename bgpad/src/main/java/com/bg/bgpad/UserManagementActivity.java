@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -56,6 +57,8 @@ public class UserManagementActivity extends BaseActivity implements SelectionUse
     Button export;
     @BindView(R.id.delete)
     Button delete;
+    @BindView(R.id.total)
+    TextView total;
 
     private SimpleAdapter simpleAdapter;
     private int[] colors = new int[]{0xFFFFFFFF, 0xFFEFEFEF};
@@ -65,6 +68,11 @@ public class UserManagementActivity extends BaseActivity implements SelectionUse
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
+                    total.setText("共 " + msg.arg1 + " 条数据");
+                    break;
+            }
             simpleAdapter.notifyDataSetChanged();
         }
     };
@@ -78,7 +86,6 @@ public class UserManagementActivity extends BaseActivity implements SelectionUse
                 "用户管理", new int[]{R.drawable.back_bt, R.drawable.ble_bt});
         new SelectionUser(this, this, selection, false);
 
-        getData();
         simpleAdapter = new SimpleAdapter(this, list_maps, R.layout.usersetlist_item,
                 new String[]{"user_number", "user_name", "strDate"},
                 new int[]{R.id.usernumber, R.id.username, R.id.testdate}) {
@@ -125,22 +132,39 @@ public class UserManagementActivity extends BaseActivity implements SelectionUse
         });
     }
 
-    private void getData() {
-        List<InBodyData> inbodylist = DataSupport.order("testDate desc").limit(15).find(InBodyData.class);
-        addData(inbodylist);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getData();
     }
 
-    private void addData(List<InBodyData> list) {
+    private void getData() {
+        List<InBodyData> inbodylist = DataSupport.order("testDate desc").limit(15).find(InBodyData.class);
+        List<Map<String, String>> datalist = new ArrayList<Map<String, String>>();
+        for (int i = 0; i < inbodylist.size(); i++) {
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("data_id", inbodylist.get(i).getId()+"");
+            map.put("user_number", inbodylist.get(i).getUser_number());
+            map.put("user_name", inbodylist.get(i).getUser().getUser_name());
+            map.put("sex", inbodylist.get(i).getUser().getSex() == 0 ? "男" : "女");
+            map.put("strDate", inbodylist.get(i).getStrDate());
+            datalist.add(map);
+        }
+        total.setText("前 " + datalist.size() + " 条数据");
+        addData(datalist);
+    }
+
+    private void addData(List<Map<String, String>> list) {
         list_maps.clear();
         if (list.size() != 0) {
             datatip.setVisibility(View.GONE);
             for (int i = 0; i < list.size(); i++) {
-                User user = list.get(i).getUser();
                 Map<String, String> map = new HashMap<>();
-                map.put("user_number", user.getUser_number().toString());
-                map.put("user_name", user.getUser_name());
-                map.put("strDate", list.get(i).getStrDate());
-                map.put("data_id", list.get(i).getId() + "");
+                map.put("data_id", list.get(i).get("data_id"));
+                map.put("user_number", list.get(i).get("user_number"));
+                map.put("user_name", list.get(i).get("user_name"));
+                map.put("sex", list.get(i).get("sex"));
+                map.put("strDate", list.get(i).get("strDate"));
                 list_maps.add(map);
             }
         } else {
@@ -150,7 +174,8 @@ public class UserManagementActivity extends BaseActivity implements SelectionUse
     }
 
     @Override
-    public void sendList(List<InBodyData> list) {
+    public void sendList(List<Map<String, String>> list) {
+        total.setText("共 " + list.size() + " 条数据");
         addData(list);
     }
 
@@ -169,8 +194,13 @@ public class UserManagementActivity extends BaseActivity implements SelectionUse
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        CheckBox box = (CheckBox) view.findViewById(R.id.checkBox);
-        box.setChecked(!box.isChecked());
+//        CheckBox box = (CheckBox) view.findViewById(R.id.checkBox);
+//        box.setChecked(!box.isChecked());
+        view.setBackgroundColor(ContextCompat.getColor(this, R.color.title_bar));
+        Intent intent = new Intent(this,TestReportActivity.class);
+        String data_id = list_maps.get(position).get("data_id");
+        intent.putExtra("data_id",data_id);
+        startActivity(intent);
     }
 
     @OnClick({R.id.export, R.id.delete})
@@ -235,7 +265,10 @@ public class UserManagementActivity extends BaseActivity implements SelectionUse
                                     checkBox.setChecked(false);
                                 }
                                 deleteDialog.dismiss();
-                                handler.sendEmptyMessage(0);
+                                Message message = Message.obtain();
+                                message.what = 1;
+                                message.arg1 = list_maps.size();
+                                handler.sendMessage(message);
                                 delDialog.setDialog("数据已删除！", true, false, null).show();
                             }
                         }).show();

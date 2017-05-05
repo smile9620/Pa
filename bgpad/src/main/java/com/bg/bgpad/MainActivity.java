@@ -99,9 +99,10 @@ public class MainActivity extends BleActivityResult implements SetTitle.OnTitleB
     private List<BaseActivity> getPages() {
         UserSelectActivity userSelectActivity = new UserSelectActivity();
         UserManagementActivity userManag = new UserManagementActivity();
+        InBodyTestReportActivity reportActivity = new InBodyTestReportActivity();
         pages.add(userSelectActivity);
         pages.add(userManag);
-        pages.add(userSelectActivity);
+        pages.add(reportActivity);
         pages.add(userSelectActivity);
         return pages;
     }

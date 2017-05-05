@@ -43,10 +43,10 @@
             android:name=".WelcomeActivity"
             android:theme="@style/MyAppTheme">
 
-             <!--<intent-filter>-->
-             <!--<action android:name="android.intent.action.MAIN" />-->
-             <!--<category android:name="android.intent.category.LAUNCHER" />-->
-             <!--</intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
 
         <service
@@ -64,10 +64,17 @@
 
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".MainActivity">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
         <activity android:name=".ChangePassword" />
         <activity android:name="com.zxing.activity.CaptureActivity" />
-        <activity android:name=".Test" />
         <activity
             android:name=".UserSelectActivity"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
@@ -84,7 +91,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".InBodySetActivity" />
-        <activity android:name=".InBodyTestReportActivity"></activity>
+        <activity android:name=".InBodyTestReportActivity" />
+        <activity android:name=".TestReportActivity" />
     </application>
 
 </manifest>

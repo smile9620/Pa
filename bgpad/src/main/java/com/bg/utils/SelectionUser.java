@@ -26,6 +26,7 @@ import com.bg.model.User;
 
 import org.litepal.crud.DataSupport;
 
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -40,7 +41,7 @@ import static android.R.attr.type;
 
 public class SelectionUser implements View.OnClickListener {
 
-    EditText input;
+    static EditText input;
     ImageButton more;
     private ImageButton search;
     private Button add;
@@ -90,7 +91,7 @@ public class SelectionUser implements View.OnClickListener {
                 break;
             case R.id.search:
                 String str = input.getText().toString();
-                List<InBodyData> datalist = new ArrayList<InBodyData>();
+                List<Map<String, String>> datalist = new ArrayList<Map<String, String>>();
                 if (str == null || str.isEmpty()) {
                     Toast toast = Toast.makeText(AppContext.getContext(), "请输入查询条件！", Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER, 0, 0);
@@ -98,16 +99,15 @@ public class SelectionUser implements View.OnClickListener {
                 } else {
                     if (select.equals(SelectionUser.select_date)) {
                         String[] dates = dateFormat(str);
-                        datalist = DataSupport.where(" date between ? and ? ",
+                        List<InBodyData> list = DataSupport.where(" date between ? and ? ",
                                 dates[0], dates[1]).find(InBodyData.class);
+                        datalist = getData(list);
                     } else {
                         List<User> users = DataSupport.select("user_number").where(select + " = ?", str).find(User.class);
                         for (int i = 0; i < users.size(); i++) {
                             List<InBodyData> list = DataSupport.where("user_number = ? ", users.get(i).getUser_number().
                                     toString()).find(InBodyData.class);
-                            for (int j = 0; j < list.size(); j++) {
-                                datalist.add(list.get(i));
-                            }
+                            datalist = getData(list);
                         }
                     }
                     onSelectoinUser.sendList(datalist);
@@ -152,7 +152,7 @@ public class SelectionUser implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 inputSelect(popWindow, "name");
-                input.setText("");
+                fresh();
             }
         });
         number.setOnClickListener(new View.OnClickListener() {
@@ -160,7 +160,7 @@ public class SelectionUser implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 inputSelect(popWindow, "number");
-                input.setText("");
+                fresh();
             }
         });
         date.setOnClickListener(new View.OnClickListener() {
@@ -168,7 +168,7 @@ public class SelectionUser implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 inputSelect(popWindow, "date");
-                input.setText("");
+                fresh();
             }
         });
         // 需要设置一下此参数，点击外边可消失
@@ -260,8 +260,25 @@ public class SelectionUser implements View.OnClickListener {
         return dates;
     }
 
+    private List<Map<String, String>> getData(List<InBodyData> list){
+        List<Map<String, String>> datalist = new ArrayList<Map<String, String>>();
+        for (int i = 0; i < list.size(); i++) {
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("data_id", list.get(i).getId()+"");
+            map.put("user_number", list.get(i).getUser_number());
+            map.put("user_name", list.get(i).getUser().getUser_name());
+            map.put("sex", list.get(i).getUser().getSex() == 0 ? "男" : "女");
+            map.put("strDate", list.get(i).getStrDate());
+            datalist.add(map);
+        }
+        return datalist;
+    }
+    public static void fresh() {
+        input.setText("");
+    }
+
     public interface SetOnSelectoinUser {
-        void sendList(List<InBodyData> list);
+        void sendList(List<Map<String, String>> list);
 
         void onAdd();
     }

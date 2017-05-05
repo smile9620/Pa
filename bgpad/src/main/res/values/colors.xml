@@ -17,6 +17,7 @@
     <color name="report_blue_light">#9dccdf</color>
     <color name="report_green_dark">#99b365</color>
     <color name="report_green_light">#c9df9d</color>
+    <color name="black">#000</color>
 
     <!--<color name="blue">#055EDD</color>-->
     <!--<color name="white">#EDEDED</color>-->

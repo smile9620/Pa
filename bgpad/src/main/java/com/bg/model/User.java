@@ -20,13 +20,13 @@ import java.util.concurrent.Callable;
  * Created by Administrator on 2017-02-14.
  */
 
-public class User extends DataSupport implements Serializable{
+public class User extends DataSupport implements Serializable {
 
     private long id;            //id
     private String user_name;   //姓名
     @Column(unique = true, nullable = false)
     private String user_number;        //编号
-    private int sex;           //性别 0 代表男生，1 代表女生
+    private int sex;           //性别 0 代表女生，1 代表男生
     private String birthday;      //出生年月
     private String image_path;  //头像路径
     private String mark;       //备注
