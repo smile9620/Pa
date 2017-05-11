@@ -44,7 +44,7 @@ public class MainActivity extends BleActivityResult implements SetTitle.OnTitleB
         setContentView(R.layout.activity_main);
 
         View view = this.findViewById(R.id.title);
-        new SetTitle(this,view, new boolean[]{true,false},
+        new SetTitle(this, view, new boolean[]{true, false},
                 "贝高医疗", new int[]{R.drawable.qr_bt, R.drawable.ble_bt});
 
         mViewFlipper = (ViewFlipper) this.findViewById(R.id.viewFlipper);

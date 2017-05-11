@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -55,7 +56,14 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            simpleAdapter.notifyDataSetChanged();
+            switch (msg.what) {
+                case 0:
+                    simpleAdapter.notifyDataSetChanged();
+                    break;
+                case 1:
+                    showToast(column == true ? "有立柱" : "无立柱");
+                    break;
+            }
         }
     };
 
@@ -91,7 +99,7 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
             Map<String, String> map = new HashMap<String, String>();
             map.put("user_number", inbodylist.get(i).getUser_number());
             map.put("user_name", inbodylist.get(i).getUser().getUser_name());
-            map.put("sex", inbodylist.get(i).getUser().getSex() == 0 ? "男" : "女");
+            map.put("sex", inbodylist.get(i).getUser().getSex() == 0 ? "女" : "男");//性别 0 代表女生，1 代表男生
             map.put("strDate", inbodylist.get(i).getStrDate());
             datalist.add(map);
         }
@@ -127,27 +135,23 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
         }
     }
 
+    private int time = 0;
+
     @Override
     protected void updateData(String str) {
-
-        String[] datas = str.split(" ");
-        //第一次接收数据时，判断蓝牙包头是否正确，不正确则认为蓝牙连接错误，断开
-        if ((datas[0] + datas[1]).toString().equals(DeviceName.InBody_Head)) {
-            if (datas[3].equals("11")) {
-                //立柱信息
-                int[][] start_end = new int[][]{{4, 4}};
-                String[] allData = FormatString.formateData(datas, start_end);
-                column = allData[0].equals("0") ? false : true;
-                ble_enable = true;
-                showToast(column == true ? "有立柱" : "没有立柱");
-            }
+        String[] datas = str.toString().split(" ");
+        if ((datas[0] + datas[1]).toString().equals(DeviceName.InBody_Head) && datas[3].equals("11") &&
+                Integer.parseInt(datas[2], 16) == (datas.length - 3) && datas[datas.length - 1].equals("FF")) {
+            //立柱信息
+            String allData = FormatString.formateData(datas, new int[]{4, 4});
+            column = allData.equals("0") ? false : true;
+            ble_enable = true;
+            handler.sendEmptyMessage(1);
         } else {
-            ble_enable = false;
-            if (Constant.mBluetoothLeService != null) {
-                Constant.mBluetoothLeService.close();
-                Constant.mBluetoothLeService = null;
+            if (time < 3) {
+                writeData(null, new byte[]{(byte) 0xEA, (byte) 0x52, (byte) 0x02, (byte) 0x20, (byte) 0xFF});
             }
-            showToast("该设备不可用,蓝牙已断开！");
+            time++;
         }
     }
 
@@ -215,4 +219,5 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
             showToast("蓝牙未连接!");
         }
     }
+
 }

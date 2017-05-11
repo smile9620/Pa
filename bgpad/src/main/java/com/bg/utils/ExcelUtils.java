@@ -52,12 +52,11 @@ public class ExcelUtils {
 			arial10format.setBorder(jxl.format.Border.ALL,
 					jxl.format.BorderLineStyle.THIN);
 			arial10format.setBackground(jxl.format.Colour.LIGHT_BLUE);
-			arial12font = new WritableFont(WritableFont.ARIAL, 12);
+			arial12font = new WritableFont(WritableFont.ARIAL, 10);
 			arial12format = new WritableCellFormat(arial12font);
 			arial12format.setBorder(jxl.format.Border.ALL,
 					jxl.format.BorderLineStyle.THIN);
 		} catch (WriteException e) {
-
 			e.printStackTrace();
 		}
 	}

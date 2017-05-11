@@ -45,6 +45,7 @@ public abstract class BleActivityStart extends BaseActivity {
     protected Dialog pogressDialog = null;
     protected MyDialog myDialog = null;
     private AlertDialog devicesDialog = null;
+    private boolean is_ble = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +56,15 @@ public abstract class BleActivityStart extends BaseActivity {
     protected abstract void select_ble();
 
     protected void searchBtClick() {
-        if (!Constant.mScanning) {  //蓝牙是否正在搜索
-            isavailable();
+        if (is_ble) {
+            if (!Constant.mScanning) {//蓝牙是否正在搜索
+                isavailable();
+            } else {
+                scanLeDevice(false);
+            }
         } else {
-            scanLeDevice(false);
+            Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT)
+                    .show();
         }
     }
 
@@ -95,6 +101,7 @@ public abstract class BleActivityStart extends BaseActivity {
                 }
             }
         } else {
+            is_ble = false;
             Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT)
                     .show();
         }
@@ -137,7 +144,7 @@ public abstract class BleActivityStart extends BaseActivity {
         if (!scan) {
             pogressDialog.dismiss();
         } else {
-            pogressDialog = myDialog.setDialog(getResources().getString(R.string.ble_search), false,false,null);
+            pogressDialog = myDialog.setDialog(getResources().getString(R.string.ble_search), false, false, null);
             pogressDialog.show();
         }
     }

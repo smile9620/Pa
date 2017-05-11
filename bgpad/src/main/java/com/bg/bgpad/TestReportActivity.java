@@ -1,12 +1,15 @@
 package com.bg.bgpad;
 
 import android.annotation.TargetApi;
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
@@ -17,10 +20,16 @@ import android.widget.TextView;
 
 import com.bg.model.InBodyData;
 import com.bg.model.User;
+import com.bg.utils.DrawTestReport;
+import com.bg.utils.MyDialog;
 import com.bg.utils.SetTitle;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -94,12 +103,17 @@ public class TestReportActivity extends BaseActivity implements SetTitle.OnTitle
     @BindView(R.id.testweight)
     TextView testWeight;//体重
     private InBodyData inBodyData;
+    private User user;
 
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            changeData();
+            switch (msg.what) {
+                case 0:
+                    changeData();
+                    break;
+            }
         }
     };
 
@@ -111,7 +125,7 @@ public class TestReportActivity extends BaseActivity implements SetTitle.OnTitle
         new SetTitle(this, view, new boolean[]{true, false},
                 "测试报告", new int[]{R.drawable.back_bt, R.drawable.ble_bt});
         Intent intent = getIntent();
-        String data_id = intent.getStringExtra("data_id");
+        final String data_id = intent.getStringExtra("data_id");
         inBodyData = DataSupport.where("id = ?", data_id).find(InBodyData.class).get(0);
         handler.sendEmptyMessage(0);
         save.setVisibility(View.GONE);
@@ -125,8 +139,9 @@ public class TestReportActivity extends BaseActivity implements SetTitle.OnTitle
                         Intent intent = new Intent();
                         ComponentName componentName = new ComponentName("com.lenovo.vop", "com.lenovo.vop.StartActivity");
                         if (componentName != null) {
-                            intent.setComponent(componentName);
-                            startActivity(intent);
+//                            intent.setComponent(componentName);
+//                            startActivity(intent);
+                            new MyThread().start();
                         } else {
                             showToast("请安装打印机！");
                         }
@@ -153,32 +168,32 @@ public class TestReportActivity extends BaseActivity implements SetTitle.OnTitle
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void changeData() {
         //身体总评分 score
-        score.setText(inBodyData.getScore() + "");
+        score.setText(String.valueOf(inBodyData.getScore()));
         //身体成分分析
-        User user = inBodyData.getUser();
+        user = inBodyData.getUser();
         usernumber.setText(user.getUser_number());
         username.setText(user.getUser_name());
         sex.setText((user.getSex() == 0 ? "男" : "女"));
-        testHeight.setText(inBodyData.getHeight() + "");//身高
-        testWeight.setText(inBodyData.getWeight() + "");//体重
-        body[0].setText(inBodyData.getInliquid() + "");//细胞内液
-        body[1].setText(inBodyData.getOutliquid() + "");//细胞外液
-        body[2].setText(inBodyData.getTotalprotein() + "");//蛋白质
-        body[3].setText(inBodyData.getTotalinorganicsalt() + "");//无机盐
-        body[4].setText(inBodyData.getBodyfat() + "");//体脂肪
-        body[5].setText(inBodyData.getTotalwater() + "");//总水分
-        body[6].setText(inBodyData.getMuscle() + "");//肌肉量
-        body[7].setText(inBodyData.getFatfree() + "");//去脂体重
-        body[8].setText(inBodyData.getWeight() + "");//总体重
+        testHeight.setText(String.valueOf(inBodyData.getHeight()));//身高
+        testWeight.setText(String.valueOf(inBodyData.getWeight()));//体重
+        body[0].setText(String.valueOf(inBodyData.getInliquid()));//细胞内液
+        body[1].setText(String.valueOf(inBodyData.getOutliquid()));//细胞外液
+        body[2].setText(String.valueOf(inBodyData.getTotalprotein()));//蛋白质
+        body[3].setText(String.valueOf(inBodyData.getTotalinorganicsalt()));//无机盐
+        body[4].setText(String.valueOf(inBodyData.getBodyfat()));//体脂肪
+        body[5].setText(String.valueOf(inBodyData.getTotalwater()));//总水分
+        body[6].setText(String.valueOf(inBodyData.getMuscle()));//肌肉量
+        body[7].setText(String.valueOf(inBodyData.getFatfree()));//去脂体重
+        body[8].setText(String.valueOf(inBodyData.getWeight()));//总体重
         body[9].setText(inBodyData.getNormalrange0());//细胞内液正常范围
         body[10].setText(inBodyData.getNormalrange1());//细胞外液正常范围
         body[11].setText(inBodyData.getNormalrange2());//蛋白质正常范围
         body[12].setText(inBodyData.getNormalrange3());//无机盐正常范围
         body[13].setText(inBodyData.getNormalrange4());//体脂肪正常范围
         //肌肉脂肪分析
-        muscleFat[0].setText(inBodyData.getWeight() + "");//体重
-        muscleFat[1].setText(inBodyData.getBones() + "");//骨骼肌
-        muscleFat[2].setText(inBodyData.getMusclefat() + "");//体脂肪
+        muscleFat[0].setText(String.valueOf(inBodyData.getWeight()));//体重
+        muscleFat[1].setText(String.valueOf(inBodyData.getBones()));//骨骼肌
+        muscleFat[2].setText(String.valueOf(inBodyData.getMusclefat()));//体脂肪
         muscleFat[6].setText(inBodyData.getNormalrange5());//体重正常范围
         muscleFat[7].setText(inBodyData.getNormalrange6());//骨骼肌正常范围
         muscleFat[8].setText(inBodyData.getNormalrange7());//体脂肪正常范围
@@ -189,9 +204,9 @@ public class TestReportActivity extends BaseActivity implements SetTitle.OnTitle
         muscleProgress[1].setProgress(inBodyData.getBonesevalue());//骨骼肌进度条
         muscleProgress[2].setProgress(inBodyData.getFatvalue());//体脂肪进度条
         // 肥胖分析
-        fatAnalysis[0].setText(inBodyData.getBmi() + "");//BMI
-        fatAnalysis[1].setText(inBodyData.getFatrate() + "");//体脂率
-        fatAnalysis[2].setText(inBodyData.getWaistrate() + "");//腰臀比
+        fatAnalysis[0].setText(String.valueOf(inBodyData.getBmi()));//BMI
+        fatAnalysis[1].setText(String.valueOf(inBodyData.getFatrate()));//体脂率
+        fatAnalysis[2].setText(String.valueOf(inBodyData.getWaistrate()));//腰臀比
         fatAnalysis[6].setText(inBodyData.getNormalrange8());//BMI正常范围
         fatAnalysis[7].setText(inBodyData.getNormalrange9());//体脂率正常范围
         fatAnalysis[8].setText(inBodyData.getNormalrange10());//腰臀比正常范围
@@ -202,11 +217,11 @@ public class TestReportActivity extends BaseActivity implements SetTitle.OnTitle
         fatProgress[1].setProgress(inBodyData.getFatratevalue());//体脂率进度条
         fatProgress[2].setProgress(inBodyData.getWaistratevalue());//腰臀比进度条
         //节段肌肉分析
-        segmentalMuscle[0].setText(inBodyData.getLeftarm() + "");//左臂
-        segmentalMuscle[1].setText(inBodyData.getRightarm() + "");//右臂
-        segmentalMuscle[2].setText(inBodyData.getTrunk() + "");//躯干
-        segmentalMuscle[3].setText(inBodyData.getLeftleg() + "");//左腿
-        segmentalMuscle[4].setText(inBodyData.getRightleg() + "");//右腿
+        segmentalMuscle[0].setText(String.valueOf(inBodyData.getLeftarm()));//左臂
+        segmentalMuscle[1].setText(String.valueOf(inBodyData.getRightarm()));//右臂
+        segmentalMuscle[2].setText(String.valueOf(inBodyData.getTrunk()));//躯干
+        segmentalMuscle[3].setText(String.valueOf(inBodyData.getLeftleg()));//左腿
+        segmentalMuscle[4].setText(String.valueOf(inBodyData.getRightleg()));//右腿
         segmentalMuscle[10].setText(inBodyData.getNormalrange11());//左臂正常范围
         segmentalMuscle[11].setText(inBodyData.getNormalrange12());//右臂正常范围
         segmentalMuscle[12].setText(inBodyData.getNormalrange13());//躯干正常范围
@@ -223,28 +238,28 @@ public class TestReportActivity extends BaseActivity implements SetTitle.OnTitle
         segmentalProgress[3].setProgress(inBodyData.getLeftlegvalue());//左腿进度条
         segmentalProgress[4].setProgress(inBodyData.getRightlegvalue());//右腿进度条
         //体重身高分析
-        weightHeight[0].setText(inBodyData.getStandardweight() + "");//标准体重
-        weightHeight[1].setText(inBodyData.getStandardheight() + "");//标准身高
-        weightHeight[2].setText(inBodyData.getMusclecontrol() + "");//肌肉控制
-        weightHeight[3].setText(inBodyData.getWeightcontrol() + "");//体重控制
-        weightHeight[4].setText(inBodyData.getFatcontrol() + "");//脂肪控制
-        weightHeight[5].setText(inBodyData.getBasalmetabolism() + "");//基础代谢量
+        weightHeight[0].setText(String.valueOf(inBodyData.getStandardweight()));//标准体重
+        weightHeight[1].setText(String.valueOf(inBodyData.getStandardheight()));//标准身高
+        weightHeight[2].setText(String.valueOf(inBodyData.getMusclecontrol()));//肌肉控制
+        weightHeight[3].setText(String.valueOf(inBodyData.getWeightcontrol()));//体重控制
+        weightHeight[4].setText(String.valueOf(inBodyData.getFatcontrol()));//脂肪控制
+        weightHeight[5].setText(String.valueOf(inBodyData.getBasalmetabolism()));//基础代谢量
         //生物电阻抗 biologyImpedance
-        biologyImpedance[0].setText(inBodyData.getRa0() + "");//RA 5kHz
-        biologyImpedance[1].setText(inBodyData.getRa1() + "");//RA 50kHz
-        biologyImpedance[2].setText(inBodyData.getRa2() + "");//RA 2505kHz
-        biologyImpedance[3].setText(inBodyData.getLa0() + "");//LA 5kHz
-        biologyImpedance[4].setText(inBodyData.getLa1() + "");//LA 50kHz
-        biologyImpedance[5].setText(inBodyData.getLa2() + "");//LA 250kHz
-        biologyImpedance[6].setText(inBodyData.getTr0() + "");//TR 5kHz
-        biologyImpedance[7].setText(inBodyData.getTr1() + "");//TR 50kHz
-        biologyImpedance[8].setText(inBodyData.getTr2() + "");//TR 250kHz
-        biologyImpedance[9].setText(inBodyData.getRl0() + "");//RL 5kHz
-        biologyImpedance[10].setText(inBodyData.getRl1() + "");//RL 50kHz
-        biologyImpedance[11].setText(inBodyData.getRl2() + "");//RL 250kHz
-        biologyImpedance[12].setText(inBodyData.getLl0() + "");//LL 5kHz
-        biologyImpedance[13].setText(inBodyData.getLl1() + "");//LL 50kHz
-        biologyImpedance[14].setText(inBodyData.getLl2() + "");//LL 250kH
+        biologyImpedance[0].setText(String.valueOf(inBodyData.getRa0()));//RA 5kHz
+        biologyImpedance[1].setText(String.valueOf(inBodyData.getRa1()));//RA 50kHz
+        biologyImpedance[2].setText(String.valueOf(inBodyData.getRa2()));//RA 2505kHz
+        biologyImpedance[3].setText(String.valueOf(inBodyData.getLa0()));//LA 5kHz
+        biologyImpedance[4].setText(String.valueOf(inBodyData.getLa1()));//LA 50kHz
+        biologyImpedance[5].setText(String.valueOf(inBodyData.getLa2()));//LA 250kHz
+        biologyImpedance[6].setText(String.valueOf(inBodyData.getTr0()));//TR 5kHz
+        biologyImpedance[7].setText(String.valueOf(inBodyData.getTr1()));//TR 50kHz
+        biologyImpedance[8].setText(String.valueOf(inBodyData.getTr2()));//TR 250kHz
+        biologyImpedance[9].setText(String.valueOf(inBodyData.getRl0()));//RL 5kHz
+        biologyImpedance[10].setText(String.valueOf(inBodyData.getRl1()));//RL 50kHz
+        biologyImpedance[11].setText(String.valueOf(inBodyData.getRl2()));//RL 250kHz
+        biologyImpedance[12].setText(String.valueOf(inBodyData.getLl0()));//LL 5kHz
+        biologyImpedance[13].setText(String.valueOf(inBodyData.getLl1()));//LL 50kHz
+        biologyImpedance[14].setText(String.valueOf(inBodyData.getLl2()));//LL 250kH
         //健康诊断  身体水分 healthWater 健康诊断浮肿 healthEdema
         Drawable drawable1 = getResources().getDrawable(R.drawable.check_down, null);
         drawable1.setBounds(0, 0, drawable1.getMinimumWidth(), drawable1.getMinimumHeight());
@@ -262,7 +277,106 @@ public class TestReportActivity extends BaseActivity implements SetTitle.OnTitle
         drawable2.setBounds(0, 0, drawable2.getMinimumWidth(), drawable2.getMinimumHeight());
         shapeJudgment[inBodyData.getShapeint()].setCompoundDrawables(drawable2, null, null, null);
         //浮肿分析值 edemaValue 浮肿分析进度条 edemaProgess
-        edemaValue.setText(inBodyData.getEdemavalue() + "");
+        edemaValue.setText(String.valueOf(inBodyData.getEdemavalue()));
         edemaProgess.setProgress(inBodyData.getEdemarange());
+    }
+
+    private Map<String, String> getMap() {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("score", score.getText().toString());//得分
+        map.put("usernumber", usernumber.getText().toString());//编号
+        map.put("username", username.getText().toString());//姓名
+        map.put("sex", sex.getText().toString());//性别
+        map.put("age", String.valueOf(user.getAge()));//年龄
+        map.put("testHeight", testHeight.getText().toString());//身高
+        map.put("testWeight", testWeight.getText().toString());//体重
+        map.put("strDate", inBodyData.getStrDate());//测试日期
+        map.put("inliquid", body[0].getText().toString());//细胞内液
+        map.put("outliquid", body[1].getText().toString());//细胞外液
+        map.put("totalprotein", body[2].getText().toString());//蛋白质
+        map.put("totalinorganicsalt", body[3].getText().toString());//无机盐
+        map.put("bodyfat", body[4].getText().toString());//体脂肪
+        map.put("totalwater", body[5].getText().toString());//总水分
+        map.put("muscle", body[6].getText().toString());//肌肉量
+        map.put("fatfree", body[7].getText().toString());//去脂体重
+        map.put("weight", body[8].getText().toString());//总体重
+        map.put("normalrange0", body[9].getText().toString());//细胞内液正常范围
+        map.put("normalrange1", body[10].getText().toString());//细胞外液正常范围
+        map.put("normalrange2", body[11].getText().toString());//蛋白质正常范围
+        map.put("normalrange3", body[12].getText().toString());//无机盐正常范围
+        map.put("normalrange4", body[13].getText().toString());//体脂肪正常范围
+        map.put("bones", muscleFat[1].getText().toString());//骨骼肌
+        map.put("musclefat", muscleFat[2].getText().toString());//体脂肪
+        map.put("normalrange5", muscleFat[6].getText().toString());//体重正常范围
+        map.put("normalrange6", muscleFat[7].getText().toString());//骨骼肌正常范围
+        map.put("normalrange6", muscleFat[8].getText().toString());//体脂肪正常范围
+        map.put("weightvalue", String.valueOf(muscleProgress[0].getProgress()));//体重进度条
+        map.put("bonesevalue", String.valueOf(muscleProgress[1].getProgress()));//骨骼肌进度条
+        map.put("fatvalue", String.valueOf(muscleProgress[2].getProgress()));//体脂肪进度条
+        map.put("bmi", fatAnalysis[0].getText().toString());//BMI
+        map.put("fatrate", fatAnalysis[1].getText().toString());//体脂率
+        map.put("waistrate", fatAnalysis[2].getText().toString());//腰臀比
+        map.put("normalrange8", fatAnalysis[6].getText().toString());//BMI正常范围
+        map.put("normalrange9", fatAnalysis[7].getText().toString());//体脂率正常范围
+        map.put("normalrange10", fatAnalysis[8].getText().toString());//腰臀比正常范围
+        map.put("bmivalue", String.valueOf(fatProgress[0].getProgress()));//BMI进度条
+        map.put("fatratevalue", String.valueOf(fatProgress[1].getProgress()));//体脂率进度条
+        map.put("waistratevalue", String.valueOf(fatProgress[2].getProgress()));//腰臀比进度条
+        map.put("leftarm", segmentalMuscle[0].getText().toString());//左臂
+        map.put("rightarm", segmentalMuscle[1].getText().toString());//右臂
+        map.put("trunk", segmentalMuscle[2].getText().toString());//右臂
+        map.put("leftleg", segmentalMuscle[3].getText().toString());//左腿
+        map.put("rightleg", segmentalMuscle[4].getText().toString());//右腿
+        map.put("normalrange11", segmentalMuscle[10].getText().toString());//左臂正常范围
+        map.put("normalrange12", segmentalMuscle[11].getText().toString());//右臂正常范围
+        map.put("normalrange13", segmentalMuscle[12].getText().toString());//躯干正常范围
+        map.put("normalrange14", segmentalMuscle[13].getText().toString());//左腿正常范围
+        map.put("normalrange15", segmentalMuscle[14].getText().toString());//右腿正常范围
+        map.put("leftarmvalue", String.valueOf(segmentalProgress[0].getProgress()));//左臂进度条
+        map.put("rightarmvalue", String.valueOf(segmentalProgress[1].getProgress()));//右臂进度条
+        map.put("trunkvalue", String.valueOf(segmentalProgress[2].getProgress()));//躯干进度条
+        map.put("leftlegvalue", String.valueOf(segmentalProgress[3].getProgress()));//左腿进度条
+        map.put("rightlegvalue", String.valueOf(segmentalProgress[4].getProgress()));//右腿进度条
+        map.put("standardweight", String.valueOf(weightHeight[0].getText().toString()));//标准体重
+        map.put("standardheight", String.valueOf(weightHeight[1].getText().toString()));//标准身高
+        map.put("musclecontrol", String.valueOf(weightHeight[2].getText().toString()));//肌肉控制
+        map.put("weightcontrol", String.valueOf(weightHeight[3].getText().toString()));//体重控制
+        map.put("fatcontrol", String.valueOf(weightHeight[4].getText().toString()));//脂肪控制
+        map.put("basalmetabolism", String.valueOf(weightHeight[5].getText().toString()));//基础代谢量
+        map.put("ra0", String.valueOf(biologyImpedance[0].getText().toString()));//RA 5kHz
+        map.put("ra1", String.valueOf(biologyImpedance[1].getText().toString()));//RA 50kHz
+        map.put("ra2", String.valueOf(biologyImpedance[2].getText().toString()));//RA 2505kHz
+        map.put("la0", String.valueOf(biologyImpedance[3].getText().toString()));//LA 5kHz
+        map.put("la1", String.valueOf(biologyImpedance[4].getText().toString()));//LA 50kHz
+        map.put("la2", String.valueOf(biologyImpedance[5].getText().toString()));//LA 250kHz
+        map.put("tr0", String.valueOf(biologyImpedance[6].getText().toString()));//TR 5kHz
+        map.put("tr1", String.valueOf(biologyImpedance[7].getText().toString()));//TR 50kHz
+        map.put("tr2", String.valueOf(biologyImpedance[8].getText().toString()));//TR 250kHz
+        map.put("rl0", String.valueOf(biologyImpedance[9].getText().toString()));//RL 5kHz
+        map.put("rl1", String.valueOf(biologyImpedance[10].getText().toString()));//RL 50kHz
+        map.put("rl2", String.valueOf(biologyImpedance[11].getText().toString()));//RL 250kHz
+        map.put("ll0", String.valueOf(biologyImpedance[12].getText().toString()));//LL 5kHz
+        map.put("ll1", String.valueOf(biologyImpedance[13].getText().toString()));//LL 50kHz
+        map.put("ll2", String.valueOf(biologyImpedance[14].getText().toString()));//LL 250kH
+        map.put("healthWater", String.valueOf(inBodyData.getWaterint()));//健康诊断 身体水分
+        map.put("healthEdema", String.valueOf(inBodyData.getEdemaint()));//健康诊断 浮肿
+        map.put("nutritionProtein", String.valueOf(inBodyData.getProteinint()));//营养评估 蛋白质
+        map.put("nutritionSalt", String.valueOf(inBodyData.getSaltint()));//营养评估 无机盐
+        map.put("nutritionFat", String.valueOf(inBodyData.getFatint()));//营养评估 体脂肪
+        map.put("muscleUp", String.valueOf(inBodyData.getUpint()));//肌肉评估 上肢
+        map.put("muscleDown", String.valueOf(inBodyData.getDownint()));//肌肉评估 下肢
+        map.put("shapeJudgment", String.valueOf(inBodyData.getShapeint()));//体型判断
+        map.put("edemaValue", String.valueOf(inBodyData.getEdemavalue()));//浮肿分析值
+        map.put("edemaProgess", String.valueOf(inBodyData.getEdemarange()));//浮肿分析进度条
+        return map;
+    }
+
+    class MyThread extends Thread {
+        //继承Thread类，并改写其run方法
+        public void run() {
+            DrawTestReport drawTestReport = new DrawTestReport(TestReportActivity.this, getMap());
+            drawTestReport.draw(new Canvas());
+            refreshFile();
+        }
     }
 }

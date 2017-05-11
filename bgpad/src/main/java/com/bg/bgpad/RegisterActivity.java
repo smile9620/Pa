@@ -29,7 +29,7 @@ public class RegisterActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         View view = this.findViewById(R.id.title);
-        new SetTitle(this,view, new boolean[]{true,false},
+        new SetTitle(this, view, new boolean[]{true, false},
                 "注册", new int[]{R.drawable.back_bt, R.drawable.turn_bt});
 
         tel = (EditText) this.findViewById(R.id.tel);

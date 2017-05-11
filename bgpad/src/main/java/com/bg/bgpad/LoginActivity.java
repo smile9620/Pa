@@ -91,6 +91,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+
     @Override
     public void onClick(View v) {
         Intent intent = new Intent();

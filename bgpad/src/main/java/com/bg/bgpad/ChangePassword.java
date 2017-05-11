@@ -34,7 +34,7 @@ public class ChangePassword extends BaseActivity implements SetTitle.OnTitleBtCl
         setContentView(R.layout.activity_change_password);
 
         View view = this.findViewById(R.id.title);
-        new SetTitle(this,view,new boolean[]{true,false},
+        new SetTitle(this, view, new boolean[]{true, false},
                 "密码修改", new int[]{R.drawable.back_bt, R.drawable.turn_bt});
         findView();
 

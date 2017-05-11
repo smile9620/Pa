@@ -47,7 +47,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-public class CameraActivity extends AppCompatActivity {
+public class CameraActivity extends BaseActivity {
     private TextureView mTextureView;
     private Button mButton;
     private Handler mHandler;
@@ -64,6 +64,7 @@ public class CameraActivity extends AppCompatActivity {
             super.handleMessage(msg);
             setResult(RESULT_OK);
             finish();
+            refreshFile();
         }
     };
     //相机会话的监听器，通过他得到mCameraSession对象，这个对象可以用来发送预览和拍照请求
@@ -122,7 +123,7 @@ public class CameraActivity extends AppCompatActivity {
             thread.start();
             mHandler = new Handler(thread.getLooper());
             CameraManager manager = (CameraManager) CameraActivity.this.getSystemService(Context.CAMERA_SERVICE);
-            String cameraid = CameraCharacteristics.LENS_FACING_FRONT + "";
+            String cameraid = String.valueOf(CameraCharacteristics.LENS_FACING_FRONT);
             try {
                 mCameraCharacteristics = manager.getCameraCharacteristics(cameraid);
                 StreamConfigurationMap map = mCameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);

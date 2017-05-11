@@ -1,6 +1,7 @@
 package com.bg.utils;
 
 import java.io.UnsupportedEncodingException;
+import java.text.DecimalFormat;
 
 /**
  * Created by zjy on 2017-04-18.
@@ -62,6 +63,7 @@ public class FormatString {
         else
             return -1;
     }
+
     /**
      * 16进制字符转串字符串
      */
@@ -88,33 +90,44 @@ public class FormatString {
         return hexStr;
     }
 
-    public static String[] formateData(String[] data, int[][] start_end) {  //一组gbk16进制字符串的解析
-//        int[][] in = new int[][]{{0,1},{2,2},{3,3},{4,11}};
-        String[] allData = new String[start_end.length];
-        for (int i = 0; i < start_end.length; i++) {
-            StringBuilder builder = new StringBuilder();
-            for (int j = start_end[i][0]; j <= start_end[i][1]; j++) {
-                builder.append(data[j]);
-            }
-            allData[i] = hex2String(builder.toString()).trim();
+    //    public static String[] formateData(String[] data, int[][] start_end) {  //一组gbk16进制字符串的解析
+////        int[][] in = new int[][]{{0,1},{2,2},{3,3},{4,11}};
+//        String[] allData = new String[start_end.length];
+//        for (int i = 0; i < start_end.length; i++) {
+//            StringBuilder builder = new StringBuilder();
+//            for (int j = start_end[i][0]; j <= start_end[i][1]; j++) {
+//                builder.append(data[j]);
+//            }
+//            allData[i] = hex2String(builder.toString()).trim();
+//        }
+//        return allData;
+//    }
+    public static String formateData(String[] data, int[] start_end) {  //一组gbk16进制字符串的解析
+        String result = null;
+        StringBuilder builder = new StringBuilder();
+        for (int i = start_end[0]; i < start_end[1] + 1; i++) {
+            builder.append(data[i]);
+            result = hex2String(builder.toString()).trim();
         }
-        return allData;
+        return result;
     }
 
     public static String formatResult(String str1, String str2, int type) { //测试数据高位和低位的解析
 //       *1：十进制 = ((十六进制（高位）*256+十六进制（低位）)/10
 //       *2：十进制 = ((十六进制（高位）*256+十六进制（低位）)/100
 //       *3：十进制 = ((十六进制（高位）*256+十六进制（低位）)
+        DecimalFormat df1 = new DecimalFormat("0.0");//保留一位小数
+        DecimalFormat df2 = new DecimalFormat("0.00");//保留两位小数
         String result = "";
         switch (type) {
             case 1:
-                result = (Integer.parseInt(str1,16) * 256 + Integer.parseInt(str2,16)) / 10 + "";
+                result = df1.format((Integer.valueOf(str1 + str2, 16).shortValue() / 10.0)) + "";
                 break;
             case 2:
-                result = (Integer.parseInt(str1,16) * 256 + Integer.parseInt(str2,16)) / 100 + "";
+                result = df2.format((Integer.valueOf(str1 + str2, 16).shortValue() / 100.0)) + "";
                 break;
             case 3:
-                result = (Integer.parseInt(str1,16) * 256 + Integer.parseInt(str2,16)) + "";
+                result = (Integer.valueOf(str1 + str2, 16).shortValue()) + "";
                 break;
         }
         return result;
@@ -125,13 +138,13 @@ public class FormatString {
         int base = 17;
         if (Float.parseFloat(str3) < Float.parseFloat(str1)) { //正常范围的左值str1,右值str2,测量值str3
             result[0] = "低标准";
-            result[1] = base + position * 2 + "";
+            result[1] = base + position + "";
         } else if (Float.parseFloat(str2) < Float.parseFloat(str3)) {
             result[0] = "超标准";
-            result[1] = base * 5 + position * 2 + "";
+            result[1] = base * 5 + position + "";
         } else {
             result[0] = "正常";
-            result[1] = base * 3 + position * 2 + "";
+            result[1] = base * 3 + position + "";
         }
         return result;
     }

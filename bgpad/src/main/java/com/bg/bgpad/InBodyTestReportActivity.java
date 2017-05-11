@@ -17,6 +17,8 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bg.constant.Constant;
+import com.bg.constant.DeviceName;
 import com.bg.model.InBodyData;
 import com.bg.model.User;
 import com.bg.utils.FormatString;
@@ -26,6 +28,8 @@ import com.bg.utils.SetTitle;
 import org.litepal.crud.DataSupport;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -100,12 +104,14 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
     TextView testHeight;//身高
     @BindView(R.id.testweight)
     TextView testWeight;//体重
+
     private User user;
     private boolean is_save = false;
     private boolean ble_enable = true;
     private Dialog dialog = null;
     private MyDialog myDialog = new MyDialog(this);
     private String[] datas;
+    private InBodyData inBodyData;
 
     private Handler handler = new Handler() {
         @Override
@@ -113,7 +119,7 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
             super.handleMessage(msg);
             switch (msg.what) {
                 case 0:
-                    if (dialog.isShowing()) { //10秒钟后未获取到蓝牙数据
+                    if (dialog.isShowing()) { //50秒钟后未获取到蓝牙数据
                         dialog.dismiss();
                         myDialog.setDialog("未接收到蓝牙数据，请检查蓝牙是否故障！", false, true, new MyDialog.DialogConfirm() {
                             @Override
@@ -126,10 +132,11 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
                 case 1:
                     writeData(null, new byte[]{(byte) 0xEA, (byte) 0x52, (byte) 0x02, (byte) 0x26, (byte) 0xFF});
                     changeData();
-                    dialog.dismiss();
+                    break;
+                case 2:
+                    showToast(msg.obj.toString());
                     break;
             }
-
         }
     };
 
@@ -141,15 +148,15 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
         new SetTitle(this, view, new boolean[]{true, false},
                 "测试报告", new int[]{R.drawable.back_bt, R.drawable.ble_bt});
         Intent intent = getIntent();
-        user = (User) intent.getSerializableExtra("user");
+        user = DataSupport.where(" user_number = ? ", intent.getStringExtra("user_number")).find(User.class).get(0);
         if (user != null) {
             usernumber.setText(user.getUser_number());
             username.setText(user.getUser_name());
-            sex.setText((user.getSex() == 0 ? "男" : "女"));
+            sex.setText((user.getSex() == 0 ? "女" : "男"));
         }
         dialog = myDialog.setDialog("测试中，请稍后...", false, false, null);
         dialog.show();
-        handler.sendEmptyMessageDelayed(0, 20000);//20秒钟之后，未收到测试数据则认为蓝牙故障
+        handler.sendEmptyMessageDelayed(0, 50000);//50秒钟之后，未收到测试数据则认为蓝牙故障
     }
 
     @OnClick({R.id.save, R.id.print})
@@ -171,7 +178,6 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
                         } else {
                             showToast("请安装打印机！");
                         }
-
                     } else {
                         showToast("usb 打印");
                     }
@@ -198,17 +204,31 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
         }
     }
 
-    private int time = 0;
-
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void updateData(String str) {
-        if (time == 0) {
-            datas = str.split(" ");
-            if (datas[3].equals("15")) {
-                handler.sendEmptyMessage(1);
-            }
-            time = 1;
+        if (dialog != null) {
+            dialog.dismiss();
+        }
+        String[] data = str.split(" ");
+        if ((data[0] + data[1]).toString().equals(DeviceName.InBody_Head) && data[3].equals("15") &&
+                Integer.parseInt(data[2], 16) == (data.length - 3) && data[data.length - 1].equals("FF")) {
+            datas = new String[data.length];
+            datas = data;
+            handler.sendEmptyMessage(1);
+        } else if ((data[0] + data[1]).toString().equals(DeviceName.InBody_Head) && data[3].equals("17") &&
+                Integer.parseInt(data[2], 16) == (data.length - 3) && data[data.length - 1].equals("FF")) {
+            Message message = Message.obtain();
+            message.obj = "本次测试已完成！";
+            message.what = 2;
+            handler.sendMessage(message);
+        } else {
+            Message mesg = Message.obtain();
+            mesg.what = 2;
+            mesg.obj = "数据解析错误！";
+            handler.sendMessage(mesg);
+            setResult(RESULT_OK);
+            finish();
         }
     }
 
@@ -237,6 +257,7 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
                         File file = new File(path1, user.getImage_path());
                         if (file.exists()) {
                             file.delete();
+                            refreshFile();
                         }
                     }
                     finishActivity();
@@ -256,8 +277,9 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
     }
 
     private void saveUser() {
+        Message message = Message.obtain();
+        message.what = 2;
         if (user != null) {
-            InBodyData inBodyData = new InBodyData();
             // body 身体成分分析
             inBodyData.setHeight(Float.parseFloat(testHeight.getText().toString()));//体重
             inBodyData.setWeight(Float.parseFloat(testWeight.getText().toString()));
@@ -369,23 +391,32 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
             inBodyData.setEdemarange(edemaProgess.getProgress());//浮肿分析结果进度条
             //总得分
             inBodyData.setScore(Integer.parseInt(datas[116], 16));
-            List<User> us = DataSupport.select("user_number").where("user_number = ? ", user.getUser_number()).find(User.class);
-            if (us.size() == 0) {
-                user.save();
-            }
-            if (inBodyData.save()) {
-                showToast("保存成功！");
-                is_save = true;
+            if (!is_save) {
+                if (inBodyData.save()) {
+                    List<User> us = DataSupport.select("user_number").where("user_number = ? ", user.getUser_number()).find(User.class);
+                    if (us.size() == 0) {
+                        user.save();
+                    }
+                    message.obj = "保存成功！";
+                    handler.sendMessage(message);
+                    is_save = true;
+                } else {
+                    message.obj = "保存失败！";
+                    handler.sendMessage(message);
+                }
             } else {
-                showToast("保存失败！");
+                message.obj = "数据已经保存！";
+                handler.sendMessage(message);
             }
         } else {
-            showToast("user 为空");
+            message.obj = "user 为空！";
+            handler.sendMessage(message);
         }
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void changeData() {
+        inBodyData = new InBodyData();
         //身体成分分析
         testHeight.setText(FormatString.formatResult(datas[4], datas[5], 1));//身高
         testWeight.setText(FormatString.formatResult(datas[6], datas[7], 1));//体重
@@ -407,8 +438,8 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
                 FormatString.formatResult(datas[28], datas[29], 1));//蛋白质正常范围
         body[12].setText(FormatString.formatResult(datas[36], datas[37], 1) + "-" +
                 FormatString.formatResult(datas[34], datas[35], 1));//无机盐正常范围
-        body[13].setText(FormatString.formatResult(datas[52], datas[53], 2) + "-" +
-                FormatString.formatResult(datas[50], datas[51], 2));//体脂肪正常范围
+        body[13].setText(FormatString.formatResult(datas[52], datas[53], 1) + "-" +
+                FormatString.formatResult(datas[50], datas[51], 1));//体脂肪正常范围
         //肌肉脂肪分析
         muscleFat[0].setText(FormatString.formatResult(datas[6], datas[7], 1));//体重
         muscleFat[1].setText(FormatString.formatResult(datas[42], datas[43], 1));//骨骼肌
@@ -434,13 +465,13 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
         // 肥胖分析
         fatAnalysis[0].setText(FormatString.formatResult(datas[54], datas[55], 1));//BMI
         fatAnalysis[1].setText(FormatString.formatResult(datas[60], datas[61], 1));//体脂率
-        fatAnalysis[2].setText(FormatString.formatResult(datas[66], datas[67], 1));//腰臀比
+        fatAnalysis[2].setText(FormatString.formatResult(datas[66], datas[67], 2));//腰臀比
         fatAnalysis[6].setText(FormatString.formatResult(datas[58], datas[59], 1) + "-" +
                 FormatString.formatResult(datas[56], datas[57], 1));//BMI正常范围
         fatAnalysis[7].setText(FormatString.formatResult(datas[64], datas[65], 1) + "-" +
                 FormatString.formatResult(datas[62], datas[63], 1));//体脂率正常范围
-        fatAnalysis[8].setText(FormatString.formatResult(datas[71], datas[70], 1) + "-" +
-                FormatString.formatResult(datas[68], datas[69], 1));//腰臀比正常范围
+        fatAnalysis[8].setText(FormatString.formatResult(datas[70], datas[71], 2) + "-" +
+                FormatString.formatResult(datas[68], datas[69], 2));//腰臀比正常范围
         String[] progress3 = FormatString.formatStandard(FormatString.formatResult(datas[58], datas[59], 1),
                 FormatString.formatResult(datas[56], datas[57], 1), fatAnalysis[0].getText().toString(), 0);
         String[] progress4 = FormatString.formatStandard(FormatString.formatResult(datas[64], datas[65], 1),
@@ -513,7 +544,7 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
         biologyImpedance[13].setText(FormatString.formatResult(datas[143], datas[144], 1));//LL 50kHz
         biologyImpedance[14].setText(FormatString.formatResult(datas[153], datas[154], 1));//LL 250kHz
         //身体x总评分 score
-        score.setText(Integer.parseInt(datas[116], 16) + "");
+        score.setText(String.valueOf(Integer.parseInt(datas[116], 16)));
         //健康诊断  身体水分 healthWater 健康诊断浮肿 healthEdema
         Drawable drawable1 = getResources().getDrawable(R.drawable.check_down, null);
         drawable1.setBounds(0, 0, drawable1.getMinimumWidth(), drawable1.getMinimumHeight());
@@ -541,5 +572,97 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
         } else {
             edemaProgess.setProgress(value2 * 5 + 25);
         }
+    }
+
+    private List<Map<String, String>> getList() {
+        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("score", score.getText().toString());//得分
+        map.put("usernumber", usernumber.getText().toString());//编号
+        map.put("username", username.getText().toString());//姓名
+        map.put("sex", sex.getText().toString());//性别
+        map.put("age", String.valueOf(user.getAge()));//年龄
+        map.put("testHeight", testHeight.getText().toString());//身高
+        map.put("testWeight", testWeight.getText().toString());//体重
+        map.put("strDate", inBodyData.getStrDate());//测试日期
+        map.put("inliquid", body[0].getText().toString());//细胞内液
+        map.put("outliquid", body[1].getText().toString());//细胞外液
+        map.put("totalprotein", body[2].getText().toString());//蛋白质
+        map.put("totalinorganicsalt", body[3].getText().toString());//无机盐
+        map.put("bodyfat", body[4].getText().toString());//体脂肪
+        map.put("totalwater", body[5].getText().toString());//总水分
+        map.put("muscle", body[6].getText().toString());//肌肉量
+        map.put("fatfree", body[7].getText().toString());//去脂体重
+        map.put("weight", body[8].getText().toString());//总体重
+        map.put("normalrange0", body[9].getText().toString());//细胞内液正常范围
+        map.put("normalrange1", body[10].getText().toString());//细胞外液正常范围
+        map.put("normalrange2", body[11].getText().toString());//蛋白质正常范围
+        map.put("normalrange3", body[12].getText().toString());//无机盐正常范围
+        map.put("normalrange4", body[13].getText().toString());//体脂肪正常范围
+        map.put("bones", muscleFat[1].getText().toString());//骨骼肌
+        map.put("musclefat", muscleFat[2].getText().toString());//体脂肪
+        map.put("normalrange5", muscleFat[6].getText().toString());//体重正常范围
+        map.put("normalrange6", muscleFat[7].getText().toString());//骨骼肌正常范围
+        map.put("normalrange6", muscleFat[8].getText().toString());//体脂肪正常范围
+        map.put("weightvalue", String.valueOf(muscleProgress[0].getProgress()));//体重进度条
+        map.put("bonesevalue", String.valueOf(muscleProgress[1].getProgress()));//骨骼肌进度条
+        map.put("fatvalue", String.valueOf(muscleProgress[2].getProgress()));//体脂肪进度条
+        map.put("bmi", fatAnalysis[0].getText().toString());//BMI
+        map.put("fatrate", fatAnalysis[1].getText().toString());//体脂率
+        map.put("waistrate", fatAnalysis[2].getText().toString());//腰臀比
+        map.put("normalrange8", fatAnalysis[6].getText().toString());//BMI正常范围
+        map.put("normalrange9", fatAnalysis[7].getText().toString());//体脂率正常范围
+        map.put("normalrange10", fatAnalysis[8].getText().toString());//腰臀比正常范围
+        map.put("bmivalue", String.valueOf(fatProgress[0].getProgress()));//BMI进度条
+        map.put("fatratevalue", String.valueOf(fatProgress[1].getProgress()));//体脂率进度条
+        map.put("waistratevalue", String.valueOf(fatProgress[2].getProgress()));//腰臀比进度条
+        map.put("leftarm", segmentalMuscle[0].getText().toString());//左臂
+        map.put("rightarm", segmentalMuscle[1].getText().toString());//右臂
+        map.put("trunk", segmentalMuscle[2].getText().toString());//右臂
+        map.put("leftleg", segmentalMuscle[3].getText().toString());//左腿
+        map.put("rightleg", segmentalMuscle[4].getText().toString());//右腿
+        map.put("normalrange11", segmentalMuscle[10].getText().toString());//左臂正常范围
+        map.put("normalrange12", segmentalMuscle[11].getText().toString());//右臂正常范围
+        map.put("normalrange13", segmentalMuscle[12].getText().toString());//躯干正常范围
+        map.put("normalrange14", segmentalMuscle[13].getText().toString());//左腿正常范围
+        map.put("normalrange15", segmentalMuscle[14].getText().toString());//右腿正常范围
+        map.put("leftarmvalue", String.valueOf(segmentalProgress[0].getProgress()));//左臂进度条
+        map.put("rightarmvalue", String.valueOf(segmentalProgress[1].getProgress()));//右臂进度条
+        map.put("trunkvalue", String.valueOf(segmentalProgress[2].getProgress()));//躯干进度条
+        map.put("leftlegvalue", String.valueOf(segmentalProgress[3].getProgress()));//左腿进度条
+        map.put("rightlegvalue", String.valueOf(segmentalProgress[4].getProgress()));//右腿进度条
+        map.put("standardweight", String.valueOf(weightHeight[0].getText().toString()));//标准体重
+        map.put("standardheight", String.valueOf(weightHeight[1].getText().toString()));//标准身高
+        map.put("musclecontrol", String.valueOf(weightHeight[2].getText().toString()));//肌肉控制
+        map.put("weightcontrol", String.valueOf(weightHeight[3].getText().toString()));//体重控制
+        map.put("fatcontrol", String.valueOf(weightHeight[4].getText().toString()));//脂肪控制
+        map.put("basalmetabolism", String.valueOf(weightHeight[5].getText().toString()));//基础代谢量
+        map.put("ra0", String.valueOf(biologyImpedance[0].getText().toString()));//RA 5kHz
+        map.put("ra1", String.valueOf(biologyImpedance[1].getText().toString()));//RA 50kHz
+        map.put("ra2", String.valueOf(biologyImpedance[2].getText().toString()));//RA 2505kHz
+        map.put("la0", String.valueOf(biologyImpedance[3].getText().toString()));//LA 5kHz
+        map.put("la1", String.valueOf(biologyImpedance[4].getText().toString()));//LA 50kHz
+        map.put("la2", String.valueOf(biologyImpedance[5].getText().toString()));//LA 250kHz
+        map.put("tr0", String.valueOf(biologyImpedance[6].getText().toString()));//TR 5kHz
+        map.put("tr1", String.valueOf(biologyImpedance[7].getText().toString()));//TR 50kHz
+        map.put("tr2", String.valueOf(biologyImpedance[8].getText().toString()));//TR 250kHz
+        map.put("rl0", String.valueOf(biologyImpedance[9].getText().toString()));//RL 5kHz
+        map.put("rl1", String.valueOf(biologyImpedance[10].getText().toString()));//RL 50kHz
+        map.put("rl2", String.valueOf(biologyImpedance[11].getText().toString()));//RL 250kHz
+        map.put("ll0", String.valueOf(biologyImpedance[12].getText().toString()));//LL 5kHz
+        map.put("ll1", String.valueOf(biologyImpedance[13].getText().toString()));//LL 50kHz
+        map.put("ll2", String.valueOf(biologyImpedance[14].getText().toString()));//LL 250kH
+        map.put("healthWater", String.valueOf(Integer.parseInt(datas[114], 16)));//健康诊断 身体水分
+        map.put("healthEdema", String.valueOf(Integer.parseInt(datas[115], 16)));//健康诊断 浮肿
+        map.put("nutritionProtein", String.valueOf(Integer.parseInt(datas[118], 16)));//营养评估 蛋白质
+        map.put("nutritionSalt", String.valueOf(Integer.parseInt(datas[119], 16)));//营养评估 无机盐
+        map.put("nutritionFat", String.valueOf(Integer.parseInt(datas[120], 16)));//营养评估 体脂肪
+        map.put("muscleUp", String.valueOf(Integer.parseInt(datas[121], 16)));//肌肉评估 上肢
+        map.put("muscleDown", String.valueOf(Integer.parseInt(datas[122], 16)));//肌肉评估 下肢
+        map.put("shapeJudgment", String.valueOf(Integer.parseInt(datas[117], 16)));//体型判断
+        map.put("edemaValue", String.valueOf(edemaValue.getText().toString()));//浮肿分析值
+        map.put("edemaProgess", String.valueOf(edemaProgess.getProgress()));//浮肿分析进度条
+        list.add(map);
+        return list;
     }
 }

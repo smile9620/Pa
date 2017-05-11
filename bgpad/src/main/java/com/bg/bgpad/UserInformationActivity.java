@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -21,6 +22,7 @@ import android.provider.MediaStore;
 import android.support.annotation.IdRes;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -32,6 +34,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.bg.constant.Constant;
+import com.bg.constant.DeviceName;
 import com.bg.constant.InBodyBluetooth;
 import com.bg.model.InBodyData;
 import com.bg.model.User;
@@ -85,12 +88,29 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
     private boolean column;
     private boolean showdialog = true;
     private int selectsex = 0;
-    private String photopath = "";
+    private String photopath;
     public static UserInformationActivity instance;
     private Intent intent;
     private boolean user_exist;
     private boolean ble_enable = true;
     private String strBirth;
+    public String sendData;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 0:
+                    new MyDialog(UserInformationActivity.this).setDialog("下位机已存在该编号，是否对该信息覆盖？", true, true, new MyDialog.DialogConfirm() {
+                        @Override
+                        public void dialogConfirm() {
+                            test();
+                        }
+                    }).show();
+                    break;
+            }
+        }
+    };
 
     public UserInformationActivity() {
         instance = UserInformationActivity.this;
@@ -101,8 +121,11 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_information);
         ButterKnife.bind(this);
+
         intent = getIntent();
-        user_exist = intent.getStringExtra("user_number") == null ? false : true;
+        if (intent.getStringExtra("user_number") != null) {
+            user_exist = true;
+        }
         new SetTitle(this, view, new boolean[]{true, user_exist},
                 "测试", new int[]{R.drawable.back_bt, R.drawable.delete_bt});
         column = intent.getBooleanExtra("column", true);
@@ -115,9 +138,9 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 if (boy.isChecked()) {
-                    selectsex = 0;
+                    selectsex = 1;  //性别 0 代表女生，1 代表男生
                 } else {
-                    selectsex = 1;
+                    selectsex = 0;
                 }
             }
         });
@@ -134,13 +157,13 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
             users = DataSupport.where(" user_number = ? ", intent.getStringExtra("user_number")).find(User.class);
             username.setText(users.get(0).getUser_name());
             usernumber.setText(users.get(0).getUser_number());
-            if (users.get(0).getSex() == 0) {
+            if (users.get(0).getSex() == 1) { //性别 0 代表女生，1 代表男生
                 boy.setChecked(true);
             } else {
                 girl.setChecked(true);
             }
             birthday.setText(users.get(0).getBirthday());
-            age.setText(users.get(0).getAge() + "");
+            age.setText(String.valueOf(users.get(0).getAge()));
             if (users.get(0).getImage_path() != null) {
                 File path1 = new File(getSDPath() + "/Image");
                 if (path1.exists()) {
@@ -165,19 +188,35 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
         }
     }
 
+    private int time = 0;
+
     @Override
     protected void updateData(String str) {
         String[] datas = str.split(" ");
-        if (datas[3].equals("13")) {
-            Intent intent = new Intent(this, InBodyTestReportActivity.class);
-            intent.putExtra("user", user);
-            startActivity(intent);
+        if ((datas[0] + datas[1]).toString().equals(DeviceName.InBody_Head) &&
+                datas[3].equals("13") && Integer.parseInt(datas[2], 16) == (datas.length - 3) &&
+                datas[datas.length - 1].equals("FF")) {
+            String req = FormatString.formateData(datas, new int[]{4, 4});
+            if (req.equals("1")) {// 0 不可以发送数据， 1 可以发送数据
+                if (sendData != null && user != null) {
+                    Intent intent = new Intent(this, InBodyTestReportActivity.class);
+                    intent.putExtra("user_number", user.getUser_number());
+                    startActivityForResult(intent, Constant.TEST_REQ);
+                }
+            } else {
+                handler.sendEmptyMessage(0);
+            }
+        } else {
+            if (time < 3) {
+                test();
+            }
+            time++;
         }
     }
 
     @Override
     public void leftBt(ImageButton left) {
-        finish();
+        finishActivity();
     }
 
     @Override
@@ -194,6 +233,7 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
                     File file = new File(path1, users.get(0).getImage_path());
                     if (file.exists()) {
                         file.delete();
+                        refreshFile();
                     }
                 }
                 showToast("删除成功！");
@@ -217,22 +257,37 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
                 String userna = username.getText().toString().trim();
                 String bir = birthday.getText().toString().trim();
                 String heig = height.getText().toString().trim();
-                String sendData = checkUser(usernu, userna, bir, heig);
+                sendData = checkUser(usernu, userna, bir, heig);
                 if (sendData != null) {
                     user = new User();
                     user.setUser_number(usernu);
                     user.setUser_name(userna);
                     user.setBirthday(bir);
                     user.setSex(selectsex);
-                    if (photopath != "") {
+                    if (photopath != null) {
                         user.setImage_path(photopath);
                     }
-                    if (ble_enable) { //蓝牙可用时，才能写数据
-//                        writeData("34122219870611503X诸葛亮  1200006110180", new byte[]{(byte) 0xEA, (byte) 0x52, (byte) 0x29, (byte) 0x22, (byte) 0xFF});
-                        writeData(sendData, new byte[]{(byte) 0xEA, (byte) 0x52, (byte) 0x29, (byte) 0x22, (byte) 0xFF});
-//                        writeData(null, InBodyBluetooth.send2);
+                    if (!user_exist) {
+                        final List<User> list = DataSupport.where("user_number = ?", usernu).find(User.class);
+                        if (list.size() != 0) {
+                            new MyDialog(UserInformationActivity.this).setDialog("编号为" + usernu +
+                                    "的用户已存在,是否进行覆盖？", true, true, new MyDialog.DialogConfirm() {
+                                @Override
+                                public void dialogConfirm() {
+                                    ContentValues values = new ContentValues();
+                                    values.put("user_name", user.getUser_name());
+                                    values.put("birthday", user.getBirthday());
+                                    values.put("sex", user.getSex());
+                                    values.put("image_path", user.getImage_path());
+                                    DataSupport.update(User.class, values, list.get(0).getId());
+                                    test();
+                                }
+                            }).show();
+                        } else {
+                            test();
+                        }
                     } else {
-                        showToast("蓝牙已断开，无法测试！");
+                        test();
                     }
                 }
                 break;
@@ -246,15 +301,8 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
             usernumber.setHint("编号不能为空！");
             usernumber.setHintTextColor(Color.RED);
             return null;
-        } else {
-            if (!user_exist) {
-                List<User> list = DataSupport.where("user_number = ?", number).find(User.class);
-                if (list.size() != 0) {
-                    showToast("编号为" + number + "的用户已存在");
-                    return null;
-                }
-            }
         }
+
         if (name == null || name.isEmpty()) {
             username.setHint("姓名不能为空！");
             username.setHintTextColor(Color.RED);
@@ -275,10 +323,13 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
             }
         }
 
+        int create = 0;//用户类别 1个字节  已有用户：0  新建：1
         int number_length = 0; //编号18个字节
         int name_length = 0;//姓名8个字节
         int he_length = 0;//身高3个字节
-
+        if (!user_exist) {
+            create = 1;
+        }
         number_length = number.getBytes().length;//编号长度18字节
         try {
             name_length = name.getBytes("gbk").length;//姓名长度8字节
@@ -306,11 +357,12 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
         } else {
             he = "   ";
         }
+
         String bi = birthday.getText().toString();
         String[] b = bi.split("-");
         strBirth = b[0] + b[1] + b[2];
 
-        result = number + name + (boy.isChecked() ? 1 : 0) + strBirth +
+        result = String.valueOf(create) + number + name + (boy.isChecked() ? 1 : 0) + strBirth +
                 (column == false ? 0 : 1) + he;
         return result;
     }
@@ -322,11 +374,11 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
             new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                    String mon = month + 1 + "";
+                    String mon = String.valueOf(month + 1);
                     if ((month + 1) < 10) {
                         mon = "0" + (month + 1);
                     }
-                    String day = dayOfMonth + "";
+                    String day = String.valueOf(dayOfMonth);
                     if (dayOfMonth < 10) {
                         day = "0" + dayOfMonth;
                     }
@@ -342,7 +394,7 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
                         showToast("出生日期大于当前日期！");
                     } else {
                         birthday.setText(data);
-                        age.setText((cal.get(Calendar.YEAR) - year) + "");
+                        age.setText(String.valueOf(cal.get(Calendar.YEAR) - year));
                     }
                 }
             }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show();
@@ -366,18 +418,30 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
             }
         }
 
-//        File path1 = new File(Constant.mFilePath+"/image");
-//        if (!path1.exists()) {
-//            path1.mkdirs();
-//        }
         File path1 = new File(getSDPath() + "/Image");
-        makeDir(path1);
-        photopath = System.currentTimeMillis() + ".jpg";
+        if (!path1.exists()) {
+            path1.mkdir();
+        }
+        if (photopath == null) {
+            photopath = System.currentTimeMillis() + ".jpg";
+        }
         File file = new File(path1, photopath);
         Constant.imageUri = Uri.fromFile(file);
 
         Intent intent = new Intent(UserInformationActivity.this, CameraActivity.class);
         startActivityForResult(intent, Constant.CAMERA_STA_USERINFO);
+    }
+
+    private void finishActivity() {
+        File path1 = new File(getSDPath() + "/Image");
+        if (photopath != null) {
+            File file = new File(path1, photopath);
+            if (file.exists()) {
+                file.delete();
+                refreshFile();
+            }
+        }
+        finish();
     }
 
     @Override
@@ -411,50 +475,42 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
                 bitmap.recycle();
             }
         } catch (Exception e) {
-            photopath = "";
+            photopath = null;
             e.printStackTrace();
         }
+    }
 
+    private void test() {
+        if (ble_enable) { //蓝牙可用时，才能写数据
+//          writeData("34122219870611503X张金燕  1200006110180", new byte[]{(byte) 0xEA, (byte) 0x52, (byte) 0x29, (byte) 0x22, (byte) 0xFF});
+            writeData(sendData, new byte[]{(byte) 0xEA, (byte) 0x52, (byte) 0x29, (byte) 0x22, (byte) 0xFF});
+        } else {
+            showToast("蓝牙已断开，无法测试！");
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == Constant.CAMERA_STA_USERINFO) {
-            showImage(Constant.imageUri);
-
-//            FileInputStream fis = null;
-//            try {
-//                fis = new FileInputStream(mFilePath);
-//                Bitmap bitmap = BitmapFactory.decodeStream(fis);
-//                image.setBackground(new BitmapDrawable(this.getResources(), bitmap));
-//
-//            } catch (FileNotFoundException e) {
-//                e.printStackTrace();
-//            } finally {
-//                try {
-//                    fis.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-
-
-//         File file = new File(Environment.getExternalStorageDirectory()
-//                 .getPath() + "/share_pic.png");// 保存到sdcard根目录下，文件名为share_pic.png
-//         FileOutputStream fos = null;
-//         try {
-//             fos = new FileOutputStream(file);
-//             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);//表示压缩70%; 如果不压缩是100，表示压缩率为0
-//             fos.close();
-//         } catch (FileNotFoundException e) {
-//             e.printStackTrace();
-//         } catch (IOException e) {
-//             e.printStackTrace();
-//         }
-
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case Constant.CAMERA_STA_USERINFO:
+                    showImage(Constant.imageUri);
+                    break;
+                case Constant.TEST_REQ:
+                    test();
+                    break;
+            }
         }
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            finishActivity();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }

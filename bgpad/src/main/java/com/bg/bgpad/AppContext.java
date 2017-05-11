@@ -9,7 +9,7 @@ import org.litepal.LitePalApplication;
  * Created by Administrator on 2017-02-15.
  */
 
-public class AppContext extends LitePalApplication{
+public class AppContext extends LitePalApplication {
     private static Context context;
 
     @Override
@@ -18,8 +18,7 @@ public class AppContext extends LitePalApplication{
         context = getApplicationContext();
     }
 
-    public static Context getContext()
-    {
+    public static Context getContext() {
         return context;
     }
 }

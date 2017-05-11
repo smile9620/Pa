@@ -14,7 +14,6 @@ import android.os.IBinder;
 import android.os.Message;
 
 import com.bg.constant.Constant;
-import com.bg.utils.FormatString;
 import com.bg.utils.MyDialog;
 
 import java.io.UnsupportedEncodingException;
@@ -26,7 +25,8 @@ public abstract class BleActivityResult extends BleActivityStart {
     private ServiceConnection mServiceConnection = null;
     private BroadcastReceiver mGattUpdateReceiver = null;
     private boolean is_change;
-    private Timer timer;
+    private Timer timer1;
+    private Timer timer2;//检测蓝牙数据是否发完
     private String data = "";
     private Handler handler = new Handler() {
         @Override
@@ -43,15 +43,13 @@ public abstract class BleActivityResult extends BleActivityStart {
         Receiver();
     }
 
-    private int time = 0;
-
-
+    private int time = 0; //计数用，发三次则认为下位机忙或蓝牙故障
     private byte[] head;
 
     protected void writeData(String data, byte[] by) {
         this.data = data;
-        this.head = by;//byte[]{(byte) 0xEA, (byte) 0x52, (byte) 0x0A, (byte) 0x20, (byte) 0xFF};
-        timer = new Timer();
+        this.head = by;
+        timer1 = new Timer();
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
@@ -60,12 +58,12 @@ public abstract class BleActivityResult extends BleActivityStart {
                     writeBle();
                 } else {
                     time = 0;
-                    timer.cancel();
+                    timer1.cancel();
                     handler.sendEmptyMessage(0);
                 }
             }
         };
-        timer.schedule(task, 0, 300);//300毫秒发一次，3次之后未收到数据则下位机忙或蓝牙故障
+        timer1.schedule(task, 0, 300);//300毫秒发一次，3次之后未收到数据则下位机忙或蓝牙故障
     }
 
     private boolean writeBle() {  //分包向蓝牙写数据
@@ -174,7 +172,7 @@ public abstract class BleActivityResult extends BleActivityStart {
 
     protected abstract void updateData(String str);
 
-    StringBuilder builder = new StringBuilder();
+    private StringBuilder builder = new StringBuilder();
 
     private void Receiver() {
 
@@ -206,16 +204,25 @@ public abstract class BleActivityResult extends BleActivityStart {
 
                         } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) { // 收到数据
                             time = 0;
-                            if (timer != null) {
-                                timer.cancel();
+                            if (timer1 != null) {
+                                timer1.cancel();
+                            }
+                            if (timer2 != null) {
+                                timer2.cancel();
                             }
                             String data = intent.getStringExtra(BluetoothLeService.EXTRA_DATA);
-                            String[] da = data.split(" ");
                             builder.append(data);
+                            String[] da = data.split(" ");
                             if (da[da.length - 1].equals("FF")) {  //判断蓝牙数据是否结束
                                 if (da.length != 1) {
-                                    updateData(builder.toString());
-                                    builder.delete(0, builder.length());
+                                    timer2 = new Timer();
+                                    timer2.schedule(new TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            updateData(builder.toString());
+                                            builder.delete(0, builder.length());
+                                        }
+                                    }, 50);
                                 } else {
                                     updateState(false);//"FF" 设备断开
                                     if (Constant.mBluetoothLeService != null) {

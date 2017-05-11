@@ -204,12 +204,12 @@ public class InBodyData extends DataSupport {
         Calendar cal = Calendar.getInstance();
         int month = cal.get(Calendar.MONTH) + 1;
         int day = cal.get(Calendar.DAY_OF_MONTH);
-        String mon = null;
-        String da = null;
+        String mon = String.valueOf(month);
+        String da =String.valueOf(day);
         if ((month + 1) < 10) {
             mon = "0" + month;
         }
-        if ((day) < 10) {
+        if (day < 10) {
             da = "0" + day;
         }
         String fillDate = cal.get(Calendar.YEAR) + mon + da;
