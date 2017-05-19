@@ -465,7 +465,6 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
         try {
             // 读取uri所在的图片
             bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-
             Matrix matrix = new Matrix(); //抗锯齿
             matrix.postScale(0.2f, 0.2f);
             Bitmap temp = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
@@ -483,7 +482,7 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
     private void test() {
         if (ble_enable) { //蓝牙可用时，才能写数据
 //          writeData("34122219870611503X张金燕  1200006110180", new byte[]{(byte) 0xEA, (byte) 0x52, (byte) 0x29, (byte) 0x22, (byte) 0xFF});
-            writeData(sendData, new byte[]{(byte) 0xEA, (byte) 0x52, (byte) 0x29, (byte) 0x22, (byte) 0xFF});
+            writeData(sendData, new byte[]{(byte) 0xEA, (byte) 0x52, (byte) 0x2A, (byte) 0x22, (byte) 0xFF});
         } else {
             showToast("蓝牙已断开，无法测试！");
         }

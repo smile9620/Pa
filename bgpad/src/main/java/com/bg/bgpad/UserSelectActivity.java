@@ -2,6 +2,7 @@ package com.bg.bgpad;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -75,7 +76,6 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
         new SetTitle(this, view, new boolean[]{true, true}, "用户信息",
                 new int[]{R.drawable.back_bt, R.drawable.ble_bt});
         new SelectionUser(this, this, selection, true);
-
         getBle(DeviceName.InBody); //启动蓝牙
         simpleAdapter = new SimpleAdapter(this, list_maps, R.layout.userlist_item,
                 new String[]{"user_number", "user_name", "sex", "strDate"},

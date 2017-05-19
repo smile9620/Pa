@@ -12,6 +12,7 @@ import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,6 +31,8 @@ import com.bg.utils.LeDeviceListAdapter;
 import com.bg.utils.MyDialog;
 import com.zxing.activity.CaptureActivity;
 
+import java.util.Map;
+
 /**
  * 蓝牙功能调用getBle() 进行搜索，searchBtClick() 进行改变状态
  * 二维码扫描功能调用 requestPermission("Camrea"); 即可
@@ -41,7 +44,7 @@ public abstract class BleActivityStart extends BaseActivity {
     private BluetoothAdapter mBluetoothAdapter;
 
     private LeDeviceListAdapter mLeDeviceListAdapter;
-    private final long SCAN_PERIOD = 3000;
+    private final long SCAN_PERIOD = 10000;
     protected Dialog pogressDialog = null;
     protected MyDialog myDialog = null;
     private AlertDialog devicesDialog = null;
@@ -286,7 +289,6 @@ public abstract class BleActivityStart extends BaseActivity {
                         Constant.mScanning = false;
                     }
                     devicesDialog.cancel();
-
                 }
             }
         });

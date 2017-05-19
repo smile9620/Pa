@@ -1,7 +1,6 @@
 package com.bg.bgpad;
 
 import android.annotation.TargetApi;
-import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,7 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
@@ -17,21 +15,13 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.bg.model.InBodyData;
 import com.bg.model.User;
 import com.bg.utils.DrawTestReport;
-import com.bg.utils.MyDialog;
 import com.bg.utils.SetTitle;
-
 import org.litepal.crud.DataSupport;
-
-import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
@@ -309,22 +299,22 @@ public class TestReportActivity extends BaseActivity implements SetTitle.OnTitle
         map.put("musclefat", muscleFat[2].getText().toString());//体脂肪
         map.put("normalrange5", muscleFat[6].getText().toString());//体重正常范围
         map.put("normalrange6", muscleFat[7].getText().toString());//骨骼肌正常范围
-        map.put("normalrange6", muscleFat[8].getText().toString());//体脂肪正常范围
-        map.put("weightvalue", String.valueOf(muscleProgress[0].getProgress()));//体重进度条
-        map.put("bonesevalue", String.valueOf(muscleProgress[1].getProgress()));//骨骼肌进度条
-        map.put("fatvalue", String.valueOf(muscleProgress[2].getProgress()));//体脂肪进度条
+        map.put("normalrange7", muscleFat[8].getText().toString());//体脂肪正常范围
+        map.put("weightrange", muscleFat[3].getText().toString());//体重进度条
+        map.put("boneserange", muscleFat[4].getText().toString());//骨骼肌进度条
+        map.put("fatrange", muscleFat[5].getText().toString());//体脂肪进度条
         map.put("bmi", fatAnalysis[0].getText().toString());//BMI
         map.put("fatrate", fatAnalysis[1].getText().toString());//体脂率
         map.put("waistrate", fatAnalysis[2].getText().toString());//腰臀比
         map.put("normalrange8", fatAnalysis[6].getText().toString());//BMI正常范围
         map.put("normalrange9", fatAnalysis[7].getText().toString());//体脂率正常范围
         map.put("normalrange10", fatAnalysis[8].getText().toString());//腰臀比正常范围
-        map.put("bmivalue", String.valueOf(fatProgress[0].getProgress()));//BMI进度条
-        map.put("fatratevalue", String.valueOf(fatProgress[1].getProgress()));//体脂率进度条
-        map.put("waistratevalue", String.valueOf(fatProgress[2].getProgress()));//腰臀比进度条
+        map.put("bmirange", fatAnalysis[3].getText().toString());//BMI进度条
+        map.put("fatraterange", fatAnalysis[4].getText().toString());//体脂率进度条
+        map.put("waistraterange", fatAnalysis[5].getText().toString());//腰臀比进度条
         map.put("leftarm", segmentalMuscle[0].getText().toString());//左臂
         map.put("rightarm", segmentalMuscle[1].getText().toString());//右臂
-        map.put("trunk", segmentalMuscle[2].getText().toString());//右臂
+        map.put("trunk", segmentalMuscle[2].getText().toString());//躯干
         map.put("leftleg", segmentalMuscle[3].getText().toString());//左腿
         map.put("rightleg", segmentalMuscle[4].getText().toString());//右腿
         map.put("normalrange11", segmentalMuscle[10].getText().toString());//左臂正常范围
@@ -332,11 +322,11 @@ public class TestReportActivity extends BaseActivity implements SetTitle.OnTitle
         map.put("normalrange13", segmentalMuscle[12].getText().toString());//躯干正常范围
         map.put("normalrange14", segmentalMuscle[13].getText().toString());//左腿正常范围
         map.put("normalrange15", segmentalMuscle[14].getText().toString());//右腿正常范围
-        map.put("leftarmvalue", String.valueOf(segmentalProgress[0].getProgress()));//左臂进度条
-        map.put("rightarmvalue", String.valueOf(segmentalProgress[1].getProgress()));//右臂进度条
-        map.put("trunkvalue", String.valueOf(segmentalProgress[2].getProgress()));//躯干进度条
-        map.put("leftlegvalue", String.valueOf(segmentalProgress[3].getProgress()));//左腿进度条
-        map.put("rightlegvalue", String.valueOf(segmentalProgress[4].getProgress()));//右腿进度条
+        map.put("leftarmrange", segmentalMuscle[5].getText().toString());//左臂进度条
+        map.put("rightarmrange", segmentalMuscle[6].getText().toString());//右臂进度条
+        map.put("trunkrange", segmentalMuscle[7].getText().toString());//躯干进度条
+        map.put("leftlegrange", segmentalMuscle[8].getText().toString());//左腿进度条
+        map.put("rightlegrange", segmentalMuscle[9].getText().toString());//右腿进度条
         map.put("standardweight", String.valueOf(weightHeight[0].getText().toString()));//标准体重
         map.put("standardheight", String.valueOf(weightHeight[1].getText().toString()));//标准身高
         map.put("musclecontrol", String.valueOf(weightHeight[2].getText().toString()));//肌肉控制

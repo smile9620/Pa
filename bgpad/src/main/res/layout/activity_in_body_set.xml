@@ -107,7 +107,7 @@
 
             <TextView
                 style="@style/inbody_infor_text"
-                android:text="电话" />
+                android:text="电        话" />
 
             <EditText
                 android:id="@+id/telephone"

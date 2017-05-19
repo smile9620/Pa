@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -120,12 +121,12 @@ public abstract class BleActivityResult extends BleActivityStart {
 
     @Override
     protected void select_ble() {
-        pogressDialog.show();
-        myDialog.setMsg(getResources().getString(R.string.ble_connect));
+//        pogressDialog.show();
+//        myDialog.setMsg(getResources().getString(R.string.ble_connect));
         startBle();
     }
 
-    //1分钟之后，如何还是显示连接中，则认为连接不成功，则断开
+    //1分钟之后，如果还是显示连接中，则认为连接不成功，则断开
     CountDownTimer countDownTimer = new CountDownTimer(10000, 1) {
         @Override
         public void onTick(long millisUntilFinished) {
@@ -201,7 +202,6 @@ public abstract class BleActivityResult extends BleActivityStart {
                         {
                             updateState(true);
                             showToast("连接成功，现在可以正常通信！");
-
                         } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) { // 收到数据
                             time = 0;
                             if (timer1 != null) {
