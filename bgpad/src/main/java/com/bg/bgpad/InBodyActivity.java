@@ -28,8 +28,8 @@ public class InBodyActivity extends BaseActivity implements SetTitle.OnTitleBtCl
     View view;
     @BindView(R.id.test)
     Button test;
-    @BindView(R.id.userset)
-    Button userset;
+    @BindView(R.id.dataset)
+    Button dataset;
     @BindView(R.id.set)
     Button set;
     @BindView(R.id.help)
@@ -40,11 +40,11 @@ public class InBodyActivity extends BaseActivity implements SetTitle.OnTitleBtCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_in_body);
         ButterKnife.bind(this);
-        new SetTitle(this, view, new boolean[]{false, false},
+        new SetTitle(this, view, new boolean[]{true, false},
                 "贝高", new int[]{R.drawable.back_bt, R.drawable.ble_bt});
     }
 
-    @OnClick({R.id.test, R.id.userset, R.id.set, R.id.help})
+    @OnClick({R.id.test, R.id.dataset, R.id.set, R.id.help})
     public void onClick(View view) {
         Intent intent = new Intent();
         switch (view.getId()) {
@@ -52,7 +52,7 @@ public class InBodyActivity extends BaseActivity implements SetTitle.OnTitleBtCl
                 intent.setClass(this, UserSelectActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.userset:
+            case R.id.dataset:
                 intent.setClass(this, UserManagementActivity.class);
                 startActivity(intent);
                 break;
@@ -68,7 +68,7 @@ public class InBodyActivity extends BaseActivity implements SetTitle.OnTitleBtCl
 
     @Override
     public void leftBt(ImageButton left) {
-
+        finish();
     }
 
     @Override

@@ -14,9 +14,7 @@ public class WelcomeActivity extends Activity {
         public void handleMessage(android.os.Message msg) {
             Intent intent = new Intent(WelcomeActivity.this,
                     LoginActivity.class);
-
             startActivity(intent);
-
             finish();
         }
 
@@ -26,7 +24,6 @@ public class WelcomeActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.welcome_activity);
         handler.sendEmptyMessageDelayed(0, 1500);
     }

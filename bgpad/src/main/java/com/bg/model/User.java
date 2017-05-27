@@ -9,6 +9,7 @@ import org.litepal.annotation.Column;
 import org.litepal.crud.DataSupport;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -71,11 +72,16 @@ public class User extends DataSupport implements Serializable {
         this.user_number = user_id;
     }
 
-    public int getAge() {
-        char[] bir = birthday.toCharArray();
-        String year = bir[0] + "" + bir[1] + bir[2] + bir[3];
+    public float getAge() {
+        String[] str = birthday.split("-");
         Calendar cal = Calendar.getInstance();
-        return cal.get(Calendar.YEAR) - Integer.parseInt(year);
+        DecimalFormat df = new DecimalFormat("0.0");
+        int cur_year = cal.get(Calendar.YEAR);
+        int cur_month = cal.get(Calendar.MONTH) + 1;
+        int year = Integer.parseInt(str[0]);
+        int month = Integer.parseInt(str[1]);
+        float ag = (cur_month - month) / 12f + cur_year - year;
+        return Float.parseFloat(df.format(ag));
     }
 
     public int getSex() {

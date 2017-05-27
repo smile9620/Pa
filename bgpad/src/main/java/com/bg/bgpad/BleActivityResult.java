@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -18,6 +17,7 @@ import com.bg.constant.Constant;
 import com.bg.utils.MyDialog;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.ref.WeakReference;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -29,14 +29,25 @@ public abstract class BleActivityResult extends BleActivityStart {
     private Timer timer1;
     private Timer timer2;//检测蓝牙数据是否发完
     private String data = "";
-    private Handler handler = new Handler() {
+    private MyHandler handler = new MyHandler(this);
+
+    private static class MyHandler extends Handler {
+        private final WeakReference<BleActivityResult> mActivity;
+
+        public MyHandler(BleActivityResult activity) {
+            mActivity = new WeakReference<BleActivityResult>(activity);
+        }
+
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            new MyDialog(BleActivityResult.this).setDialog("下位机在忙或蓝牙故障无法接收数据！",
-                    true, false, null).show();
+            BleActivityResult act = mActivity.get();
+            if (mActivity.get() != null) {
+                new MyDialog(act).setDialog("下位机在忙或蓝牙故障无法接收数据！",
+                        true, false, null).show();
+            }
         }
-    };
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +75,7 @@ public abstract class BleActivityResult extends BleActivityStart {
                 }
             }
         };
-        timer1.schedule(task, 0, 300);//300毫秒发一次，3次之后未收到数据则下位机忙或蓝牙故障
+        timer1.schedule(task, 0, 1000);//1秒发一次，3次之后未收到数据则下位机忙或蓝牙故障
     }
 
     private boolean writeBle() {  //分包向蓝牙写数据
@@ -91,11 +102,17 @@ public abstract class BleActivityResult extends BleActivityStart {
             if (len <= 20) {
                 tmp = new byte[len];
                 System.arraycopy(data3, flag, tmp, 0, len);
-                result = Constant.mBluetoothLeService.WriteValue(tmp);
+                if (Constant.mBluetoothLeService.WriteValue(tmp)) {
+                    result = true;
+                } else {
+                    result = false;
+                    break;
+                }
                 len -= 20;
             } else {
                 tmp = new byte[20];
                 System.arraycopy(data3, flag, tmp, 0, 20);
+
                 if (Constant.mBluetoothLeService.WriteValue(tmp)) {
                     flag += 20;
                     len -= 20;
@@ -104,6 +121,10 @@ public abstract class BleActivityResult extends BleActivityStart {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    result = true;
+                } else {
+                    result = false;
+                    break;
                 }
             }
         } while (len > 0);
@@ -161,12 +182,16 @@ public abstract class BleActivityResult extends BleActivityStart {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (timer1 != null) {
+            timer1.cancel();
+        }
         if (mServiceConnection != null) {
             unbindService(mServiceConnection);
         }
         if (mGattUpdateReceiver != null) {
             unregisterReceiver(mGattUpdateReceiver);
         }
+        handler.removeCallbacksAndMessages(null);
     }
 
     protected abstract void updateState(boolean bool);

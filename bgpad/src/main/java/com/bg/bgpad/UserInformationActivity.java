@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -13,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.net.rtp.AudioGroup;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -46,6 +48,9 @@ import org.litepal.crud.DataSupport;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.lang.ref.WeakReference;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -84,7 +89,7 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
     TableRow showheight;
 
     private List<User> users;
-    private User user;
+    private User sendUser;
     private boolean column;
     private boolean showdialog = true;
     private int selectsex = 0;
@@ -95,22 +100,31 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
     private boolean ble_enable = true;
     private String strBirth;
     public String sendData;
-    private Handler handler = new Handler() {
+    private MyHandler handler = new MyHandler(this);
+
+    private static class MyHandler extends Handler {
+        private final WeakReference<UserInformationActivity> mActivity;
+
+        public MyHandler(UserInformationActivity activity) {
+            mActivity = new WeakReference<UserInformationActivity>(activity);
+        }
+
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what) {
-                case 0:
-                    new MyDialog(UserInformationActivity.this).setDialog("下位机已存在该编号，是否对该信息覆盖？", true, true, new MyDialog.DialogConfirm() {
-                        @Override
-                        public void dialogConfirm() {
-                            test();
-                        }
-                    }).show();
-                    break;
+            UserInformationActivity act = mActivity.get();
+            if (act != null) {
+                switch (msg.what) {
+                    case 0:
+                        act.getFocusable();
+                        break;
+                    case 1:
+                        act.test.setClickable(true);
+                        break;
+                }
             }
         }
-    };
+    }
 
     public UserInformationActivity() {
         instance = UserInformationActivity.this;
@@ -198,9 +212,9 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
                 datas[datas.length - 1].equals("FF")) {
             String req = FormatString.formateData(datas, new int[]{4, 4});
             if (req.equals("1")) {// 0 不可以发送数据， 1 可以发送数据
-                if (sendData != null && user != null) {
+                if (sendData != null && sendUser != null) {
                     Intent intent = new Intent(this, InBodyTestReportActivity.class);
-                    intent.putExtra("user_number", user.getUser_number());
+                    intent.putExtra("user", sendUser);
                     startActivityForResult(intent, Constant.TEST_REQ);
                 }
             } else {
@@ -229,12 +243,7 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
                 DataSupport.deleteAll(User.class, "user_number = ?", number);
                 DataSupport.deleteAll(InBodyData.class, "user_number = ?", number);
                 if (users.get(0).getImage_path() != null) {  //删除头像
-                    File path1 = new File(getSDPath() + "/Image");
-                    File file = new File(path1, users.get(0).getImage_path());
-                    if (file.exists()) {
-                        file.delete();
-                        refreshFile();
-                    }
+                    deleteImage(users.get(0).getImage_path());
                 }
                 showToast("删除成功！");
                 finish();
@@ -253,36 +262,51 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
                 showDialog(showdialog);
                 break;
             case R.id.test:
+                test.setClickable(false);
+                handler.sendEmptyMessageDelayed(1, 3000);//按钮禁用3秒，防止重复点击
                 String usernu = usernumber.getText().toString().trim();
                 String userna = username.getText().toString().trim();
                 String bir = birthday.getText().toString().trim();
                 String heig = height.getText().toString().trim();
                 sendData = checkUser(usernu, userna, bir, heig);
                 if (sendData != null) {
-                    user = new User();
-                    user.setUser_number(usernu);
-                    user.setUser_name(userna);
-                    user.setBirthday(bir);
-                    user.setSex(selectsex);
+                    sendUser = new User();
+                    sendUser.setUser_number(usernu);
+                    sendUser.setUser_name(userna);
+                    sendUser.setBirthday(bir);
+                    sendUser.setSex(selectsex);
                     if (photopath != null) {
-                        user.setImage_path(photopath);
+                        sendUser.setImage_path(photopath);
                     }
                     if (!user_exist) {
                         final List<User> list = DataSupport.where("user_number = ?", usernu).find(User.class);
                         if (list.size() != 0) {
-                            new MyDialog(UserInformationActivity.this).setDialog("编号为" + usernu +
-                                    "的用户已存在,是否进行覆盖？", true, true, new MyDialog.DialogConfirm() {
-                                @Override
-                                public void dialogConfirm() {
-                                    ContentValues values = new ContentValues();
-                                    values.put("user_name", user.getUser_name());
-                                    values.put("birthday", user.getBirthday());
-                                    values.put("sex", user.getSex());
-                                    values.put("image_path", user.getImage_path());
-                                    DataSupport.update(User.class, values, list.get(0).getId());
-                                    test();
+                            user_exist = true;
+                            if (sendUser.getUser_name().equals(list.get(0).getUser_name()) &&
+                                    sendUser.getSex() == list.get(0).getSex() &&
+                                    sendUser.getBirthday().equals(list.get(0).getBirthday())) {
+                                test();
+                            } else {
+                                new MyDialog(UserInformationActivity.this).setDialog("编号为：" + usernu +
+                                        " 的用户本地已存在,是否进行覆盖？", true, true, new MyDialog.DialogConfirm() {
+                                    @Override
+                                    public void dialogConfirm() {
+                                        ContentValues values = new ContentValues();
+                                        values.put("user_name", sendUser.getUser_name());
+                                        values.put("birthday", sendUser.getBirthday());
+                                        values.put("sex", sendUser.getSex());
+                                        DataSupport.update(User.class, values, list.get(0).getId());
+                                        test();
+                                    }
+                                }).show();
+                            }
+                            if (sendUser.getImage_path() != null) {
+                                ContentValues val = new ContentValues();
+                                val.put("image_path", sendUser.getImage_path());
+                                if (DataSupport.update(User.class, val, list.get(0).getId()) > -1) {
+                                    deleteImage(list.get(0).getImage_path());
                                 }
-                            }).show();
+                            }
                         } else {
                             test();
                         }
@@ -292,6 +316,24 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
                 }
                 break;
         }
+    }
+
+    private void getFocusable() {
+        new MyDialog(this).setDialog("下位机已存在该编号，请修改编号!", true, false, null).show();
+        user_exist = false;
+
+        username.setFocusable(true);
+        username.setFocusableInTouchMode(true);
+        username.requestFocus();
+
+        boy.setClickable(true);
+        girl.setClickable(true);
+        birthday.setClickable(true);
+        image.setClickable(true);
+
+        usernumber.setFocusable(true);
+        usernumber.setFocusableInTouchMode(true);
+        usernumber.requestFocus();
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -367,9 +409,11 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
         return result;
     }
 
+    private Calendar cal = Calendar.getInstance();
+
     private void showDialog(Boolean bool) {
         if (bool) {
-            final Calendar cal = Calendar.getInstance();
+
             final Date currentTime = new Date();
             new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                 @Override
@@ -394,7 +438,11 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
                         showToast("出生日期大于当前日期！");
                     } else {
                         birthday.setText(data);
-                        age.setText(String.valueOf(cal.get(Calendar.YEAR) - year));
+                        DecimalFormat df = new DecimalFormat("0.0");
+                        int cur_year = cal.get(Calendar.YEAR);
+                        int cur_month = cal.get(Calendar.MONTH) + 1;
+                        float ag = (cur_month - (month + 1)) / 12f + cur_year - year;
+                        age.setText(String.valueOf(df.format(ag)));
                     }
                 }
             }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show();
@@ -433,13 +481,10 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
     }
 
     private void finishActivity() {
-        File path1 = new File(getSDPath() + "/Image");
-        if (photopath != null) {
-            File file = new File(path1, photopath);
-            if (file.exists()) {
-                file.delete();
-                refreshFile();
-            }
+
+
+        if (!user_exist && photopath != null) {
+            deleteImage(photopath);
         }
         finish();
     }
@@ -481,7 +526,7 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
 
     private void test() {
         if (ble_enable) { //蓝牙可用时，才能写数据
-//          writeData("34122219870611503X张金燕  1200006110180", new byte[]{(byte) 0xEA, (byte) 0x52, (byte) 0x29, (byte) 0x22, (byte) 0xFF});
+//          writeData("34122219870611503X诸葛亮  1200006110180", new byte[]{(byte) 0xEA, (byte) 0x52, (byte) 0x29, (byte) 0x22, (byte) 0xFF});
             writeData(sendData, new byte[]{(byte) 0xEA, (byte) 0x52, (byte) 0x2A, (byte) 0x22, (byte) 0xFF});
         } else {
             showToast("蓝牙已断开，无法测试！");
@@ -511,5 +556,11 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeMessages(0);
     }
 }

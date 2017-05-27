@@ -28,11 +28,11 @@
             android:text="测试" />
 
         <Button
-            android:id="@+id/userset"
+            android:id="@+id/dataset"
             style="@style/inbody_main_bt"
             android:background="#99B365"
             android:drawableLeft="@drawable/userset"
-            android:text="用户管理" />
+            android:text="数据管理" />
 
         <Button
             android:id="@+id/set"

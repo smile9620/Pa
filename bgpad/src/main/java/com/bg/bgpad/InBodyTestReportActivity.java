@@ -17,7 +17,6 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.bg.constant.Constant;
 import com.bg.constant.DeviceName;
 import com.bg.model.InBodyData;
 import com.bg.model.User;
@@ -27,7 +26,7 @@ import com.bg.utils.SetTitle;
 
 import org.litepal.crud.DataSupport;
 
-import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -112,33 +111,73 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
     private MyDialog myDialog = new MyDialog(this);
     private String[] datas;
     private InBodyData inBodyData;
+    private MyHandler handler = new MyHandler(this);
 
-    private Handler handler = new Handler() {
+    private static class MyHandler extends Handler {
+        private final WeakReference<InBodyTestReportActivity> mActivity;
+
+        public MyHandler(InBodyTestReportActivity activity) {
+            mActivity = new WeakReference<InBodyTestReportActivity>(activity);
+        }
+
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what) {
-                case 0:
-                    if (dialog.isShowing()) { //50秒钟后未获取到蓝牙数据
-                        dialog.dismiss();
-                        myDialog.setDialog("未接收到蓝牙数据，请检查蓝牙是否故障！", false, true, new MyDialog.DialogConfirm() {
-                            @Override
-                            public void dialogConfirm() {
-                                finish();
-                            }
-                        }).show();
-                    }
-                    break;
-                case 1:
-                    writeData(null, new byte[]{(byte) 0xEA, (byte) 0x52, (byte) 0x02, (byte) 0x26, (byte) 0xFF});
-                    changeData();
-                    break;
-                case 2:
-                    showToast(msg.obj.toString());
-                    break;
+            InBodyTestReportActivity act = mActivity.get();
+            if (act != null) {
+                switch (msg.what) {
+                    case 0:
+                        act.showDialog();
+                        break;
+                    case 1:
+                        act.writeData(null, new byte[]{(byte) 0xEA, (byte) 0x52, (byte) 0x02, (byte) 0x26, (byte) 0xFF});
+                        act.changeData();
+                        break;
+                    case 2:
+                        act.showToast(msg.obj.toString());
+                        break;
+                }
             }
         }
-    };
+    }
+
+    private void showDialog() {
+        if (dialog.isShowing()) { //50秒钟后未获取到蓝牙数据
+            dialog.dismiss();
+            myDialog.setDialog("未接收到蓝牙数据，请检查蓝牙是否故障！", false, true, new MyDialog.DialogConfirm() {
+                @Override
+                public void dialogConfirm() {
+                    finish();
+                }
+            }).show();
+        }
+    }
+//    private Handler handler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            super.handleMessage(msg);
+//            switch (msg.what) {
+//                case 0:
+//                    if (dialog.isShowing()) { //50秒钟后未获取到蓝牙数据
+//                        dialog.dismiss();
+//                        myDialog.setDialog("未接收到蓝牙数据，请检查蓝牙是否故障！", false, true, new MyDialog.DialogConfirm() {
+//                            @Override
+//                            public void dialogConfirm() {
+//                                finish();
+//                            }
+//                        }).show();
+//                    }
+//                    break;
+//                case 1:
+//                    writeData(null, new byte[]{(byte) 0xEA, (byte) 0x52, (byte) 0x02, (byte) 0x26, (byte) 0xFF});
+//                    changeData();
+//                    break;
+//                case 2:
+//                    showToast(msg.obj.toString());
+//                    break;
+//            }
+//        }
+//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,7 +187,8 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
         new SetTitle(this, view, new boolean[]{true, false},
                 "测试报告", new int[]{R.drawable.back_bt, R.drawable.ble_bt});
         Intent intent = getIntent();
-        user = DataSupport.where(" user_number = ? ", intent.getStringExtra("user_number")).find(User.class).get(0);
+//        user = DataSupport.where(" user_number = ? ", intent.getStringExtra("user_number")).find(User.class).get(0);
+        user = (User) intent.getSerializableExtra("user");
         if (user != null) {
             usernumber.setText(user.getUser_number());
             username.setText(user.getUser_name());
@@ -252,13 +292,9 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
             new MyDialog(this).setDialog("该测试报告尚未保存，您确定要关闭当前页面吗？", true, true, new MyDialog.DialogConfirm() {
                 @Override
                 public void dialogConfirm() {
-                    if (user.getImage_path() != null) {  //删除头像
-                        File path1 = new File(getSDPath() + "/Image");
-                        File file = new File(path1, user.getImage_path());
-                        if (file.exists()) {
-                            file.delete();
-                            refreshFile();
-                        }
+                    List<User> us = DataSupport.select("user_number").where("user_number = ? ", user.getUser_number()).find(User.class);
+                    if (us.size() == 0 && user.getImage_path() != null) {
+                        deleteImage(user.getImage_path());
                     }
                     finishActivity();
                 }
@@ -393,7 +429,7 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
             inBodyData.setScore(Integer.parseInt(datas[116], 16));
             if (!is_save) {
                 if (inBodyData.save()) {
-                    List<User> us = DataSupport.select("user_number").where("user_number = ? ", user.getUser_number()).find(User.class);
+                    List<User> us = DataSupport.select("id", "image_path").where("user_number = ? ", user.getUser_number()).find(User.class);
                     if (us.size() == 0) {
                         user.save();
                     }
@@ -664,5 +700,11 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
         map.put("edemaProgess", String.valueOf(edemaProgess.getProgress()));//浮肿分析进度条
         list.add(map);
         return list;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacksAndMessages(null);
     }
 }

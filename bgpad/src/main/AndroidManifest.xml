@@ -43,10 +43,10 @@
             android:name=".WelcomeActivity"
             android:theme="@style/MyAppTheme">
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
+             <!--<intent-filter>-->
+             <!--<action android:name="android.intent.action.MAIN" />-->
+             <!--<category android:name="android.intent.category.LAUNCHER" />-->
+             <!--</intent-filter>-->
         </activity>
 
         <service
@@ -93,6 +93,7 @@
         <activity android:name=".InBodySetActivity" />
         <activity android:name=".InBodyTestReportActivity" />
         <activity android:name=".TestReportActivity" />
+        <activity android:name=".SettingActivity"></activity>
     </application>
 
 </manifest>

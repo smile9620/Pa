@@ -69,6 +69,15 @@ public class BaseActivity extends AppCompatActivity {
         return dir;
     }
 
+    protected void deleteImage(String imagePath) {
+        File path1 = new File(getSDPath() + "/Image");
+        File file = new File(path1, imagePath);
+        if (file.exists()) {
+            file.delete();
+            refreshFile();
+        }
+    }
+
     /**
      * * 获取文件夹大小
      * * @param file File实例

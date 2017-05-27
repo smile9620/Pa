@@ -44,7 +44,7 @@ public abstract class BleActivityStart extends BaseActivity {
     private BluetoothAdapter mBluetoothAdapter;
 
     private LeDeviceListAdapter mLeDeviceListAdapter;
-    private final long SCAN_PERIOD = 10000;
+    private final long SCAN_PERIOD = 8000;
     protected Dialog pogressDialog = null;
     protected MyDialog myDialog = null;
     private AlertDialog devicesDialog = null;

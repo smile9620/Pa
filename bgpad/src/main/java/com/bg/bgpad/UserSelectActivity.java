@@ -27,6 +27,7 @@ import com.bg.utils.SetTitle;
 
 import org.litepal.crud.DataSupport;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,20 +54,45 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
     private boolean column = true;  //是否有立柱，默认为有
     private SimpleAdapter simpleAdapter;
     private int[] colors = new int[]{0xFFFFFFFF, 0xFFEFEFEF};
-    private Handler handler = new Handler() {
+    private MyHandler handler = new MyHandler(this);
+
+    private static class MyHandler extends Handler {
+        private final WeakReference<UserSelectActivity> mActivity;
+
+        public MyHandler(UserSelectActivity activity) {
+            mActivity = new WeakReference<UserSelectActivity>(activity);
+        }
+
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what) {
-                case 0:
-                    simpleAdapter.notifyDataSetChanged();
-                    break;
-                case 1:
-                    showToast(column == true ? "有立柱" : "无立柱");
-                    break;
+            UserSelectActivity act = mActivity.get();
+            if (act != null) {
+                switch (msg.what) {
+                    case 0:
+                        act.simpleAdapter.notifyDataSetChanged();
+                        break;
+                    case 1:
+                        act.showToast(act.column == true ? "有立柱" : "无立柱");
+                        break;
+                }
             }
         }
-    };
+    }
+//    private Handler handler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            super.handleMessage(msg);
+//            switch (msg.what) {
+//                case 0:
+//                    simpleAdapter.notifyDataSetChanged();
+//                    break;
+//                case 1:
+//                    showToast(column == true ? "有立柱" : "无立柱");
+//                    break;
+//            }
+//        }
+//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

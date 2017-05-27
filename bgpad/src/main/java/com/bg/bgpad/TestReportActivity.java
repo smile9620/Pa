@@ -15,13 +15,18 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.bg.model.InBodyData;
 import com.bg.model.User;
 import com.bg.utils.DrawTestReport;
 import com.bg.utils.SetTitle;
+
 import org.litepal.crud.DataSupport;
+
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
@@ -94,18 +99,28 @@ public class TestReportActivity extends BaseActivity implements SetTitle.OnTitle
     TextView testWeight;//体重
     private InBodyData inBodyData;
     private User user;
+    private MyHandler handler = new MyHandler(this);
 
-    private Handler handler = new Handler() {
+    private static class MyHandler extends Handler {
+        private WeakReference<TestReportActivity> mActivity;
+
+        public MyHandler(TestReportActivity activity) {
+            mActivity = new WeakReference<TestReportActivity>(activity);
+        }
+
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what) {
-                case 0:
-                    changeData();
-                    break;
+            TestReportActivity act = mActivity.get();
+            if (act != null) {
+                switch (msg.what) {
+                    case 0:
+                        act.changeData();
+                        break;
+                }
             }
         }
-    };
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -368,5 +383,11 @@ public class TestReportActivity extends BaseActivity implements SetTitle.OnTitle
             drawTestReport.draw(new Canvas());
             refreshFile();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacksAndMessages(null);
     }
 }

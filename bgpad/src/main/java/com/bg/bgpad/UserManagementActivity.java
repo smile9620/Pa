@@ -41,6 +41,7 @@ import org.litepal.crud.DataSupport;
 import java.io.File;
 import java.io.FileInputStream;
 import java.lang.annotation.ElementType;
+import java.lang.ref.WeakReference;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -81,25 +82,54 @@ public class UserManagementActivity extends BaseActivity implements SelectionUse
     private Map<Integer, Boolean> checkmap = new HashMap<>();// 存放已被选中的CheckBox
     private MyDialog expDialog;
     private Dialog exportDialog;
-    private Handler handler = new Handler() {
+    private MyHandler handler = new MyHandler(this);
+
+    private static class MyHandler extends Handler {
+        private final WeakReference<UserManagementActivity> mActivity;
+
+        public MyHandler(UserManagementActivity activity) {
+            mActivity = new WeakReference<UserManagementActivity>(activity);
+        }
+
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what) {
-                case 0:
-                    total.setText("共 " + msg.arg1 + " 条数据");
-                case 1:
-                    simpleAdapter.notifyDataSetChanged();
-                    break;
-                case 2:
-                    refreshFile();
-                    exportDialog.dismiss();
-                    expDialog.setDialog("数据已导出，存储在文件夹Bg\\Test中！", true, false, null).show();
-                    break;
+            UserManagementActivity act = mActivity.get();
+            if (act != null) {
+                switch (msg.what) {
+                    case 0:
+                        act.total.setText("共 " + msg.arg1 + " 条数据");
+                    case 1:
+                        act.simpleAdapter.notifyDataSetChanged();
+                        break;
+                    case 2:
+                        act.refreshFile();
+                        act.exportDialog.dismiss();
+                        act.expDialog.setDialog("数据已导出，存储在文件夹Bg\\Test中！", true, false, null).show();
+                        break;
+                }
             }
-
         }
-    };
+    }
+//    private Handler handler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            super.handleMessage(msg);
+//            switch (msg.what) {
+//                case 0:
+//                    total.setText("共 " + msg.arg1 + " 条数据");
+//                case 1:
+//                    simpleAdapter.notifyDataSetChanged();
+//                    break;
+//                case 2:
+//                    refreshFile();
+//                    exportDialog.dismiss();
+//                    expDialog.setDialog("数据已导出，存储在文件夹Bg\\Test中！", true, false, null).show();
+//                    break;
+//            }
+//
+//        }
+//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
