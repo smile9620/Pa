@@ -148,7 +148,7 @@ public abstract class BleActivityResult extends BleActivityStart {
     }
 
     //1分钟之后，如果还是显示连接中，则认为连接不成功，则断开
-    CountDownTimer countDownTimer = new CountDownTimer(10000, 1) {
+    CountDownTimer countDownTimer = new CountDownTimer(1000 * 60, 1) {
         @Override
         public void onTick(long millisUntilFinished) {
         }
@@ -247,7 +247,7 @@ public abstract class BleActivityResult extends BleActivityStart {
                                             updateData(builder.toString());
                                             builder.delete(0, builder.length());
                                         }
-                                    }, 50);
+                                    }, 20);
                                 } else {
                                     updateState(false);//"FF" 设备断开
                                     if (Constant.mBluetoothLeService != null) {

@@ -144,8 +144,8 @@ public class TestReportActivity extends BaseActivity implements SetTitle.OnTitle
                         Intent intent = new Intent();
                         ComponentName componentName = new ComponentName("com.lenovo.vop", "com.lenovo.vop.StartActivity");
                         if (componentName != null) {
-//                            intent.setComponent(componentName);
-//                            startActivity(intent);
+                            intent.setComponent(componentName);
+                            startActivity(intent);
                             new MyThread().start();
                         } else {
                             showToast("请安装打印机！");

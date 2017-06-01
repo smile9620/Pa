@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.view.View;
 
 import com.bg.bgpad.R;
+import com.bg.bgpad.TestReportActivity;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -186,10 +187,10 @@ public class DrawTestReport extends View {
         canvas.drawText("浮肿分析", 70 + paint.measureText("浮肿分析") / 2, 820, paint);
         canvas.drawText("生物电阻抗", 70 + paint.measureText("生物电阻抗") / 2, 820, paint);
         paint.setTextSize(40);
-        paint.setColor(Color.rgb(192,216,157));
+        paint.setColor(Color.rgb(192, 216, 157));
         Rect inliquid = new Rect(70, 870, 284, 930);//一个矩形
 //        Rect outliquid = new Rect(70, 990, 490, 731);//一个矩形
-        canvas.drawRect(inliquid,paint);
+        canvas.drawRect(inliquid, paint);
 //        canvas.drawRect(outliquid,paint);
 
 
@@ -382,4 +383,5 @@ public class DrawTestReport extends View {
                 break;
         }
     }
+
 }
