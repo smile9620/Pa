@@ -32,6 +32,7 @@ import com.bg.utils.MyDialog;
 import com.zxing.activity.CaptureActivity;
 
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * 蓝牙功能调用getBle() 进行搜索，searchBtClick() 进行改变状态
@@ -44,11 +45,12 @@ public abstract class BleActivityStart extends BaseActivity {
     private BluetoothAdapter mBluetoothAdapter;
 
     private LeDeviceListAdapter mLeDeviceListAdapter;
-    private final long SCAN_PERIOD = 8000;
+    private final long SCAN_PERIOD = 3 * 1000;
     protected Dialog pogressDialog = null;
     protected MyDialog myDialog = null;
     private AlertDialog devicesDialog = null;
     private boolean is_ble = true;
+    private final UUID[] serviceUuids = {BluetoothLeService.UUID_NOTIFY};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,7 +136,8 @@ public abstract class BleActivityStart extends BaseActivity {
                 Constant.mScanning = true;
                 mLeDeviceListAdapter.clear();
                 mHandler.sendEmptyMessage(1);
-                mBluetoothAdapter.startLeScan(mLeScanCallback);
+//              mBluetoothAdapter.startDiscovery();//发现所有设备
+                mBluetoothAdapter.startLeScan(mLeScanCallback);//只能发现支持BLE的设备
             } else {
                 Constant.mScanning = false;
                 mBluetoothAdapter.stopLeScan(mLeScanCallback);
@@ -284,10 +287,6 @@ public abstract class BleActivityStart extends BaseActivity {
                 } else {
                     Constant.mDeviceAddress = device.getAddress();
                     select_ble();
-                    if (Constant.mScanning) {
-                        mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                        Constant.mScanning = false;
-                    }
                     devicesDialog.cancel();
                 }
             }

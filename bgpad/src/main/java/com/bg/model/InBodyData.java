@@ -193,8 +193,7 @@ public class InBodyData extends DataSupport {
         this.height = height;
     }
 
-    @Override
-    public synchronized boolean save() {
+    public void setAllDate() {
         Date currentTime = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String dateString = formatter.format(currentTime);
@@ -205,7 +204,7 @@ public class InBodyData extends DataSupport {
         int month = cal.get(Calendar.MONTH) + 1;
         int day = cal.get(Calendar.DAY_OF_MONTH);
         String mon = String.valueOf(month);
-        String da =String.valueOf(day);
+        String da = String.valueOf(day);
         if ((month + 1) < 10) {
             mon = "0" + month;
         }
@@ -214,7 +213,6 @@ public class InBodyData extends DataSupport {
         }
         String fillDate = cal.get(Calendar.YEAR) + mon + da;
         setDate(Integer.parseInt(fillDate));
-        return super.save();
     }
 
     public float getInliquid() {

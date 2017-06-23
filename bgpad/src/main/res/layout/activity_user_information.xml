@@ -10,172 +10,186 @@
         android:id="@+id/title"
         layout="@layout/title_bar" />
 
-    <RelativeLayout
-        android:layout_width="@dimen/information_table_width"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/information_margin_top">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <ImageButton
-            android:id="@+id/image"
-            android:layout_width="@dimen/information_photo_width"
-            android:layout_height="@dimen/information_photo_height"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="@dimen/information_table_row_padd"
-            android:background="@drawable/pic_bg" />
-
-        <TableLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
 
-            <TableRow
+        <RelativeLayout
+            android:layout_width="@dimen/information_table_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/information_margin_top">
+
+            <ImageButton
+                android:id="@+id/image"
+                android:layout_width="@dimen/information_photo_width"
+                android:layout_height="@dimen/information_photo_height"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="@dimen/information_table_row_padd"
+                android:background="@drawable/pic_bg" />
+
+            <TableLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="@dimen/information_table_row_padd">
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true">
 
-                <TextView
-                    style="@style/inbody_infor_text"
-                    android:text="编号" />
-
-                <EditText
-                    android:id="@+id/usernumber"
-                    style="@style/inbody_infor_edit"
-                    android:hint="请输入编号"
-                    android:maxLength="18"
-                    android:singleLine="true" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="@dimen/information_table_row_padd">
-
-                <TextView
-                    style="@style/inbody_infor_text"
-                    android:text="姓名" />
-
-                <EditText
-                    android:id="@+id/username"
-                    style="@style/inbody_infor_edit"
-                    android:hint="请输入姓名"
-                    android:maxLength="5"
-                    android:singleLine="true"/>
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="@dimen/information_table_row_padd">
-
-                <TextView
-                    style="@style/inbody_infor_text"
-                    android:text="性别" />
-
-                <RadioGroup
-                    android:id="@+id/sex"
+                <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:padding="@dimen/information_table_row_padd">
 
-                    <RadioButton
-                        android:id="@+id/boy"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:drawableRight="@drawable/sex_boy" />
+                    <TextView
+                        style="@style/inbody_infor_text"
+                        android:text="编号" />
 
-                    <RadioButton
-                        android:id="@+id/girl"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:drawableRight="@drawable/sex_girl" />
-                </RadioGroup>
-            </TableRow>
+                    <EditText
+                        android:id="@+id/usernumber"
+                        style="@style/inbody_infor_edit"
+                        android:hint="请输入编号"
+                        android:maxLength="18"
+                        android:singleLine="true" />
+                </TableRow>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="@dimen/information_table_row_padd">
-
-                <TextView
-                    style="@style/inbody_infor_text"
-                    android:text="出生日期" />
-
-                <EditText
-                    android:id="@+id/birthday"
-                    style="@style/inbody_infor_edit"
-                    android:focusable="false"
-                    android:hint="出生年月日" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="@dimen/information_table_row_padd">
-
-                <TextView
-                    style="@style/inbody_infor_text"
-                    android:text="年龄" />
-
-                <TextView
-                    android:id="@+id/age"
-                    style="@style/inbody_infor_text"
-                    android:layout_marginLeft="@dimen/information_table_row_marg"
-                    android:gravity="center" />
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/showheight"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="@dimen/information_table_row_padd">
-
-                <TextView
-                    style="@style/inbody_infor_text"
-                    android:text="身高" />
-
-                <EditText
-                    android:id="@+id/height"
-                    style="@style/inbody_infor_edit"
-                    android:hint="请输入身高"
-                    android:inputType="number"
-                    android:maxLength="3" />
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <TableRow
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/table_row"
-                    android:gravity="center_vertical"
-                    android:padding="@dimen/information_table_padd"
-                    android:text="cm"
-                    android:textColor="@color/text_color"
-                    android:textSize="@dimen/general_text" />
-            </TableRow>
-        </TableLayout>
-    </RelativeLayout>
+                    android:padding="@dimen/information_table_row_padd">
 
-    <ImageView
-        android:layout_width="@dimen/information_table_width"
-        android:layout_height="@dimen/information_image_height"
-        android:layout_marginTop="@dimen/information_image_marg"
-        android:background="@color/table_row"
-        app:srcCompat="@drawable/pic_bg" />
+                    <TextView
+                        style="@style/inbody_infor_text"
+                        android:text="姓名" />
 
-    <Button
-        android:id="@+id/test"
-        android:layout_width="@dimen/information_testbt_width"
-        android:layout_height="@dimen/information_testbt_hight"
-        android:layout_gravity="right"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="@dimen/information_image_marg"
-        android:background="@drawable/test_bg"
-        android:text="开始测试"
-        android:textColor="@color/share_view"
-        android:textSize="@dimen/information_testbt_size" />
+                    <EditText
+                        android:id="@+id/username"
+                        style="@style/inbody_infor_edit"
+                        android:hint="请输入姓名"
+                        android:maxLength="5"
+                        android:singleLine="true" />
+                </TableRow>
 
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/information_table_row_padd">
+
+                    <TextView
+                        style="@style/inbody_infor_text"
+                        android:text="性别" />
+
+                    <RadioGroup
+                        android:id="@+id/sex"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/boy"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:drawableRight="@drawable/sex_boy" />
+
+                        <RadioButton
+                            android:id="@+id/girl"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:drawableRight="@drawable/sex_girl" />
+                    </RadioGroup>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/information_table_row_padd">
+
+                    <TextView
+                        style="@style/inbody_infor_text"
+                        android:text="出生日期" />
+
+                    <EditText
+                        android:id="@+id/birthday"
+                        style="@style/inbody_infor_edit"
+                        android:focusable="false"
+                        android:hint="出生年月日" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/information_table_row_padd">
+
+                    <TextView
+                        style="@style/inbody_infor_text"
+                        android:text="年龄" />
+
+                    <TextView
+                        android:id="@+id/age"
+                        style="@style/inbody_infor_text"
+                        android:layout_marginLeft="@dimen/information_table_row_marg"
+                        android:gravity="center" />
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/showheight"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/information_table_row_padd">
+
+                    <TextView
+                        style="@style/inbody_infor_text"
+                        android:text="身高" />
+
+                    <EditText
+                        android:id="@+id/height"
+                        style="@style/inbody_infor_edit"
+                        android:hint="请输入身高"
+                        android:inputType="number"
+                        android:maxLength="3" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@color/table_row"
+                        android:gravity="center_vertical"
+                        android:padding="@dimen/information_table_padd"
+                        android:text="cm"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/general_text" />
+                </TableRow>
+            </TableLayout>
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="@dimen/information_table_width"
+            android:layout_height="@dimen/information_image_height"
+            android:layout_marginTop="@dimen/information_image_marg"
+            android:background="@color/table_row"
+            app:srcCompat="@drawable/pic_bg" />
+
+        <Button
+            android:id="@+id/test"
+            android:layout_width="@dimen/information_testbt_width"
+            android:layout_height="@dimen/information_testbt_hight"
+            android:layout_gravity="right"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="@dimen/information_image_marg"
+            android:background="@drawable/test_bg"
+            android:text="开始测试"
+            android:textColor="@color/share_view"
+            android:textSize="@dimen/information_testbt_size" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dialog_text_padding"/>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

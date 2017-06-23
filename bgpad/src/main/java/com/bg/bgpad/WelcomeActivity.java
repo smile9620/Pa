@@ -9,7 +9,7 @@ import android.os.Handler;
  * Created by Administrator on 2017-01-09.
  */
 
-public class WelcomeActivity extends Activity {
+public class WelcomeActivity extends BaseActivity {
     private Handler handler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             Intent intent = new Intent(WelcomeActivity.this,

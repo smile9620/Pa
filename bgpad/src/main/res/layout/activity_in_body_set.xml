@@ -33,7 +33,8 @@
             android:layout_centerVertical="true"
             android:text="@null"
             android:track="@drawable/switch_bt"
-            android:layout_marginRight="@dimen/information_table_padd"/>
+            android:layout_marginRight="@dimen/information_table_padd"
+            android:switchMinWidth="@dimen/switchbt"/>
 
     </RelativeLayout>
 

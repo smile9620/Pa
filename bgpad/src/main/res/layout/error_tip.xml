@@ -14,7 +14,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/errortip1"
             android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="@dimen/errortip">
 
             <TextView
                 android:id="@+id/msg"
@@ -52,6 +53,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/errortip2" />
     </LinearLayout>
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
@@ -59,5 +61,5 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:indeterminateDrawable="@drawable/progressbar"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 </FrameLayout>

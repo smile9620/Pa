@@ -247,7 +247,7 @@ public abstract class BleActivityResult extends BleActivityStart {
                                             updateData(builder.toString());
                                             builder.delete(0, builder.length());
                                         }
-                                    }, 20);
+                                    }, 10);
                                 } else {
                                     updateState(false);//"FF" 设备断开
                                     if (Constant.mBluetoothLeService != null) {

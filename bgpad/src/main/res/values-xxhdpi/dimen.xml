@@ -12,7 +12,7 @@
 
     <dimen name="inbody_image_height">220dp</dimen>
     <dimen name="inbody_bt_text_size">14sp</dimen>
-    <dimen name="inbody_bt_img_marg">10dp</dimen>
+    <dimen name="inbody_bt_img_marg">6dp</dimen>
     <dimen name="inbody_bt_margtop">7dp</dimen>
     <dimen name="inbody_bt_drawablepadding">5dp</dimen>
     <dimen name="inbody_bt_padding">10dp</dimen>
@@ -25,7 +25,7 @@
 
     <dimen name="selectuser_userlist_marginleft">12dp</dimen>
 
-    <dimen name="information_margin_top">15dp</dimen>
+    <dimen name="information_margin_top">7dp</dimen>
     <dimen name="information_table_width">300dp</dimen>
     <dimen name="information_table_padd">6dp</dimen>
     <dimen name="information_table_row_padd">3dp</dimen>
@@ -35,7 +35,7 @@
     <dimen name="information_testbt_hight">32dp</dimen>
     <dimen name="information_testbt_size">16sp</dimen>
     <dimen name="information_photo_width">70dp</dimen>
-    <dimen name="information_photo_height">90dp</dimen>
+    <dimen name="information_photo_height">80dp</dimen>
     <dimen name="information_table_row">140dp</dimen>
     <dimen name="information_image_height">200dp</dimen>
     <dimen name="information_image_marg">15dp</dimen>
@@ -43,7 +43,7 @@
     <dimen name="dialog_small_text_magtop">10dp</dimen>
     <dimen name="dialog_text_padding">6dp</dimen>
 
-    <dimen name="inbody_set_margin">4dp</dimen>
+    <dimen name="inbody_set_margin">6dp</dimen>
     <dimen name="inbody_set_width">280dp</dimen>
 
     <dimen name="inbody_report_score_width">100dp</dimen>
@@ -57,4 +57,7 @@
     <dimen name="shape_judge_grid_height">120dp</dimen>
     <dimen name="shape_judge_grid_margleft">40dp</dimen>
     <dimen name="shape_judge_grid_margbutt">30dp</dimen>
+
+    <dimen name="switchbt">80dp</dimen>
+    <dimen name="errortip">250dp</dimen>
 </resources>

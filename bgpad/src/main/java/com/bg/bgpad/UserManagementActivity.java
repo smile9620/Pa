@@ -137,9 +137,10 @@ public class UserManagementActivity extends BaseActivity implements SelectionUse
         setContentView(R.layout.activity_user_management);
         ButterKnife.bind(this);
         new SetTitle(this, view, new boolean[]{true, false},
-                "用户管理", new int[]{R.drawable.back_bt, R.drawable.ble_bt});
+                "数据管理", new int[]{R.drawable.back_bt, R.drawable.ble_bt});
         new SelectionUser(this, this, selection, false);
         showCache();
+        getData();
         simpleAdapter = new SimpleAdapter(this, list_maps, R.layout.usersetlist_item,
                 new String[]{"user_number", "user_name", "strDate"},
                 new int[]{R.id.usernumber, R.id.username, R.id.testdate}) {
@@ -189,7 +190,7 @@ public class UserManagementActivity extends BaseActivity implements SelectionUse
     @Override
     protected void onResume() {
         super.onResume();
-        getData();
+        simpleAdapter.notifyDataSetChanged();
     }
 
     private void getData() {
@@ -323,7 +324,7 @@ public class UserManagementActivity extends BaseActivity implements SelectionUse
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.
-                        permission.WRITE_EXTERNAL_STORAGE}, Constant.EXPORT_REQ);
+                        permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, Constant.EXPORT_REQ);
                 return;
             }
         }

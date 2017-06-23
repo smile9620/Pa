@@ -200,7 +200,7 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
         }
         dialog = myDialog.setDialog("测试中，请稍后...", false, false, null);
         dialog.show();
-        handler.sendEmptyMessageDelayed(0, 50000);//50秒钟之后，未收到测试数据则认为蓝牙故障
+        handler.sendEmptyMessageDelayed(0, 50 * 1000);//50秒钟之后，未收到测试数据则认为蓝牙故障
     }
 
     @OnClick({R.id.save, R.id.print})
@@ -214,14 +214,15 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
                 Map<String, ?> printmap = printShare.getAll();
                 if (printShare != null && printmap.size() != 0) {
                     if (printmap.get("print").equals("wifi")) {
-                        Intent intent = new Intent();
-                        ComponentName componentName = new ComponentName("com.lenovo.vop", "com.lenovo.vop.StartActivity");
-                        if (componentName != null) {
+                        try {
+                            Intent intent = new Intent();
+                            ComponentName componentName = new ComponentName("com.lenovo.vop", "com.lenovo.vop.StartActivity");
                             intent.setComponent(componentName);
                             startActivity(intent);
                             new MyThread().start();
-                        } else {
-                            showToast("请安装打印机！");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            showToast("请安装wifi打印机！");
                         }
                     } else {
                         showToast("usb 打印");
@@ -458,6 +459,7 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void changeData() {
         inBodyData = new InBodyData();
+        inBodyData.setAllDate();
         //身体成分分析
         testHeight.setText(FormatString.formatResult(datas[4], datas[5], 1));//身高
         testWeight.setText(FormatString.formatResult(datas[6], datas[7], 1));//体重
@@ -616,9 +618,6 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
     }
 
     private Map<String, String> getMap() {
-        Date currentTime = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        String dateString = formatter.format(currentTime);
         Map<String, String> map = new HashMap<String, String>();
         map.put("score", score.getText().toString());//得分
         map.put("usernumber", usernumber.getText().toString());//编号
@@ -627,7 +626,7 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
         map.put("age", String.valueOf(user.getAge()));//年龄
         map.put("testHeight", testHeight.getText().toString());//身高
         map.put("testWeight", testWeight.getText().toString());//体重
-        map.put("strDate", dateString);//测试日期
+        map.put("strDate", inBodyData.getStrDate());//测试日期
         map.put("inliquid", body[0].getText().toString());//细胞内液
         map.put("outliquid", body[1].getText().toString());//细胞外液
         map.put("totalprotein", body[2].getText().toString());//蛋白质

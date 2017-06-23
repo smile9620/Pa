@@ -6,7 +6,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
+import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
@@ -17,6 +20,7 @@ import android.hardware.camera2.CameraMetadata;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.AudioAttributes;
+import android.media.ExifInterface;
 import android.media.Image;
 import android.media.ImageReader;
 import android.media.Ringtone;
@@ -226,8 +230,8 @@ public class CameraActivity extends BaseActivity {
                 ByteBuffer buffer = reader.getPlanes()[0].getBuffer();
                 byte[] buff = new byte[buffer.remaining()];
                 buffer.get(buff);
-                outputStream.write(buff);
                 //保存图片完成
+                outputStream.write(buff);
                 handler.sendEmptyMessage(0);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -256,5 +260,4 @@ public class CameraActivity extends BaseActivity {
                     (long) rhs.getWidth() * rhs.getHeight());
         }
     }
-
 }

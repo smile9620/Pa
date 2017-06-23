@@ -1,22 +1,12 @@
 package com.bg.bgpad;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.storage.StorageManager;
-import android.os.storage.StorageVolume;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.bg.utils.SetTitle;
-
-import java.io.File;
-import java.lang.reflect.Array;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

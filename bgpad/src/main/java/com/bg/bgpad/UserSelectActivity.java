@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -79,30 +81,16 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
             }
         }
     }
-//    private Handler handler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            super.handleMessage(msg);
-//            switch (msg.what) {
-//                case 0:
-//                    simpleAdapter.notifyDataSetChanged();
-//                    break;
-//                case 1:
-//                    showToast(column == true ? "有立柱" : "无立柱");
-//                    break;
-//            }
-//        }
-//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_select);
         ButterKnife.bind(this);
+        getBle(DeviceName.InBody); //启动蓝牙
         new SetTitle(this, view, new boolean[]{true, true}, "用户信息",
                 new int[]{R.drawable.back_bt, R.drawable.ble_bt});
         new SelectionUser(this, this, selection, true);
-        getBle(DeviceName.InBody); //启动蓝牙
         simpleAdapter = new SimpleAdapter(this, list_maps, R.layout.userlist_item,
                 new String[]{"user_number", "user_name", "sex", "strDate"},
                 new int[]{R.id.usernumber, R.id.username, R.id.sex, R.id.testdate}) {
@@ -224,6 +212,7 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
             Constant.mBluetoothLeService = null;
             showToast("设备已断开！");
         }
+        handler.removeCallbacksAndMessages(null);
     }
 
     @Override

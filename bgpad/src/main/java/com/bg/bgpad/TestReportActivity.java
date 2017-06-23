@@ -141,14 +141,15 @@ public class TestReportActivity extends BaseActivity implements SetTitle.OnTitle
                 Map<String, ?> printmap = printShare.getAll();
                 if (printShare != null && printmap.size() != 0) {
                     if (printmap.get("print").equals("wifi")) {
-                        Intent intent = new Intent();
-                        ComponentName componentName = new ComponentName("com.lenovo.vop", "com.lenovo.vop.StartActivity");
-                        if (componentName != null) {
+                        try {
+                            Intent intent = new Intent();
+                            ComponentName componentName = new ComponentName("com.lenovo.vop", "com.lenovo.vop.StartActivity");
                             intent.setComponent(componentName);
                             startActivity(intent);
                             new MyThread().start();
-                        } else {
-                            showToast("请安装打印机！");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            showToast("请安装wifi打印机！");
                         }
                     } else {
                         showToast("usb 打印");

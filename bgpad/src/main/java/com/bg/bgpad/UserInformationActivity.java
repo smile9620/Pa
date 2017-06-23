@@ -223,8 +223,9 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
         } else {
             if (time < 3) {
                 test();
+                time++;
             }
-            time++;
+
         }
     }
 
@@ -461,7 +462,7 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.
-                        permission.WRITE_EXTERNAL_STORAGE}, Constant.PICTURE_REQ);
+                        permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, Constant.PICTURE_REQ);
                 return;
             }
         }
@@ -476,12 +477,16 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
         File file = new File(path1, photopath);
         Constant.imageUri = Uri.fromFile(file);
 
-        Intent intent = new Intent(UserInformationActivity.this, CameraActivity.class);
-        startActivityForResult(intent, Constant.CAMERA_STA_USERINFO);
+//        Intent intent = new Intent(UserInformationActivity.this, CameraActivity.class);
+//        startActivityForResult(intent, Constant.CAMERA_STA_USERINFO);
+
+        Intent in = new Intent("android.media.action.IMAGE_CAPTURE");
+        Uri photoUri = Uri.fromFile(new File(file.getPath()));
+        in.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+        startActivityForResult(in, Constant.CAMERA_STA_USERINFO);
     }
 
     private void finishActivity() {
-
 
         if (!user_exist && photopath != null) {
             deleteImage(photopath);

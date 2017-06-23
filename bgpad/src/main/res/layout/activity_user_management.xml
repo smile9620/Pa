@@ -55,7 +55,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/selectuser_edit_height"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dialog_text_padding"
         android:layout_marginRight="@dimen/selectuser_userlist_marginleft">
 
@@ -96,6 +96,5 @@
             android:textColor="@color/share_view"
             android:textSize="@dimen/general_text" />
     </RelativeLayout>
-
 </LinearLayout>
 

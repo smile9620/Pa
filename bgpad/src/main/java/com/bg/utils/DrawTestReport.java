@@ -13,7 +13,6 @@ import android.os.Environment;
 import android.view.View;
 
 import com.bg.bgpad.R;
-import com.bg.bgpad.TestReportActivity;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -346,7 +345,7 @@ public class DrawTestReport extends View {
         } else {
             canvas.drawBitmap(check, 2019, 1654, null);
         }
-        Bitmap start = BitmapFactory.decodeResource(getResources(), R.drawable.start);
+        Bitmap start = BitmapFactory.decodeResource(getResources(), R.drawable.star);
         switch (shapeJudgment) {
             case 0:
                 canvas.drawBitmap(start, 1903, 594, null);//运动员型

@@ -3,6 +3,7 @@ package com.bg.bgpad;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.media.MediaScannerConnection;
@@ -40,7 +41,10 @@ public class BaseActivity extends AppCompatActivity {
 //       Toast.makeText(this, "添加", Toast.LENGTH_SHORT).show();
         ActivityCollector.addActivity(this);
 
-        setContentView(R.layout.activity_main);
+        Resources res = super.getResources();  //让字体大小不随系统文字大小改变而改变
+        Configuration config = new Configuration();
+        config.setToDefaults();
+        res.updateConfiguration(config, res.getDisplayMetrics());
 
     }
 
@@ -66,6 +70,10 @@ public class BaseActivity extends AppCompatActivity {
             sdDir = Environment.getExternalStorageDirectory();
         }
         String dir = sdDir.toString() + "/Bg";
+        File file = new File(dir);
+        if (!file.exists()){
+            file.mkdir();
+        }
         return dir;
     }
 
