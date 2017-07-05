@@ -88,7 +88,7 @@ public class ChangePassword extends BaseActivity implements SetTitle.OnTitleBtCl
                         finish();
                     }
                 } else {
-                    showToast("旧密码输入错误，请重试！");
+                    showToast(null,"旧密码输入错误，请重试！");
                 }
             } else {
                 ifsame.setVisibility(View.VISIBLE);
@@ -131,7 +131,7 @@ public class ChangePassword extends BaseActivity implements SetTitle.OnTitleBtCl
                             ifsame.setVisibility(View.VISIBLE);
                         }
                     } else {
-                        showToast("新密码或确认密码不能为空！");
+                        showToast(null,"新密码或确认密码不能为空！");
                     }
                 }
                 break;

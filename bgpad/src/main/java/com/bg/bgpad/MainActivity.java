@@ -5,20 +5,15 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
-import com.bg.constant.Constant;
 import com.bg.utils.ActivityCollector;
 import com.bg.utils.SetTitle;
-
-import org.litepal.tablemanager.Connector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,11 +25,10 @@ public class MainActivity extends BleActivityResult implements SetTitle.OnTitleB
 
     private ViewFlipper mViewFlipper;
     private GridView mGridView;
-    private ProgressBar progressBar;
     private int[] res = {R.drawable.ppt1, R.drawable.ppt2, R.drawable.ppt3};
     private int[] icon = {R.drawable.gridview, R.drawable.gridview,
             R.drawable.gridview, R.drawable.gridview};
-    private String[] icontext = {"生长发育", "血红蛋白", "人体成分", "母乳分析"};
+    private String[] icontext = {"人体成分", "血红蛋白", "母婴称", "新生儿"};
     private List<BaseActivity> pages = new ArrayList<BaseActivity>();
     private SimpleAdapter simple;
 
@@ -44,12 +38,11 @@ public class MainActivity extends BleActivityResult implements SetTitle.OnTitleB
         setContentView(R.layout.activity_main);
 
         View view = this.findViewById(R.id.title);
-        new SetTitle(this, view, new boolean[]{true, false},
+        new SetTitle(this, view, new boolean[]{false, false},
                 "贝高医疗", new int[]{R.drawable.qr_bt, R.drawable.ble_bt});
 
         mViewFlipper = (ViewFlipper) this.findViewById(R.id.viewFlipper);
         mGridView = (GridView) this.findViewById(R.id.gridView);
-        progressBar = (ProgressBar) this.findViewById(R.id.progressBar);
 
         for (int i = 0; i < res.length; i++) {
             mViewFlipper.addView(getImage(res[i]));
@@ -98,10 +91,13 @@ public class MainActivity extends BleActivityResult implements SetTitle.OnTitleB
 
     private List<BaseActivity> getPages() {
         InBodyActivity inbody = new InBodyActivity();
+        HemoglobinActivity hemoglobin = new HemoglobinActivity();
+        BabyWeighingActivity babyWeighing = new BabyWeighingActivity();
+        NewbabyVisitActivity newbaby = new NewbabyVisitActivity();
         pages.add(inbody);
-        pages.add(inbody);
-        pages.add(inbody);
-        pages.add(inbody);
+        pages.add(hemoglobin);
+        pages.add(babyWeighing);
+        pages.add(newbaby);
         return pages;
     }
 

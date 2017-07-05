@@ -173,8 +173,7 @@
             android:layout_width="@dimen/information_table_width"
             android:layout_height="@dimen/information_image_height"
             android:layout_marginTop="@dimen/information_image_marg"
-            android:background="@color/table_row"
-            app:srcCompat="@drawable/pic_bg" />
+            app:srcCompat="@drawable/devicebg" />
 
         <Button
             android:id="@+id/test"
@@ -182,7 +181,6 @@
             android:layout_height="@dimen/information_testbt_hight"
             android:layout_gravity="right"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="@dimen/information_image_marg"
             android:background="@drawable/test_bg"
             android:text="开始测试"
             android:textColor="@color/share_view"

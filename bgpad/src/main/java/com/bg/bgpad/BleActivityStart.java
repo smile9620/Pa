@@ -51,6 +51,7 @@ public abstract class BleActivityStart extends BaseActivity {
     private AlertDialog devicesDialog = null;
     private boolean is_ble = true;
     private final UUID[] serviceUuids = {BluetoothLeService.UUID_NOTIFY};
+    private Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +84,10 @@ public abstract class BleActivityStart extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
 //        mBluetoothAdapter.disable();
+        if (toast != null) {
+            toast.cancel();
+            toast = null;
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
@@ -115,7 +120,7 @@ public abstract class BleActivityStart extends BaseActivity {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     private void scanLeDevice(final boolean enable) {
         if (Constant.mBluetoothLeService != null) {
-            showToast("设备已连接！");
+            toast = showToast(toast, "设备已连接！");
             return;
         } else {
             if (enable) {
@@ -222,7 +227,7 @@ public abstract class BleActivityStart extends BaseActivity {
                     break;
             }
         } else {
-            showToast("请在应用管理中打开访问权限！");
+            showToast(null, "请在应用管理中打开访问权限！");
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
@@ -237,7 +242,7 @@ public abstract class BleActivityStart extends BaseActivity {
                 case 2: // Notify change
                     //搜索到设备名后，只有一个的自动连接，有两个的就用弹出框让用户选择
                     if (mLeDeviceListAdapter.mLeDevices.size() == 0) {
-                        showToast("当前无可用设备!");
+                        showToast(null, "当前无可用设备!");
                     } else if (mLeDeviceListAdapter.mLeDevices.size() == 1) {
                         Constant.mDeviceAddress = mLeDeviceListAdapter.mLeDevices.get(0).getAddress();
                         select_ble();

@@ -114,7 +114,7 @@ public class RegisterActivity extends BaseActivity implements
                             ifsame.setVisibility(View.VISIBLE);
                         }
                     } else {
-                        showToast("密码或确认密码不能为空！");
+                        showToast(null,"密码或确认密码不能为空！");
                     }
                 }
                 break;

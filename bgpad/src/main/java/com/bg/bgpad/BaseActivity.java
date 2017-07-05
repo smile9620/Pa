@@ -55,10 +55,15 @@ public class BaseActivity extends AppCompatActivity {
         ActivityCollector.removeActivity(this);
     }
 
-    protected void showToast(String str) {
-        Toast toast = Toast.makeText(BaseActivity.this, str, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
+    protected Toast showToast(Toast toast, String str) {
+        if (toast == null) {
+            toast = Toast.makeText(this, str, Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+        } else {
+            toast.setText(str);
+        }
         toast.show();
+        return toast;
     }
 
     protected String getSDPath() {
@@ -71,7 +76,7 @@ public class BaseActivity extends AppCompatActivity {
         }
         String dir = sdDir.toString() + "/Bg";
         File file = new File(dir);
-        if (!file.exists()){
+        if (!file.exists()) {
             file.mkdir();
         }
         return dir;

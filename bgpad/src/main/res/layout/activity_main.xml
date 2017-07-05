@@ -3,23 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-<FrameLayout
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/title_height">
-
     <include
         android:id="@+id/title"
         layout="@layout/title_bar" />
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|center_vertical"
-        android:layout_marginRight="60dp"
-        android:visibility="gone"/>
-</FrameLayout>
-
 
     <ViewFlipper
         android:id="@+id/viewFlipper"

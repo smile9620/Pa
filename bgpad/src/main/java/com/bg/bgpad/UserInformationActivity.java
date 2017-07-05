@@ -146,7 +146,7 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
         if (!column) {
             showheight.setVisibility(View.VISIBLE);
         } else {
-            showheight.setVisibility(View.GONE);
+            showheight.setVisibility(View.INVISIBLE);
         }
         sex.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -246,7 +246,7 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
                 if (users.get(0).getImage_path() != null) {  //删除头像
                     deleteImage(users.get(0).getImage_path());
                 }
-                showToast("删除成功！");
+                showToast(null,"删除成功！");
                 finish();
             }
         }).show();
@@ -436,7 +436,7 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
                         e.printStackTrace();
                     }
                     if (date.getTime() > currentTime.getTime()) {
-                        showToast("出生日期大于当前日期！");
+                        showToast(null,"出生日期大于当前日期！");
                     } else {
                         birthday.setText(data);
                         DecimalFormat df = new DecimalFormat("0.0");
@@ -505,7 +505,7 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
                     break;
             }
         } else {
-            showToast("请在应用管理中打开访问权限！");
+            showToast(null,"请在应用管理中打开访问权限！");
         }
     }
 
@@ -534,7 +534,7 @@ public class UserInformationActivity extends BleActivityResult implements SetTit
 //          writeData("34122219870611503X诸葛亮  1200006110180", new byte[]{(byte) 0xEA, (byte) 0x52, (byte) 0x29, (byte) 0x22, (byte) 0xFF});
             writeData(sendData, new byte[]{(byte) 0xEA, (byte) 0x52, (byte) 0x2A, (byte) 0x22, (byte) 0xFF});
         } else {
-            showToast("蓝牙已断开，无法测试！");
+            showToast(null,"蓝牙已断开，无法测试！");
         }
     }
 

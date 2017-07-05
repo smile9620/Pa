@@ -226,7 +226,7 @@ public abstract class BleActivityResult extends BleActivityStart {
                                 .equals(action)) // 可以开始干活了
                         {
                             updateState(true);
-                            showToast("连接成功，现在可以正常通信！");
+                            showToast(null,"连接成功，现在可以正常通信！");
                         } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) { // 收到数据
                             time = 0;
                             if (timer1 != null) {
@@ -279,9 +279,9 @@ public abstract class BleActivityResult extends BleActivityStart {
                     } else {
                         if (pogressDialog != null && pogressDialog.isShowing()) {
                             pogressDialog.dismiss();
-                            showToast("蓝牙连接失败！");
+                            showToast(null,"蓝牙连接失败！");
                         }
-                        showToast("设备获取失败!");
+                        showToast(null,"设备获取失败!");
                     }
                 }
 

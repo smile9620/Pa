@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/title"
+        layout="@layout/title_bar" />
+
+    <android.support.percent.PercentFrameLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/banner"
+            app:layout_heightPercent="40%" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:paddingBottom="@dimen/inbody_bt_margtop"
+            android:paddingTop="@dimen/inbody_bt_margtop"
+            android:orientation="vertical"
+            app:layout_heightPercent="60%"
+            android:layout_gravity="bottom">
+
+            <Button
+                android:id="@+id/test"
+                style="@style/inbody_main_bt"
+                android:background="#5C9AD3"
+                android:drawableLeft="@drawable/test"
+                android:text="测试" />
+
+            <Button
+                android:id="@+id/dataset"
+                style="@style/inbody_main_bt"
+                android:background="#99B365"
+                android:drawableLeft="@drawable/userset"
+                android:text="数据管理" />
+
+        </LinearLayout>
+    </android.support.percent.PercentFrameLayout>
+</LinearLayout>
+

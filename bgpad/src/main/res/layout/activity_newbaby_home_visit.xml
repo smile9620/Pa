@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/title"
+        layout="@layout/title_bar" />
+    <include
+        android:id="@+id/title"
+        layout="@layout/title_bar" />
+    <include
+        android:id="@+id/title"
+        layout="@layout/title_bar" />
+    <include
+        android:id="@+id/title"
+        layout="@layout/title_bar" />
+    <include
+        android:id="@+id/title"
+        layout="@layout/title_bar" />
+    <include
+        android:id="@+id/title"
+        layout="@layout/title_bar" />
+    <include
+        android:id="@+id/title"
+        layout="@layout/title_bar" />
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <android.support.percent.PercentRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.percent.PercentRelativeLayout
+                android:id="@+id/newbaby1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_marginPercent="4%">
+
+                <LinearLayout
+                    android:id="@+id/lin1"
+                    android:layout_height="wrap_content"
+                    app:layout_widthPercent="44%">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="姓名："
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/general_text" />
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/general_text" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/lin1"
+                    app:layout_marginLeftPercent="12%"
+                    app:layout_widthPercent="44%">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="编号："
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/general_text" />
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/general_text" />
+                </LinearLayout>
+            </android.support.percent.PercentRelativeLayout>
+
+
+            <TableLayout
+                android:layout_width="500dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/newbaby1"
+                android:background="@color/list_item"
+                android:padding="0.5dp"
+                android:stretchColumns="*">
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/share_view"
+                        android:gravity="center"
+                        android:text="性别" />
+
+                    <com.bg.views.FlowRadioGroup
+                        android:id="@+id/radioGroup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0.5dp"
+                        android:layout_span="4"
+                        android:background="@color/share_view">
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1 男"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/general_text" />
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2 女"
+                            android:textSize="@dimen/general_text" />
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="9 未说明的性别"
+                            android:textSize="@dimen/general_text" />
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0 未知的性别"
+                            android:textSize="@dimen/general_text" />
+                    </com.bg.views.FlowRadioGroup>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/share_view"
+                        android:gravity="center"
+                        android:text="出生日期" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/share_view"
+                        android:text="性别" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/share_view"
+                        android:text="性别" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/share_view"
+                        android:text="性别" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/share_view"
+                        android:text="性别" />
+                </TableRow>
+            </TableLayout>
+        </android.support.percent.PercentRelativeLayout>
+    </ScrollView>
+</LinearLayout>

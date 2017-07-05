@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bg.constant.Constant;
 import com.bg.constant.DeviceName;
@@ -57,6 +59,7 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
     private SimpleAdapter simpleAdapter;
     private int[] colors = new int[]{0xFFFFFFFF, 0xFFEFEFEF};
     private MyHandler handler = new MyHandler(this);
+    private static Toast toast = null;
 
     private static class MyHandler extends Handler {
         private final WeakReference<UserSelectActivity> mActivity;
@@ -75,7 +78,7 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
                         act.simpleAdapter.notifyDataSetChanged();
                         break;
                     case 1:
-                        act.showToast(act.column == true ? "有立柱" : "无立柱");
+                        act.showToast(null, act.column == true ? "有立柱" : "无立柱");
                         break;
                 }
             }
@@ -91,6 +94,7 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
         new SetTitle(this, view, new boolean[]{true, true}, "用户信息",
                 new int[]{R.drawable.back_bt, R.drawable.ble_bt});
         new SelectionUser(this, this, selection, true);
+
         simpleAdapter = new SimpleAdapter(this, list_maps, R.layout.userlist_item,
                 new String[]{"user_number", "user_name", "sex", "strDate"},
                 new int[]{R.id.usernumber, R.id.username, R.id.sex, R.id.testdate}) {
@@ -190,10 +194,10 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
                 intent.putExtra("column", column);
                 startActivity(intent);
             } else {
-                showToast("蓝牙初始化中，请稍后...");
+                toast = showToast(toast, "蓝牙初始化中，请稍后...");
             }
         } else {
-            showToast("蓝牙未连接!");
+            toast = showToast(toast, "蓝牙未连接!");
         }
     }
 
@@ -205,12 +209,22 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        if (toast != null) {
+            toast.cancel();
+            toast = null;
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (Constant.mBluetoothLeService != null) {
             Constant.mBluetoothLeService.close();
             Constant.mBluetoothLeService = null;
-            showToast("设备已断开！");
+            showToast(null, "设备已断开！");
+
         }
         handler.removeCallbacksAndMessages(null);
     }
@@ -228,10 +242,10 @@ public class UserSelectActivity extends BleActivityResult implements SetTitle.On
                 Intent intent = new Intent(this, UserInformationActivity.class);
                 startActivity(intent);
             } else {
-                showToast("蓝牙初始化中，请稍后...");
+                toast = showToast(toast, "蓝牙初始化中，请稍后...");
             }
         } else {
-            showToast("蓝牙未连接!");
+            toast = showToast(toast, "蓝牙未连接!");
         }
     }
 

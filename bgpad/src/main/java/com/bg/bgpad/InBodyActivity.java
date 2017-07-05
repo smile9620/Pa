@@ -31,7 +31,7 @@ public class InBodyActivity extends BaseActivity implements SetTitle.OnTitleBtCl
         setContentView(R.layout.activity_in_body);
         ButterKnife.bind(this);
         new SetTitle(this, view, new boolean[]{true, false},
-                "贝高", new int[]{R.drawable.back_bt, R.drawable.ble_bt});
+                "人体成分", new int[]{R.drawable.back_bt, R.drawable.ble_bt});
     }
 
     @OnClick({R.id.test, R.id.dataset, R.id.set, R.id.help})
@@ -51,7 +51,7 @@ public class InBodyActivity extends BaseActivity implements SetTitle.OnTitleBtCl
                 startActivity(intent);
                 break;
             case R.id.help:
-                showToast("该功能暂未开启");
+                showToast(null,"该功能暂未开启");
                 break;
         }
     }

@@ -37,6 +37,7 @@ public class InBodySetActivity extends BaseActivity implements SetTitle.OnTitleB
     private SharedPreferences printShare;
     private Map<String, ?> companymap;
     private Map<String, ?> printmap;
+    private Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +63,10 @@ public class InBodySetActivity extends BaseActivity implements SetTitle.OnTitleB
                 SharedPreferences.Editor edit = printShare.edit();
 
                 if (isChecked) {
-//                    showToast("wifi");
+                    toast = showToast(toast, "wifi");
                     edit.putString("print", "wifi");
                 } else {
-//                    showToast("usb");
+                    toast = showToast(toast, "usb");
                     edit.putString("print", "usb");
                 }
                 edit.commit();
@@ -152,5 +153,14 @@ public class InBodySetActivity extends BaseActivity implements SetTitle.OnTitleB
     @Override
     public void rightBt(ImageButton right) {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (toast != null) {
+            toast.cancel();
+            toast = null;
+        }
     }
 }

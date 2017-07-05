@@ -311,10 +311,10 @@ public class UserManagementActivity extends BaseActivity implements SelectionUse
                             break;
                     }
                 } else {
-                    showToast("请选择需选项！");
+                    showToast(null,"请选择需选项！");
                 }
             } else {
-                showToast("无数据！");
+                showToast(null,"无数据！");
             }
         }
     }
@@ -481,7 +481,7 @@ public class UserManagementActivity extends BaseActivity implements SelectionUse
                     break;
             }
         } else {
-            showToast("请在应用管理中打开访问权限！");
+            showToast(null,"请在应用管理中打开访问权限！");
         }
     }
 

@@ -35,7 +35,7 @@
     <dimen name="information_testbt_hight">48dp</dimen>
     <dimen name="information_testbt_size">20sp</dimen>
     <dimen name="information_photo_width">120dp</dimen>
-    <dimen name="information_photo_height">130dp</dimen>
+    <dimen name="information_photo_height">150dp</dimen>
     <dimen name="information_table_row">236dp</dimen>
     <dimen name="information_image_height">324dp</dimen>
     <dimen name="information_image_marg">30dp</dimen>

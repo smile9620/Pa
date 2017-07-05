@@ -115,11 +115,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             startActivity(intent);
                             finish();
                         } else {
-                            showToast("用户名或密码错误，不能登录！");
+                            showToast(null,"用户名或密码错误，不能登录！");
                         }
 
                     } else {
-                        showToast("用户名或密码错误，不能登录！");
+                        showToast(null,"用户名或密码错误，不能登录！");
                     }
                 }
 
@@ -184,7 +184,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             // }
             if (location.getAddrStr() != null) {
                 mLocationClient.stop();
-                showToast("当前位置：" + location.getAddrStr());
+                showToast(null,"当前位置：" + location.getAddrStr());
             }
         }
     }

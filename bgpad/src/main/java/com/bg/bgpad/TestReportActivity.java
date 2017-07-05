@@ -149,13 +149,13 @@ public class TestReportActivity extends BaseActivity implements SetTitle.OnTitle
                             new MyThread().start();
                         } catch (Exception e) {
                             e.printStackTrace();
-                            showToast("请安装wifi打印机！");
+                            showToast(null,"请安装wifi打印机！");
                         }
                     } else {
-                        showToast("usb 打印");
+                        showToast(null,"usb 打印");
                     }
                 } else {
-                    showToast("usb 打印");  //默认情况下为USB打印
+                    showToast(null,"usb 打印");  //默认情况下为USB打印
                 }
             }
         });

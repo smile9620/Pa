@@ -138,7 +138,7 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
                         act.changeData();
                         break;
                     case 2:
-                        act.showToast(msg.obj.toString());
+                        act.showToast(null,msg.obj.toString());
                         break;
                 }
             }
@@ -156,32 +156,6 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
             }).show();
         }
     }
-//    private Handler handler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            super.handleMessage(msg);
-//            switch (msg.what) {
-//                case 0:
-//                    if (dialog.isShowing()) { //50秒钟后未获取到蓝牙数据
-//                        dialog.dismiss();
-//                        myDialog.setDialog("未接收到蓝牙数据，请检查蓝牙是否故障！", false, true, new MyDialog.DialogConfirm() {
-//                            @Override
-//                            public void dialogConfirm() {
-//                                finish();
-//                            }
-//                        }).show();
-//                    }
-//                    break;
-//                case 1:
-//                    writeData(null, new byte[]{(byte) 0xEA, (byte) 0x52, (byte) 0x02, (byte) 0x26, (byte) 0xFF});
-//                    changeData();
-//                    break;
-//                case 2:
-//                    showToast(msg.obj.toString());
-//                    break;
-//            }
-//        }
-//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -222,13 +196,13 @@ public class InBodyTestReportActivity extends BleActivityResult implements SetTi
                             new MyThread().start();
                         } catch (Exception e) {
                             e.printStackTrace();
-                            showToast("请安装wifi打印机！");
+                            showToast(null,"请安装wifi打印机！");
                         }
                     } else {
-                        showToast("usb 打印");
+                        showToast(null,"usb 打印");
                     }
                 } else {
-                    showToast("usb 打印");  //默认情况下为USB打印
+                    showToast(null,"usb 打印");  //默认情况下为USB打印
                 }
                 break;
         }
